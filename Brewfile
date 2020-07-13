@@ -28,6 +28,7 @@ brew 'jq'
 brew 'watch'
 brew 'yq'
 brew 'exa'
+brew 'fzf'
 
 brew 'dockutil'
 

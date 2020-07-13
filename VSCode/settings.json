@@ -24,7 +24,7 @@
 		"848fc3d6-c58d-4678-a8f6-f84c784b094d/59dfc679-c8dc-4761-94d1-309c5510527c"
 	],
     "workbench.colorTheme": "Material Theme Darker",
-    "editor.fontFamily": "Fira Code",
+    "editor.fontFamily": "MesloLGS NF",
     "terminal.integrated.fontSize": 11,
 	"cSpell.language": "en-GB",
 	"cSpell.userWords": [
@@ -120,7 +120,7 @@
         "cfnLint.validateUsingJsonSchema": true,
         "git.confirmSync": false,
         "aws.onDefaultRegionMissing": "add",
-        "terminal.integrated.fontFamily": "SauceCodePro Nerd Font",
+        "terminal.integrated.fontFamily": "MesloLGS NF",
         "[yaml]": {
             "editor.defaultFormatter": "redhat.vscode-yaml"
         },
@@ -129,10 +129,11 @@
         "files.associations": {
             "*.hcl": "terraform"
         },
-        "aws.profile": "profile:wejo-shared-prod",
+        "aws.profile": "",
         "cSpell.enableFiletypes": [
             "!yaml"
         ],
+        "editor.formatOnPaste": true,
 
 
 }
