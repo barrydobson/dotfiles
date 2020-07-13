@@ -1,0 +1,138 @@
+{
+
+
+    "terminal.integrated.shell.windows": "C:\\Program Files\\Git\\bin\\bash.exe",
+    "terminal.integrated.shell.osx": "/bin/zsh",
+	"workbench.iconTheme": "material-icon-theme",
+	"eslint.alwaysShowStatus": true,
+	"explorer.confirmDelete": false,
+	"sync.gist": "fdf571bfe495c2e834311ce6888a7174",
+	"sync.host": "",
+	"sync.pathPrefix": "",
+	"sync.quietSync": false,
+	"sync.askGistName": false,
+	"sync.removeExtensions": true,
+	"sync.syncExtensions": true,
+	"sync.autoDownload": false,
+	"sync.autoUpload": false,
+	"sync.lastUpload": "2018-07-09T10:06:55.890Z",
+	"sync.lastDownload": "2018-06-28T07:14:34.339Z",
+	"sync.forceDownload": false,
+	"explorer.confirmDragAndDrop": false,
+	"http.proxySupport": "off",
+	"azure.resourceFilter": [
+		"848fc3d6-c58d-4678-a8f6-f84c784b094d/59dfc679-c8dc-4761-94d1-309c5510527c"
+	],
+    "workbench.colorTheme": "Material Theme Darker",
+    "editor.fontFamily": "Fira Code",
+    "terminal.integrated.fontSize": 11,
+	"cSpell.language": "en-GB",
+	"cSpell.userWords": [
+        "Dobson",
+        "Kubernetes",
+        "Kustomize",
+        "Stateful",
+        "Traefik",
+        "argo",
+        "kustomization",
+        "prometheus"
+    ],
+    "workbench.colorCustomizations": {
+        "terminal.foreground": "#839496",
+        "terminal.background": "#002833",
+        "terminal.ansiBlack": "#003541",
+        "terminal.ansiBlue": "#268bd2",
+        "terminal.ansiCyan": "#2aa198",
+        "terminal.ansiGreen": "#859901",
+        "terminal.ansiMagenta": "#d33682",
+        "terminal.ansiRed": "#dc322f",
+        "terminal.ansiWhite": "#eee8d5",
+        "terminal.ansiYellow": "#b58901",
+        "terminal.ansiBrightBlack": "#586e75",
+        "terminal.ansiBrightBlue": "#839496",
+        "terminal.ansiBrightCyan": "#93a1a1",
+        "terminal.ansiBrightGreen": "#586e75",
+        "terminal.ansiBrightMagenta": "#6c6ec6",
+        "terminal.ansiBrightRed": "#cb4b16",
+        "terminal.ansiBrightWhite": "#fdf6e3",
+        "terminal.ansiBrightYellow": "#657b83",
+        "terminalCursor.foreground": "#839496",
+        "terminalCursor.background": "#003541"
+        },
+        "editor.fontLigatures": true,
+        "files.eol": "\n",
+        "[json]": {
+            "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "javascript.updateImportsOnFileMove.enabled": "always",
+        "editor.tabSize": 2,
+        "editor.suggestSelection": "first",
+        "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+        "terraform.indexing": {
+
+            "enabled": true,
+            "liveIndexing": true,
+            "delay": 500,
+            "exclude": [
+                ".terraform/**/*",
+                "**/.terraform/**/*"
+            ]
+        },
+        "terraform.languageServer": {
+            "external": true,
+            "args": [
+                "serve"
+            ]
+        },
+
+       // Custom tags for the parser to use
+        "yaml.customTags": [
+            "!And",
+            "!If",
+            "!Not",
+            "!Equals",
+            "!Or",
+            "!FindInMap sequence",
+            "!Base64",
+            "!Cidr",
+            "!Ref",
+            "!Sub",
+            "!GetAtt",
+            "!GetAZs",
+            "!ImportValue",
+            "!Select",
+            "!Select sequence",
+            "!Split",
+            "!Join sequence",
+            "!And sequence",
+            "!If sequence",
+            "!Not sequence",
+            "!Equals sequence",
+            "!Or sequence",
+            "!FindInMap",
+            "!Join",
+            "!Sub sequence",
+            "!ImportValue sequence",
+            "!Split sequence"
+        ],
+        // Enable/disable default YAML formatter (requires restart)
+        "yaml.format.enable": true,
+        "cfnLint.validateUsingJsonSchema": true,
+        "git.confirmSync": false,
+        "aws.onDefaultRegionMissing": "add",
+        "terminal.integrated.fontFamily": "SauceCodePro Nerd Font",
+        "[yaml]": {
+            "editor.defaultFormatter": "redhat.vscode-yaml"
+        },
+        "editor.multiCursorModifier": "ctrlCmd",
+        "gitlens.views.repositories.files.layout": "tree",
+        "files.associations": {
+            "*.hcl": "terraform"
+        },
+        "aws.profile": "profile:wejo-shared-prod",
+        "cSpell.enableFiletypes": [
+            "!yaml"
+        ],
+
+
+}

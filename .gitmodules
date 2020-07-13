@@ -1,0 +1,13 @@
+[submodule "dotbot"]
+	path = dotbot
+	url = https://github.com/anishathalye/dotbot
+	ignore = dirty
+[submodule "dotbot-brew"]
+	path = dotbot-brew
+	url = https://github.com/d12frosted/dotbot-brew.git
+[submodule "oh-my-zsh"]
+	path = oh-my-zsh
+	url = https://github.com/robbyrussell/oh-my-zsh
+[submodule "themes/powerlevel10k"]
+	path = themes/powerlevel10k
+	url = https://github.com/romkatv/powerlevel10k.git

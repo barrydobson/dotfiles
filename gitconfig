@@ -1,0 +1,32 @@
+# This is Git's per-user configuration file.
+[user]
+	name = Barry Dobson
+	useConfigOnly = true
+[push]
+	followTags = true
+[core]
+	excludesfile = ~/.gitignore
+	autocrlf = input
+  trustctime = false
+  editor = code --wait
+[branch]
+  autosetuprebase = always
+[color]
+  ui = true
+[fetch]
+  prune = true
+[push]
+  default = upstream
+[diff]
+  tool = vscode
+	noprefix = true
+[difftool "vscode"]
+  cmd = code --wait --diff $LOCAL $REMOTE
+[merge]
+  tool = vscode
+[mergetool "vscode"]
+  cmd = code --wait $MERGED
+[url "git@github.com:"]
+  insteadOf = https://github.com/
+[credential]
+  helper = osxkeychain

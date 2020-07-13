@@ -1,0 +1,47 @@
+brew 'awscli'
+brew 'aws-iam-authenticator'
+
+tap 'instrumenta/instrumenta'
+brew 'kubeval'
+brew 'kubectl'
+brew 'kustomize'
+
+brew 'zsh'
+brew 'tmux'
+tap 'getantibody/tap'
+brew 'getantibody/tap/antibody'
+brew 'brew-cask-completion'
+
+brew 'git'
+brew 'openssl'
+brew 'coreutils'
+brew 'curl'
+brew 'gnu-sed'
+brew 'gnu-tar'
+brew 'wget'
+brew 'direnv'
+
+brew 'bat'
+brew 'less'
+brew 'moreutils'
+brew 'jq'
+brew 'watch'
+brew 'yq'
+brew 'exa'
+
+brew 'dockutil'
+
+cask 'docker'
+cask 'google-chrome'
+cask 'iterm2'
+cask 'visual-studio-code'
+cask 'postman'
+cask 'slack'
+cask 'lastpass'
+cask 'authy'
+
+tap 'homebrew/cask-fonts'
+cask 'font-fira-code'
+
+tap 'barrydobson/personal'
+cask 'font-meslo-lgs-nerdfont'
