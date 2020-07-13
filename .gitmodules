@@ -6,8 +6,8 @@
 	path = dotbot-brew
 	url = https://github.com/d12frosted/dotbot-brew.git
 [submodule "oh-my-zsh"]
-	path = oh-my-zsh
+	path = zsh/oh-my-zsh
 	url = https://github.com/robbyrussell/oh-my-zsh
 [submodule "themes/powerlevel10k"]
-	path = themes/powerlevel10k
+	path = zsh/themes/powerlevel10k
 	url = https://github.com/romkatv/powerlevel10k.git

@@ -8,31 +8,32 @@
       relink: true
 
 - link:
+    ~/.dotfiles: ''
     ~/.Brewfile: Brewfile
     ~/.config/bat/config: bat-config
     ~/.gitconfig: gitconfig
     ~/.gitignore: gitignore-global
     ~/.zsh: zsh
     ~/.zshrc: zshrc
-    ~/.oh-my-zsh: oh-my-zsh/
-    ~/.oh-my-zsh/custom/themes/powerlevel10k: themes/powerlevel10k
+    ~/.oh-my-zsh: zsh/oh-my-zsh/
+    ~/.oh-my-zsh/custom/themes/powerlevel10k: zsh/themes/powerlevel10k
     ~/.tmux.conf: tmux.conf
+    ~/.iterm: iterm2
     ~/Library/Application Support/Code/User/settings.json: VSCode/settings.json
     ~/Library/Application Support/Code/User/keybindings.json: VSCode/keybindings.json
-    ~/Library/Application Support/Code/User/syncLocalSettings.json: VSCode/syncLocalSettings.json
     ~/Library/Application Support/Code/User/snippets: VSCode/snippets
-
 - brewfile:
   - Brewfile
 
 - shell:
-  - git submodule update --init --recursive
+  - [git submodule update --init --recursive, Installing submodules]
   - sh -c 'grep -q $(brew --prefix)/bin/bash /etc/shells || echo $(brew --prefix)/bin/bash | sudo tee -a /etc/shells'
   - sh -c 'grep -q $(brew --prefix)/bin/zsh /etc/shells || echo $(brew --prefix)/bin/zsh | sudo tee -a /etc/shells'
   - chsh -s $(brew --prefix)/bin/zsh
   - sh -c 'antibody bundle < zsh/plugins.txt > ~/.zsh_plugins.sh && antibody update'
-  - chmod 0700 ~/.gnupg
-  - defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false
+  - code --install-extension shan.code-settings-sync
+  - [~/.dotfiles/osx.sh, Updating OS X preferences...]
+  - source ~/.zshrc
 
 - shell:
   - dockutil --add '/Applications/iTerm.app' --after Finder
