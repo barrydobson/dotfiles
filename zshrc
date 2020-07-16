@@ -69,5 +69,6 @@ export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 autoload -U +X bashcompinit && bashcompinit
 export DOCKER_BUILDKIT=1
+export COMPOSE_DOCKER_CLI_BUILD=1
 export SHOW_AWS_PROMPT=1
 eval "$(direnv hook zsh)"
