@@ -32,7 +32,7 @@
   - sh -c 'grep -q $(brew --prefix)/bin/zsh /etc/shells || echo $(brew --prefix)/bin/zsh | sudo tee -a /etc/shells'
   - chsh -s $(brew --prefix)/bin/zsh
   - sh -c 'antibody bundle < zsh/plugins.txt > ~/.zsh_plugins.sh && antibody update'
-  - code --install-extension shan.code-settings-sync
+  - sh -c 'code --install-extension shan.code-settings-sync'
   - [~/.dotfiles/osx.sh, Updating OS X preferences...]
   - source ~/.zshrc
 

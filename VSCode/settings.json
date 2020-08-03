@@ -129,7 +129,6 @@
         "files.associations": {
             "*.hcl": "terraform"
         },
-        "aws.profile": "",
         "cSpell.enableFiletypes": [
             "!yaml"
         ],
