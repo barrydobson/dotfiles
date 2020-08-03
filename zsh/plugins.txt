@@ -2,10 +2,9 @@
 zsh-users/zsh-completions
 zsh-users/zsh-autosuggestions
 zsh-users/zsh-syntax-highlighting
-zsh-users/git
-zsh-users/tmux
-zsh-users/tmuxinator
-zsh-users/kubectl
-zsh-users/aws
-
+ohmyzsh/ohmyzsh path:plugins/git
+ohmyzsh/ohmyzsh path:plugins/tmux
+ohmyzsh/ohmyzsh path:plugins/tmuxinator
+ohmyzsh/ohmyzsh path:plugins/kubectl
+ohmyzsh/ohmyzsh path:plugins/aws
 robbyrussell/oh-my-zsh path:plugins/docker

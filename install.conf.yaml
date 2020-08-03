@@ -22,7 +22,7 @@
     ~/Library/Application Support/Code/User/settings.json: VSCode/settings.json
     ~/Library/Application Support/Code/User/keybindings.json: VSCode/keybindings.json
     ~/Library/Application Support/Code/User/snippets: VSCode/snippets
-    ~/Library/Application Support/iTerm2/DynamicProfiles: iterm2/profiles.json
+    ~/Library/Application Support/iTerm2/DynamicProfiles/profiles.json: iterm2/profiles.json
 - brewfile:
   - Brewfile
 

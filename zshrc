@@ -6,7 +6,6 @@ umask 022
 
 export DOTFILES="${HOME}/.dotfiles"
 export ZSH=$HOME/.oh-my-zsh
-
 typeset -gx -U path
 path=( \
   /usr/local/sbin(N-/) \
