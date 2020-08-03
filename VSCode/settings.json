@@ -39,7 +39,7 @@
     ],
     "workbench.colorCustomizations": {
         "terminal.foreground": "#839496",
-        "terminal.background": "#002833",
+        "terminal.background": "#0d0d0e",
         "terminal.ansiBlack": "#003541",
         "terminal.ansiBlue": "#268bd2",
         "terminal.ansiCyan": "#2aa198",
@@ -133,6 +133,8 @@
             "!yaml"
         ],
         "editor.formatOnPaste": true,
+        "terminal.integrated.rendererType": "canvas",
+        "terminal.integrated.lineHeight": 1.1
 
 
 }
