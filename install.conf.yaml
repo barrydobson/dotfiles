@@ -16,7 +16,7 @@
     ~/.zsh: zsh
     ~/.zshrc: zshrc
     ~/.oh-my-zsh: zsh/oh-my-zsh/
-    ~/.oh-my-zsh/custom/themes/powerlevel10k: zsh/themes/powerlevel10k
+    ~/.oh-my-zsh/custom/themes/powerlevel10k: zsh/themes/powerlevel10k/
     ~/.tmux.conf: tmux.conf
     ~/.iterm: iterm2
     ~/Library/Application Support/Code/User/settings.json: VSCode/settings.json
