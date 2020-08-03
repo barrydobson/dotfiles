@@ -30,6 +30,7 @@ brew 'yq'
 brew 'exa'
 brew 'fzf'
 
+brew 'thefuck'
 brew 'dockutil'
 
 cask 'docker'
@@ -43,6 +44,9 @@ cask 'authy'
 
 tap 'homebrew/cask-fonts'
 cask 'font-fira-code'
+cask 'font-sauce-code-pro-nerd-font'
+
+cask 'google-cloud-sdk'
 
 tap 'barrydobson/personal'
 cask 'font-meslo-lgs-nerdfont-regular'
