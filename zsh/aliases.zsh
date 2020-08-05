@@ -101,3 +101,10 @@ alias watch='watch '
 alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
 
 alias reload="exec $SHELL -l"
+
+alias kafhere="kubectl apply -f - <<EOF"
+
+alias gcloud-dev="gcloud config set project gc-lotto-dev | kubectl config use-context lotto-dev"
+alias gcloud-test="gcloud config set project gc-lotto-test | kubectl config use-context lotto-test"
+alias gcloud-stage="gcloud config set project gc-lotto-stage | kubectl config use-context lotto-stage"
+alias gcloud-prod="gcloud config set project gc-lotto-prod | kubectl config use-context lotto-prod"
