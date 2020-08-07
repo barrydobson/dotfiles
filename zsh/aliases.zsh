@@ -108,3 +108,4 @@ alias gcloud-dev="gcloud config set project gc-lotto-dev | kubectl config use-co
 alias gcloud-test="gcloud config set project gc-lotto-test | kubectl config use-context lotto-test"
 alias gcloud-stage="gcloud config set project gc-lotto-stage | kubectl config use-context lotto-stage"
 alias gcloud-prod="gcloud config set project gc-lotto-prod | kubectl config use-context lotto-prod"
+alias myip="curl ipinfo.io/ip"
