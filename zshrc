@@ -76,3 +76,6 @@ export COMPOSE_DOCKER_CLI_BUILD=1
 export SHOW_AWS_PROMPT=1
 export PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin:$PATH"
 eval "$(direnv hook zsh)"
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/local/bin/kustomize kustomize
+export PATH="/usr/local/opt/terraform@0.12/bin:$PATH"

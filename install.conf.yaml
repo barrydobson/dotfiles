@@ -9,6 +9,7 @@
 
 - link:
     ~/.dotfiles: ''
+    ~/.aws: aws/
     ~/.Brewfile: Brewfile
     ~/.config/bat/config: bat-config
     ~/.gitconfig: gitconfig

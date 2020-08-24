@@ -134,7 +134,8 @@
         ],
         "editor.formatOnPaste": true,
         "terminal.integrated.rendererType": "canvas",
-        "terminal.integrated.lineHeight": 1.1
+        "terminal.integrated.lineHeight": 1.1,
+        "aws.profile": "profile:default"
 
 
 }

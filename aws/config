@@ -1,0 +1,10 @@
+[default]
+region = eu-west-2
+output = json
+cli_pager=
+
+[profile acc]
+account = 6456456345734574
+role = devops
+cli_pager=
+source_profile = default
