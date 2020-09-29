@@ -1,7 +1,8 @@
 #!/usr/bin/env zsh
 
 setopt no_global_rcs
-
+export LANG=en_GB.UTF-8
+export LC_ALL=en_GB.UTF-8
 umask 022
 
 export DOTFILES="${HOME}/.dotfiles"
