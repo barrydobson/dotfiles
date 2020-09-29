@@ -24,7 +24,7 @@ cfg = configparser.ConfigParser()
 cfg.read(args.config_path)
 
 if args.profile not in creds.sections():
-    parser.error('Invalid profile. Section not found in ~/.aws/credentails')
+    parser.error('Invalid profile. Section not found in ~/.aws/credentials')
 
 if 'profile ' + args.profile not in cfg.sections():
     parser.error('Invalid profile. Section not found in ~/.aws/config')

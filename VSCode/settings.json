@@ -62,7 +62,7 @@
         "editor.fontLigatures": true,
         "files.eol": "\n",
         "[json]": {
-            "editor.defaultFormatter": "esbenp.prettier-vscode"
+            "editor.defaultFormatter": "vscode.json-language-features"
         },
         "javascript.updateImportsOnFileMove.enabled": "always",
         "editor.tabSize": 2,
@@ -135,7 +135,7 @@
         "editor.formatOnPaste": true,
         "terminal.integrated.rendererType": "canvas",
         "terminal.integrated.lineHeight": 1.1,
-        "aws.profile": "profile:default"
+        "window.zoomLevel": 0
 
 
 }
