@@ -79,11 +79,11 @@ export PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin:$PA
 eval "$(direnv hook zsh)"
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/kustomize kustomize
-export PATH="/usr/local/opt/terraform@0.12/bin:$PATH"
+export PATH="/usr/local/opt/terraform/bin:$PATH"
 export PATH="/Users/barrydobson/istio-1.6.8/bin:$PATH"
-
+export  VSCODE_FORCE_USER_ENV=1
 # CLEAN PATH
-export PATH="/usr/local/opt/terraform@0.12/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Users/barrydobson/bin:/usr/local/bin:/usr/local/opt/coreutils/libexec/gnubin:/usr/local/opt/gnu-tar/libexec/gnubin:/usr/local/opt/gnu-sed/libexec/gnubin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/opt/liquibase:/Users/barrydobson/istio-1.6.8/bin"
+export PATH="/usr/local/opt/terraform/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Users/barrydobson/bin:/usr/local/bin:/usr/local/opt/coreutils/libexec/gnubin:/usr/local/opt/gnu-tar/libexec/gnubin:/usr/local/opt/gnu-sed/libexec/gnubin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/opt/liquibase:/Users/barrydobson/istio-1.6.8/bin"
 PATH="/Users/barrydobson/perl5/bin${PATH:+:${PATH}}"; export PATH;
 PERL5LIB="/Users/barrydobson/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
 PERL_LOCAL_LIB_ROOT="/Users/barrydobson/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;

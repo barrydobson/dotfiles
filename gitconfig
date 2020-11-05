@@ -2,6 +2,7 @@
 [user]
 	name = Barry Dobson
 	useConfigOnly = true
+	signingKey = 56CA648E032DCC93BF5715B29283D36E0D7BB6D2
 [push]
 	followTags = true
 [core]
@@ -30,3 +31,7 @@
   insteadOf = https://github.com/
 [credential]
   helper = osxkeychain
+[commit]
+	gpgsign = true
+[gpg]
+	program = /usr/local/bin/gpg
