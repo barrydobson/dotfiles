@@ -2,7 +2,7 @@
 [user]
 	name = Barry Dobson
 	useConfigOnly = true
-	signingKey = 56CA648E032DCC93BF5715B29283D36E0D7BB6D2
+	signingKey = 0x5928AC7A87F89D01
 [push]
 	followTags = true
 [core]
