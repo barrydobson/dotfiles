@@ -90,6 +90,7 @@ PERL_LOCAL_LIB_ROOT="/Users/barrydobson/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCA
 PERL_MB_OPT="--install_base \"/Users/barrydobson/perl5\""; export PERL_MB_OPT;
 PERL_MM_OPT="INSTALL_BASE=/Users/barrydobson/perl5"; export PERL_MM_OPT;
 
-export GPG_TTY="$(tty)"
+export GPG_TTY=$(tty)
+gpg-connect-agent updatestartuptty /bye
+unset SSH_AGENT_PID
 export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-gpgconf --launch gpg-agent
