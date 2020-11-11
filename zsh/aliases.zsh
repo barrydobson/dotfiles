@@ -110,3 +110,4 @@ alias gcloud-stage="gcloud config set project gc-lotto-stage | kubectl config us
 alias gcloud-prod="gcloud config set project gc-lotto-prod | kubectl config use-context lotto-prod"
 alias myip="curl ipinfo.io/ip"
 alias mfa=~/.aws/get-aws-creds.sh
+alias awstote="ykman oath code -s awstote"
