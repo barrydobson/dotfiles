@@ -80,10 +80,16 @@ eval "$(direnv hook zsh)"
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/kustomize kustomize
 export PATH="/usr/local/opt/terraform/bin:$PATH"
-export PATH="/Users/barrydobson/istio-1.6.8/bin:$PATH"
+export PATH="/Users/barrydobson/istio-1.8.1/bin:$PATH"
+export GOPATH=$HOME/go
+export GOBIN=$GOPATH/bin
 export  VSCODE_FORCE_USER_ENV=1
+export CLOUDSDK_PYTHON="/usr/local/opt/python@3.8/libexec/bin/python"
+source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
+source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
+
 # CLEAN PATH
-export PATH="/usr/local/opt/terraform/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Users/barrydobson/bin:/usr/local/bin:/usr/local/opt/coreutils/libexec/gnubin:/usr/local/opt/gnu-tar/libexec/gnubin:/usr/local/opt/gnu-sed/libexec/gnubin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/opt/liquibase:/Users/barrydobson/istio-1.6.8/bin"
+export PATH="$GOPATH/bin:/usr/local/opt/terraform/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Users/barrydobson/bin:/usr/local/bin:/usr/local/opt/coreutils/libexec/gnubin:/usr/local/opt/gnu-tar/libexec/gnubin:/usr/local/opt/gnu-sed/libexec/gnubin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/opt/liquibase:/Users/barrydobson/istio-1.8.1/bin:/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin:/Applications/Wireshark.app/Contents/MacOS/"
 PATH="/Users/barrydobson/perl5/bin${PATH:+:${PATH}}"; export PATH;
 PERL5LIB="/Users/barrydobson/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
 PERL_LOCAL_LIB_ROOT="/Users/barrydobson/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;

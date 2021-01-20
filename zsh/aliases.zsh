@@ -111,3 +111,4 @@ alias gcloud-prod="gcloud config set project gc-lotto-prod | kubectl config use-
 alias myip="curl ipinfo.io/ip"
 alias mfa=~/.aws/get-aws-creds.sh
 alias awstote="ykman oath code -s awstote"
+alias tg=terragrunt

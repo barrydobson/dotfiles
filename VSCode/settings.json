@@ -79,12 +79,15 @@
             ]
         },
         "terraform.languageServer": {
+
             "external": true,
             "args": [
                 "serve"
             ]
         },
-
+        "[terraform]": {
+            "editor.formatOnSave": true
+        },
        // Custom tags for the parser to use
         "yaml.customTags": [
             "!And",
@@ -135,7 +138,29 @@
         "editor.formatOnPaste": true,
         "terminal.integrated.rendererType": "canvas",
         "terminal.integrated.lineHeight": 1.1,
-        "window.zoomLevel": 0
+        "window.zoomLevel": 0,
+        "go.formatTool": "gofmt",
+        "go.useLanguageServer": true,
+        "vs-kubernetes": {
+
+
+            "vs-kubernetes.namespace": "",
+            "vs-kubernetes.kubectl-path": "",
+            "vs-kubernetes.helm-path": "",
+            "vs-kubernetes.draft-path": "",
+            "vs-kubernetes.minikube-path": "",
+            "vs-kubernetes.kubectlVersioning": "user-provided",
+            "vs-kubernetes.outputFormat": "yaml",
+            "vs-kubernetes.kubeconfig": "",
+            "vs-kubernetes.knownKubeconfigs": [],
+            "vs-kubernetes.autoCleanupOnDebugTerminate": false,
+            "vs-kubernetes.nodejs-autodetect-remote-root": true,
+            "vs-kubernetes.nodejs-remote-root": "",
+            "vs-kubernetes.nodejs-debug-port": 9229,
+            "checkForMinikubeUpgrade": true,
+            "logsDisplay": "webview",
+            "imageBuildTool": "Docker"
+        }
 
 
 }
