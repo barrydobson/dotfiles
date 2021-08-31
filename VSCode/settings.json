@@ -23,7 +23,7 @@
 	"azure.resourceFilter": [
 		"848fc3d6-c58d-4678-a8f6-f84c784b094d/59dfc679-c8dc-4761-94d1-309c5510527c"
 	],
-    "workbench.colorTheme": "Material Theme Darker",
+    "workbench.colorTheme": "Visual Studio 2019 Dark",
     "editor.fontFamily": "MesloLGS NF",
     "terminal.integrated.fontSize": 11,
 	"cSpell.language": "en-GB",
@@ -79,14 +79,17 @@
             ]
         },
         "terraform.languageServer": {
-
             "external": true,
+            "pathToBinary": "",
             "args": [
                 "serve"
-            ]
+            ],
+            "maxNumberOfProblems": 100,
+            "trace.server": "off"
         },
         "[terraform]": {
-            "editor.formatOnSave": true
+            "editor.formatOnSave": true,
+            "editor.defaultFormatter": "hashicorp.terraform"
         },
        // Custom tags for the parser to use
         "yaml.customTags": [
@@ -127,19 +130,18 @@
         "[yaml]": {
             "editor.defaultFormatter": "redhat.vscode-yaml"
         },
-        "editor.multiCursorModifier": "ctrlCmd",
         "gitlens.views.repositories.files.layout": "tree",
         "files.associations": {
             "*.hcl": "terraform"
         },
         "cSpell.enableFiletypes": [
+            "!go",
             "!yaml"
         ],
         "editor.formatOnPaste": true,
         "terminal.integrated.rendererType": "canvas",
         "terminal.integrated.lineHeight": 1.1,
-        "window.zoomLevel": 0,
-        "go.formatTool": "gofmt",
+        "go.formatTool": "gofumpt",
         "go.useLanguageServer": true,
         "vs-kubernetes": {
 
@@ -160,7 +162,59 @@
             "checkForMinikubeUpgrade": true,
             "logsDisplay": "webview",
             "imageBuildTool": "Docker"
-        }
+        },
+        "go.delveConfig": {
+
+            "dlvLoadConfig": {
+                "followPointers": true,
+                "maxVariableRecurse": 1,
+                "maxStringLen": 300,
+                "maxArrayValues": 64,
+                "maxStructFields": -1
+            },
+            "apiVersion": 2,
+            "showGlobalVariables": false
+        },
+        "go.lintTool": "golangci-lint",
+        "go.lintFlags": [
+            "--fast"
+        ],
+        "workbench.preferredDarkColorTheme": "One Dark Pro",
+        "go.toolsManagement.autoUpdate": true,
+        "[javascript]": {
+            "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "terminal.integrated.copyOnSelection": true,
+        "bracket-pair-colorizer-2.showBracketsInGutter": true,
+        "markdown-preview-enhanced.previewTheme": "solarized-dark.css",
+        "mssql.connections": [
+            {
+                "server": "{{put-server-name-here}}",
+                "database": "{{put-database-name-here}}",
+                "user": "{{put-username-here}}",
+                "password": ""
+            },
+            {
+                "server": "data-analytics.crltf2szdaoh.eu-west-2.rds.amazonaws.com",
+                "database": "",
+                "authenticationType": "SqlLogin",
+                "user": "admin",
+                "password": "",
+                "emptyPasswordInput": false,
+                "savePassword": true,
+                "profileName": "Analytics-SQL"
+            }
+        ],
+        "aws.profile": "profile:automation",
+        "redhat.telemetry.enabled": false,
+        "go.toolsEnvVars": {
+            "GOPRIVATE": "github.com/thetote/*"
+        },
+        "dotnet-test-explorer.testProjectPath": "**/*Tests.csproj",
+        "diffEditor.ignoreTrimWhitespace": false,
+        "workbench.startupEditor": "none",
+        "yaml.schemas": {},
+        "gist.defaultPrivate": true
 
 
 }

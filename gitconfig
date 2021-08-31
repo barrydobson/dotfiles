@@ -3,6 +3,7 @@
 	name = Barry Dobson
 	useConfigOnly = true
 	signingKey = DF808E7FF90BF7D8
+	email = barry.dobson@tote.co.uk
 [push]
 	followTags = true
 [core]
@@ -15,7 +16,7 @@
 [color]
   ui = true
 [fetch]
-  prune = true
+	prune = true
 [push]
   default = upstream
 [diff]
@@ -35,3 +36,16 @@
 	gpgsign = true
 [gpg]
 	program = /usr/local/bin/gpg
+[url "https://root:_1eo3yEMqHdy7CnFywQ_@gitlab.tote.co.uk"]
+	insteadOf = https://gitlab.tote.co.uk
+[url "https://@github.com"]
+	insteadOf = https://github.com
+[alias]
+	pt = !git tag -l | xargs git tag -d && git fetch -t
+[filter "lfs"]
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+[init]
+	defaultBranch = master
