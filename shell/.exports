@@ -1,0 +1,111 @@
+#!/usr/bin/env bash
+
+# `.exports` is used to provide custom variables.
+#
+# This file is used as a part of `.shell_env`
+
+
+# === Compiler flags ===
+
+# This is required because `openssl` is keg-only in `brew`,
+# see: `brew info openssl` for more information.
+export LDFLAGS="-L/usr/local/opt/openssl/lib"
+export CPPFLAGS="-I/usr/local/opt/openssl/include"
+export CFLAGS="-I$(xcrun --show-sdk-path)/usr/include"
+export PKG_CONFIG_PATH="/usr/local/opt/openssl/lib/pkgconfig"
+
+
+# === Path modifications ===
+
+# These lines should be the first ones!
+
+# GPG agent:
+PATH="/usr/local/opt/gpg-agent/bin:$PATH"
+
+# Adds `pipsi` and `pipx` binary files:
+PATH="$HOME/.local/bin:$PATH"
+
+# npm:
+PATH="/usr/local/share/npm/bin:$PATH"
+
+# === General ===
+
+# Editor:
+export EDITOR=$(which nano)
+
+# GPG:
+export GPG_TTY=$(tty)
+gpg-connect-agent updatestartuptty /bye
+unset SSH_AGENT_PID
+export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+
+# Make Python use UTF-8 encoding for output to stdin, stdout, and stderr.
+export PYTHONIOENCODING='UTF-8'
+
+# Homebrew:
+export HOMEBREW_NO_ANALYTICS=1  # disables statistics that brew collects
+
+# Pagers:
+# This affects every invocation of `less`.
+#
+#   -i   case-insensitive search unless search string contains uppercase letters
+#   -R   color
+#   -F   exit if there is less than one page of content
+#   -X   keep content on screen after exit
+#   -M   show more info at the bottom prompt line
+#   -x4  tabs are 4 instead of 8
+export LESS="-iRFXMx4"
+export PAGER='less'
+export MANPAGER='less'
+
+
+# === Version managers ===
+
+# nvm:
+export NVM_DIR="$HOME/.nvm"
+source "/usr/local/opt/nvm/nvm.sh"
+
+
+# === Histories ===
+
+# Enable persistent REPL history for `node`.
+export NODE_REPL_HISTORY="$HOME/.node_history"
+# Use sloppy mode by default, matching web browsers.
+export NODE_REPL_MODE='sloppy'
+
+# Erlang and Elixir shell history:
+export ERL_AFLAGS="-kernel shell_history enabled"
+
+
+# === Code highlight ===
+# https://github.com/zsh-users/zsh-syntax-highlighting
+
+# We won't highlight code longer than 200 chars, because it is slow:
+export ZSH_HIGHLIGHT_MAXLENGTH=200
+
+source 
+
+
+export POWERLEVEL9K_MODE="nerdfont-complete"
+
+# Standard Settings
+export POWERLEVEL9K_SHORTEN_STRATEGY="truncate_middle"
+export POWERLEVEL9K_SHORTEN_DIR_LENGTH=4
+export POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+export POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=''
+export POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX=($'%F{red} \uf7c6 %f %F{yellow}❯ ')
+
+# Prompt Segments
+export POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir dir_writable vcs)
+
+# Colors
+export POWERLEVEL9K_HISTORY_BACKGROUND='green'
+export P9K_DIR_WRITABLE_FORBIDDEN_FOREGROUND=$P9KGT_YELLOW
+export P9K_DIR_WRITABLE_FORBIDDEN_BACKGROUND=$P9KGT_RED
+export POWERLEVEL9K_KUBECONTEXT_BACKGROUND='004'
+export POWERLEVEL9K_KUBECONTEXT_FOREGROUND='000'
+
+# === PATH ===
+
+# This should be the last line:
+export PATH

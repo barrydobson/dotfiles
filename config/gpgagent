@@ -1,0 +1,5 @@
+default-cache-ttl 120
+max-cache-ttl 60
+enable-ssh-support
+write-env-file
+pinentry-program /usr/local/bin/pinentry-mac

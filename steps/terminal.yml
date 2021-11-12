@@ -1,0 +1,59 @@
+---
+
+- clean: ['~']
+
+- link:
+    # Terminal:
+    ~/.shell:
+      path: shell
+      create: true
+    ~/.bash_profile: config/bash_profile
+    ~/.bashrc: config/bashrc
+    ~/.zshrc:
+      path: config/zshrc
+      force: true
+    ~/.shell_env: config/shell_env
+    ~/.hushlogin: config/hushlogin
+    ~/.zplugrc: config/zplugrc
+    ~/.config/bat/config: config/bat_config
+
+    ~/.iterm:
+      if: '[ `uname` = Darwin ]'
+      path: iterm2
+      create: true
+
+    "~/Library/Application Support/iTerm2/DynamicProfiles/profiles.json":
+      if: '[ `uname` = Darwin ]'
+      path: "iterm2/profiles.json"
+      create: true
+      
+    # Git:
+    ~/.gitconfig: config/gitconfig
+    ~/.gitignore_global: config/gitignore
+    ~/.gitattributes_global: config/gitattributes
+
+    # Editors:
+    ~/.editorconfig: config/editorconfig
+
+    # SSH:
+    ~/.ssh/config:
+      path: config/ssh_config
+      force: true
+      create: true
+
+    # TMUX:
+    ~/.tmux.conf:
+      path: config/tmux
+      force: true
+      create: true
+
+    # GPG:
+    ~/.gnupg/gpg-agent.conf:
+      path: config/gpgagent
+      force: true
+      create: true
+  
+    ~/.gnupg/gpg.conf:
+      path: config/gpg
+      force: true
+      create: true
