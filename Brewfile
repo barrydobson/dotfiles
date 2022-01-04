@@ -30,7 +30,6 @@ brew 'yq'
 brew 'exa'
 brew 'fzf'
 
-brew 'thefuck'
 brew 'dockutil'
 
 cask 'docker'

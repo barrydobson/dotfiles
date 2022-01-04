@@ -8,5 +8,4 @@ ohmyzsh/ohmyzsh path:plugins/tmuxinator
 ohmyzsh/ohmyzsh path:plugins/kubectl
 ohmyzsh/ohmyzsh path:plugins/aws
 ohmyzsh/ohmyzsh path:plugins/gcloud
-ohmyzsh/ohmyzsh path:plugins/thefuck
 robbyrussell/oh-my-zsh path:plugins/docker

@@ -34,3 +34,13 @@ if (( $+commands[kubectl] )); then
   source "${kubectl_cache}"
   unset kubectl_cache
 fi
+
+if (( $+commands[kustomize] )); then
+  kustomize_cache="${HOME}/.kustomize-cache"
+  if [[ "$(whence kustomize)" -nt "${kustomize_cache}" ]] || [[ ! -s "${kustomize_cache}" ]]; then
+    kustomize completion zsh > "${kustomize_cache}"
+  fi
+
+  source "${kustomize_cache}"
+  unset kustomize_cache
+fi

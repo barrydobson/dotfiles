@@ -31,7 +31,7 @@ if [[ "$__CFBundleIdentifier" == "com.jetbrains.rider" ]]; then
 else
   ZSH_THEME="powerlevel10k/powerlevel10k"
   # zsh tmux settings
-  ZSH_TMUX_AUTOSTART='true'
+  ZSH_TMUX_AUTOSTART='false'
   ZSH_TMUX_AUTOCONNECT='false'
 fi
 zstyle ':bracketed-paste-magic' active-widgets '.self-*'
@@ -87,13 +87,14 @@ complete -o nospace -C /usr/local/bin/kustomize kustomize
 export PATH="/usr/local/opt/terraform/bin:$PATH"
 export GOPATH=$HOME/go
 export GO111MODULE=on
-export  VSCODE_FORCE_USER_ENV=1
+export GOPRIVATE='github.com/thetote/*'
+export VSCODE_FORCE_USER_ENV=1
 export CLOUDSDK_PYTHON="/usr/local/opt/python@3.8/libexec/bin/python"
 source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
 source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
 
 # CLEAN PATH
-export PATH="/usr/local/share/dotnet:/Users/barrydobson/Library/Python/2.7/bin:$GOPATH/bin:/usr/local/opt/terraform/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Users/barrydobson/bin:/usr/local/bin:/usr/local/opt/coreutils/libexec/gnubin:/usr/local/opt/gnu-tar/libexec/gnubin:/usr/local/opt/gnu-sed/libexec/gnubin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/opt/liquibase:/Users/barrydobson/istio-1.9.2/bin:/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin:/Applications/Wireshark.app/Contents/MacOS/:${KREW_ROOT:-$HOME/.krew}/bin"
+export PATH="/usr/local/share/dotnet:/Users/barrydobson/Library/Python/2.7/bin:$GOPATH/bin:/usr/local/opt/terraform/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Users/barrydobson/bin:/usr/local/bin:/usr/local/opt/coreutils/libexec/gnubin:/usr/local/opt/gnu-tar/libexec/gnubin:/usr/local/opt/gnu-sed/libexec/gnubin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/opt/liquibase:/Users/barrydobson/istio-1.12.1/bin:/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin:/Applications/Wireshark.app/Contents/MacOS/:${KREW_ROOT:-$HOME/.krew}/bin"
 PATH="/Users/barrydobson/perl5/bin${PATH:+:${PATH}}"; export PATH;
 PERL5LIB="/Users/barrydobson/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
 PERL_LOCAL_LIB_ROOT="/Users/barrydobson/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
@@ -104,3 +105,4 @@ export GPG_TTY=$(tty)
 gpg-connect-agent updatestartuptty /bye
 unset SSH_AGENT_PID
 export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+gpgconf --launch gpg-agent
