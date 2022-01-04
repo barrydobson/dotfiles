@@ -140,7 +140,7 @@ secret() {
   gpg --encrypt --armor --output ${output} -R "${1}" && echo "${1} -> ${output}"
 }
 
-terragrunt () {
+terragruntz () {
 	local action=$1
 	shift 1
 	command terragrunt $action "$@" 2>&1 | sed -E "s|$(dirname $(pwd))/||g;s|^\[terragrunt\]( [0-9]{4}/[0-9]{2}/[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2})* ||g;s|(\[.*\]) [0-9]{4}/[0-9]{2}/[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}|\1|g"
