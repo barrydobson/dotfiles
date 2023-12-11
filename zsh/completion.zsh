@@ -25,22 +25,12 @@ zstyle ':completion:*:manuals' separate-sections true
 zstyle ':completion:*:cd:*' ignore-parents parent pwd
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
-if (( $+commands[kubectl] )); then
-  kubectl_cache="${HOME}/.kubectl-cache"
-  if [[ "$(whence kubectl)" -nt "${kubectl_cache}" ]] || [[ ! -s "${kubectl_cache}" ]]; then
-    kubectl completion zsh > "${kubectl_cache}"
+if (( $+commands[kubectl-argo-rollouts] )); then
+  kubectl_argo_rollouts_cache="${HOME}/.kubectl-argo-rollouts-cache"
+  if [[ "$(whence kubectl-argo-rollouts)" -nt "${kubectl_argo_rollouts_cache}" ]] || [[ ! -s "${kubectl_argo_rollouts_cache}" ]]; then
+    kubectl-argo-rollouts completion zsh > "${kubectl_argo_rollouts_cache}"
   fi
 
-  source "${kubectl_cache}"
-  unset kubectl_cache
-fi
-
-if (( $+commands[kustomize] )); then
-  kustomize_cache="${HOME}/.kustomize-cache"
-  if [[ "$(whence kustomize)" -nt "${kustomize_cache}" ]] || [[ ! -s "${kustomize_cache}" ]]; then
-    kustomize completion zsh > "${kustomize_cache}"
-  fi
-
-  source "${kustomize_cache}"
-  unset kustomize_cache
+  source "${kubectl_argo_rollouts_cache}"
+  unset kubectl_argo_rollouts_cache
 fi

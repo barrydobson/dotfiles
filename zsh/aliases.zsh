@@ -110,7 +110,7 @@ alias gcloud-stage="gcloud config set project gc-lotto-stage | kubectl config us
 alias gcloud-prod="gcloud config set project gc-lotto-prod | kubectl config use-context lotto-prod"
 alias myip="curl ipinfo.io/ip"
 alias mfa=~/.aws/get-aws-creds.sh
-alias awstote="ykman oath accounts code -s awstote"
+alias awstote="ykman oath accounts code -s 'Amazon Web Services:barry.dobson@totemaster'"
 alias tg=terragrunt
 alias awsuautomation="~/.aws/awsudo-exec.sh automation"
 alias awsuadmin="~/.aws/awsudo-exec.sh administrator"
@@ -121,3 +121,7 @@ alias sshuttles="sshuttle --ssh-cmd 'ssh -o ServerAliveInterval=60'"
 alias kb="kustomize build --enable-alpha-plugins --load-restrictor=LoadRestrictionsNone --enable-exec"
 alias proxycore="sshuttles -vr barrydobson@uktote-live-services-bastion.core-services.tote.co.uk 10.130.0.0/16"
 alias proxydev="sshuttles -vr barrydobson@uktote-development-racing-bastion.development.tote.co.uk 10.123.0.0/16"
+alias awsume=". awsume"
+alias ekspip='aws ec2 describe-network-interfaces --query "NetworkInterfaces[*].{Description: Description, Status: Status, PrivateIpAddress: PrivateIpAddress}" --filters Name=description,Values="Amazon EKS uktote-*"';
+alias icode='/Applications/Visual\ Studio\ Code\ -\ Insiders.app/Contents/Resources/app/bin/code'
+alias kubectx-reload="source ~/.kube/load-all.sh"

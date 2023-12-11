@@ -9,7 +9,7 @@ POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX=($'%F{red} \uf7c6 %f %F{yellow}❯ ')
 
 # Prompt Segments
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir dir_writable vcs)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status gcloud aws kubecontext)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status aws kubecontext)
 
 # Colors
 POWERLEVEL9K_HISTORY_BACKGROUND='green'

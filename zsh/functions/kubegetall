@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+local namespace
+namespace="$1"
+shift 1
+
+for i in $(kubectl api-resources --verbs=list --namespaced -o name | grep -v "events.events.k8s.io" | grep -v "events" | sort | uniq); do
+  kubectl -n ${namespace} get --ignore-not-found ${i} $@
+done

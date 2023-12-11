@@ -20,6 +20,7 @@
     ~/.oh-my-zsh/custom/themes/powerlevel10k: zsh/themes/powerlevel10k/
     ~/.tmux.conf: tmux.conf
     ~/.iterm: iterm2
+    ~/.kube/load-all.sh: load-all.sh
     ~/Library/Application Support/Code/User/settings.json: VSCode/settings.json
     ~/Library/Application Support/Code/User/keybindings.json: VSCode/keybindings.json
     ~/Library/Application Support/Code/User/snippets: VSCode/snippets
