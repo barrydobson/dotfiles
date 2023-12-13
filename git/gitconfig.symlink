@@ -1,0 +1,80 @@
+[include]
+  path = .gitconfig_local
+[diff-so-fancy]
+  markEmptyLines = false
+  first-run = false
+[credential]
+  helper = osxkeychain
+[color]
+	ui = auto
+[color "diff"]
+	meta = yellow bold
+	commit = green bold
+	frag = magenta bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+	newMoved = cyan dim
+	oldMoved = blue dim
+	newMovedAlternative = cyan italic
+	oldMovedAlternative = blue italic
+[color "branch"]
+	current = yellow reverse
+	local = yellow
+	remote = green
+[color "status"]
+	added = yellow
+	changed = green
+	untracked = cyan
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = "red bold 52"
+	newNormal = "green bold"
+	newHighlight = "green bold 22"
+[init]
+	defaultBranch = main
+[push]
+	default = current
+  autoSetupRemote = true
+	followTags = true
+[merge]
+  tool = opendiff
+	renameLimit = 0
+  ff = only
+[pull]
+  default = current
+  ff = only
+[rebase]
+  autosquash = true
+[fetch]
+	prune = true
+[branch]
+  autosetupmerge = true
+  autosetuprebase = local
+[filter "lfs"]
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+[alias]
+  aliases = config --get-regexp alias
+	co = checkout
+	pt = !sh -c 'git tag $1 && git push --atomic origin $(git branch --show-current) $1' -
+  diff = diff --word-diff
+  dlc = diff --cached HEAD^
+  lasttag = describe --tags --abbrev=0
+  ours = "!f() { git co --ours $@ && git add $@; }; f"
+  theirs = "!f() { git co --theirs $@ && git add $@; }; f"
+  ffs = "!git all && git commit --amend"
+[core]
+	excludesfile = ~/.gitignore
+	autocrlf = input
+  trustctime = false
+[protocol]
+	version = 2
+[help]
+	autocorrect = 1
+[diff]
+	colorMoved = default
+	renames = copies
+	submodule = log

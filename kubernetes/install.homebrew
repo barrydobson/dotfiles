@@ -1,0 +1,7 @@
+kubectl
+kustomize
+argocd
+helm
+helmfile
+stern
+krew
