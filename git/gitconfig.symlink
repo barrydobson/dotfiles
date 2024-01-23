@@ -70,6 +70,7 @@
 	excludesfile = ~/.gitignore
 	autocrlf = input
   trustctime = false
+	pager = less -F -X
 [protocol]
 	version = 2
 [help]

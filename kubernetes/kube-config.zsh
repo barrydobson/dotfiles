@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 # If there's already a kubeconfig file in ~/.kube/config it will import that too and all the contexts
 DEFAULT_KUBECONFIG_FILE="$HOME/.kube/config"
 if test -f "${DEFAULT_KUBECONFIG_FILE}"
@@ -16,4 +15,3 @@ do
     export KUBECONFIG="$kubeconfigFile:$KUBECONFIG"
 done
 IFS="$OIFS"
-echo "c_$KUBECONFIG"

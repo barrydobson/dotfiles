@@ -12,7 +12,6 @@ readline
 tree
 wget
 openssl
-direnv
 grep
 gh
 openssh
