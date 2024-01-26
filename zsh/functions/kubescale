@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-local namespace kind replicas
-
-namespace="$1"
-kind="$2"
-replicas="$3"
-shift 3
-kubectl get $kind -n $namespace --no-headers -o custom-columns=:metadata.name $@ | xargs kubectl scale $kind --replicas $replicas -n $namespace $@

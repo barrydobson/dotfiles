@@ -1,0 +1,17 @@
+coreutils
+curl
+findutils
+gnu-sed
+grc
+httpstat
+jq
+yq
+moreutils
+pkgdiff
+readline
+tree
+wget
+openssl
+grep
+gh
+openssh

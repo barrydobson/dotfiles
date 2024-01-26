@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-local context contexts fzf_query
-
-contexts=$(kubectl config get-contexts -o name)
-
-[[ -n "$@" ]] && fzf_query="--query=$@"
-context=$(printf ${contexts} | fzf --no-multi ${fzf_query})
-[[ -n "${context}" ]] && kubectl config use-context "${context}"

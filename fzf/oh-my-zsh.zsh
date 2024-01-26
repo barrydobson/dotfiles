@@ -1,0 +1,1 @@
+export FZF_BASE=$(brew --prefix fzf)

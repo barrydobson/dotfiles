@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-devpod up \
-  --devcontainer-path ".devcontainer/devcontainer.json" \
-  --ide vscode \
-  --ide-option OPEN_NEW_WINDOW=true \
-  --source "git://github.com/thetote/racing-platform-infrastructure" \
-  --provider kubernetes-shared-services \
-  --id racing-platform-infrastructure
