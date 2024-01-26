@@ -5,3 +5,4 @@ unset SSH_AGENT_PID
 export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
 gpgconf --launch gpg-agent
 export XDG_CONFIG_HOME="$HOME/.config"
+source "$HOMEBREW_PREFIX/etc/grc.zsh"

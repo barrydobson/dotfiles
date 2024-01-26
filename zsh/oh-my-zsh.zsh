@@ -27,3 +27,4 @@ pastefinish() {
 zstyle :bracketed-paste-magic paste-init pasteinit
 zstyle :bracketed-paste-magic paste-finish pastefinish
 ### Fix slowness of pastes
+eval "$(/opt/homebrew/bin/brew shellenv)"
