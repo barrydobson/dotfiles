@@ -77,6 +77,15 @@ update() {
 	fi
 }
 
+pull_all() {
+	for i in $(git worktree list --porcelain | grep -E 'worktree ' | awk '{print $2}'); do
+		if [ "$(pwd)" != "$i" ]; then
+			echo "Pulling $i"
+			git -C "$i" pull
+		fi
+	done
+}
+
 if [ -z "${args[0]}" ]; then
 	help_message
 	exit 0
@@ -94,6 +103,9 @@ help)
 	;;
 version)
 	echo Version: $VERSION
+	;;
+pull-all)
+	pull_all
 	;;
 -)
 	goto_main_worktree

@@ -48,3 +48,9 @@ ZSH_HIGHLIGHT_STYLES[path_prefix]=fg=cyan
 ZSH_HIGHLIGHT_STYLES[path_approx]=fg=cyan
 ZSH_HIGHLIGHT_PATTERNS+=('rm -rf *' 'fg=white,bold,bg=red') 
 source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+if type brew &>/dev/null; then
+  FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+
+  autoload -Uz compinit
+  compinit
+fi

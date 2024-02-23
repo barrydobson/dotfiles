@@ -1,0 +1,1 @@
+export PATH=${KREW_ROOT:-$HOME/.krew}/bin:/Users/barrydobson/.slack/bin:$PATH
