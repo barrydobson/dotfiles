@@ -2,3 +2,4 @@ zsh
 zsh-syntax-highlighting
 zsh-completions
 zsh-autosuggestions
+git-vendor
