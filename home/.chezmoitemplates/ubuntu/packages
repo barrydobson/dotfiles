@@ -1,0 +1,11 @@
+{{- $packages := splitList " " (includeTemplate "universal/common-packages" .) }}
+{{- $packages =  concat (without $packages "fd") (list "fd-find") -}}
+{{- $packages =  concat (without $packages "zbar") (list "zbar-tools") -}}
+{{- $packages =  without $packages "git-delta" "tokei" -}}
+{{- if eq .host.arch "arm64" -}}
+{{- $packages =  without $packages "rclone" -}}
+{{- end -}}
+{{- if and (.toolchains.docker) (not .host.headless) }}
+{{- $packages = concat $packages (list "docker-ce" "docker-ce-cli" "containerd.io" "docker-compose-plugin") -}}
+{{- end }}
+{{- $packages | sortAlpha | join " " -}}

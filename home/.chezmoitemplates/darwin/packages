@@ -1,0 +1,14 @@
+{{- $packages := splitList " " (includeTemplate "universal/common-packages" .) }}
+{{- $packages = concat $packages (list
+"krr"
+"mas"
+"pinentry-mac"
+"reattach-to-user-namespace"
+)
+-}}
+{{- if not .host.headless -}}
+    {{- if .toolchains.docker -}}
+        {{- $packages = concat $packages (list "orbstack") -}}
+    {{- end -}}
+{{- end -}}
+{{- $packages | sortAlpha | join " " -}}

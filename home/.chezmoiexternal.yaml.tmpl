@@ -1,0 +1,20 @@
+{{- $refreshPeriod := "168h" }}
+
+{{- if not .host.headless }}
+{{-   $fontDir := "" }}
+{{-   if eq .host.distro.family "darwin" }}
+{{-     $fontDir = "Library/Fonts" }}
+{{-   else if eq .host.distro.family "linux" }}
+{{-     $fontDir = ".local/share/fonts" }}
+{{-   end }}
+{{-   range (list
+        "MesloLGS NF Regular.ttf"
+        "MesloLGS NF Bold.ttf"
+        "MesloLGS NF Italic.ttf"
+        "MesloLGS NF Bold Italic.ttf") }}
+["{{ $fontDir }}/{{ . }}"]
+    type = "file"
+    url = "https://github.com/romkatv/powerlevel10k-media/raw/master/{{ . }}"
+    refreshPeriod = "{{ $refreshPeriod }}"
+{{-   end }}
+{{- end }}

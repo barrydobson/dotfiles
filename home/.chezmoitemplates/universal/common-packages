@@ -1,0 +1,19 @@
+{{- $packages := list
+  "age"
+  "bash"
+  "bat"
+  "coreutils"
+  "curl"
+  "direnv"
+  "fd"
+  "gh"
+  "git"
+  "git-delta"
+  "gnupg"
+  "httpie"
+  "jq"
+  "tmux"
+  "wget"
+  "zsh"
+-}}
+{{- $packages | sortAlpha | join " " -}}

@@ -1,0 +1,8 @@
+{{- if (eq .host.distro.id "ubuntu") -}}
+packages:
+  - name: dandavison/delta@0.16.5
+  - name: XAMPPRocky/tokei@v13.0.0-alpha.0
+{{- if not (and (eq .host.distro.id "ubuntu") (eq .host.arch "arm64")) }}
+  - name: chmln/sd@v1.0.0
+{{- end -}}
+{{- end -}}

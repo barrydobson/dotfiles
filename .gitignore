@@ -1,0 +1,4 @@
+/.idea/
+.envrc
+/test/bats*
+_x_

@@ -1,0 +1,21 @@
+asdf_latest_versions () {
+  asdf update > /dev/null 2>&1
+  asdf plugin update --all > /dev/null 2>&1
+  diff <(cat ~/.tool-versions | awk '{print $1}' | xargs -I {} bash -c 'echo {} $(asdf latest {})') <(cat ~/.tool-versions)
+}
+
+u() {
+  chezmoi upgrade
+  chezmoi update --init
+}
+
+git_clean_ignored () {
+  pushd .;
+  currDir=`pwd`
+  for i in `find $currDir -maxdepth 7 -type d -name ".git"`; do
+    cd $i/../ > /dev/null;
+    pwd;
+    git clean -dfx
+  done;
+  popd;
+}

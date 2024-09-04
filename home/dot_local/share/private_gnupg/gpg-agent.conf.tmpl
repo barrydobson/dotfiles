@@ -1,0 +1,8 @@
+default-cache-ttl 120
+max-cache-ttl 60
+enable-ssh-support
+write-env-file
+use-standard-socket
+{{ if lookPath "pinentry-mac" -}}
+pinentry-program {{ lookPath "pinentry-mac" }}
+{{- end }}

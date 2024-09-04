@@ -1,0 +1,112 @@
+#!./test/bats/bin/bats
+
+load 'common-helper'
+
+setup() {
+  common_setup
+}
+
+@test "age" {
+  run age --help
+  assert_success
+}
+
+@test "bash" {
+  run bash --help
+  assert_success
+}
+
+@test "bat" {
+  run bat --help
+  assert_success
+}
+
+@test "coreutils" {
+  run realpath --help
+  assert_success
+}
+
+@test "curl" {
+  run curl --help
+  assert_success
+}
+
+@test "delta" {
+  run delta --help
+  assert_success
+}
+
+@test "direnv" {
+  run direnv --help
+  assert_success
+}
+
+@test "fd" {
+  run fd --help
+  assert_success
+}
+
+@test "gh" {
+  run gh --help
+  assert_success
+}
+
+@test "git" {
+  run git --help
+  assert_success
+}
+
+@test "gnupg" {
+  run gpg --help
+  assert_success
+}
+
+@test "httpie" {
+  run http --version
+  assert_success
+}
+
+@test "jq" {
+  run jq --help
+  assert_success
+}
+
+@test "tmux" {
+  run tmux -V
+  assert_success
+}
+
+@test "wget" {
+  run wget --help
+  assert_success
+}
+
+@test "zsh" {
+  run zsh --help
+  assert_success
+}
+
+{{ if eq .host.distro.family "darwin" -}}
+@test "orbstack" {
+  run orb version
+  assert_success
+}
+
+@test "mas" {
+  run mas
+  assert_success
+}
+
+@test "pinentry-mac" {
+  run pinentry-mac --version
+  assert_success
+}
+{{ end }}
+{{ if not (and (eq .host.distro.id "ubuntu") (eq .host.arch "arm64")) -}}
+
+
+@test "sd" {
+  run sd --help
+  assert_success
+}
+{{ end }}

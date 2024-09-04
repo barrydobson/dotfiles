@@ -1,0 +1,10 @@
+[user]
+  name = "{{ .git.name }}"
+  email = "{{ .git.email }}"
+  {{- if get . "git.signingKey" -}}
+  signingKey = "{{ .git.signingKey }}"
+  {{- end }}
+[credential "https://github.com"]
+  helper = !gh auth git-credential
+[credential "https://gist.github.com"]
+  helper = !gh auth git-credential

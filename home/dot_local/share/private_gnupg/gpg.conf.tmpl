@@ -1,0 +1,25 @@
+no-greeting
+require-cross-certification
+
+#keyserver
+keyserver-options no-honor-keyserver-url include-subkeys
+
+auto-key-locate local https://hkps.pool.sks-keyservers.net
+auto-key-retrieve
+
+cert-digest-algo SHA512
+default-preference-list SHA512 SHA384 SHA256 SHA224 AES256 AES192 AES CAST5 ZLIB BZIP2 ZIP Uncompressed
+personal-digest-preferences SHA512 SHA384 SHA256 SHA224
+no-emit-version
+
+no-comments
+keyid-format 0xlong
+with-fingerprint
+use-agent
+display-charset utf-8
+armor
+fixed-list-mode
+
+{{ if .gpg.sign -}}
+default-key {{ .gpg.sign }}
+{{- end }}

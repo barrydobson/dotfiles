@@ -1,0 +1,13 @@
+{{- if .toolchains.golang -}}
+golang 1.23.0
+{{- end -}}
+{{- if .toolchains.iac }}
+terraform 1.9.5
+terragrunt 0.67.1
+{{- end -}}
+{{- if .toolchains.node }}
+nodejs 20.17.0
+{{- end -}}
+{{- if .toolchains.kubernetes }}
+
+{{- end -}}

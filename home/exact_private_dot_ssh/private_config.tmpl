@@ -1,0 +1,5 @@
+{{- if (eq .host.distro.family "darwin") -}}
+Include {{ .host.home }}/.orbstack/ssh/config
+{{- end }}
+
+Include {{ .host.home }}/.config/ssh/config
