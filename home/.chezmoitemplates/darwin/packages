@@ -5,7 +5,6 @@
 "pinentry-mac"
 "yamllint"
 "mas"
-"krr"
 )
 -}}
 {{- $packages | sortAlpha | join " " -}}

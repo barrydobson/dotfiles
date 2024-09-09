@@ -35,5 +35,8 @@ curl -sS https://downloads.1password.com/linux/keys/1password.asc | \
 
 sudo apt update && sudo apt install -y 1password-cli
 
+app_apt_repo "eza-community" \
+"https://raw.githubusercontent.com/eza-community/eza/main/deb.asc" \
+"deb http://deb.gierens.de stable main"
 
 {{ end -}}
