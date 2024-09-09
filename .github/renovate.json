@@ -15,12 +15,17 @@
     "github>aquaproj/aqua-renovate-config:file#2.3.1(home/private_dot_config/exact_aqua/aqua\\.yaml\\.tmpl)",
     "github>aquaproj/aqua-renovate-config:file#2.3.1(home/private_dot_config/exact_aqua/toolchains/.*\\.yaml\\.tmpl)"
   ],
-  "labels": ["dependencies"],
-  "stabilityDays": 3,
+  "labels": [
+    "dependencies"
+  ],
+  "minimumReleaseAge": "3 days",
   "dependencyDashboardAutoclose": true,
-  "regexManagers": [
+  "customManagers": [
     {
-      "fileMatch": ["\\.chezmoiscripts\\/linux\\/.*aqua-packages\\.sh\\.tmpl$"],
+      "customType": "regex",
+      "fileMatch": [
+        "\\.chezmoiscripts\\/linux\\/.*aqua-packages\\.sh\\.tmpl$"
+      ],
       "matchStrings": [
         "# renovate: depName=(?<depName>.*) datasource=(?<datasource>.*)\\n\\s*current_\\w+_version=(?<currentValue>.+)\\b"
       ]
@@ -28,36 +33,53 @@
   ],
   "packageRules": [
     {
-      "matchPackageNames": ["helmfile/helmfile"],
+      "matchPackageNames": [
+        "helmfile/helmfile"
+      ],
       "enabled": false
     },
     {
       "description": "Require dashboard approval for major updates",
-      "matchUpdateTypes": ["major"],
+      "matchUpdateTypes": [
+        "major"
+      ],
       "dependencyDashboardApproval": true
     },
     {
       "description": "Update Aqua weekly",
-      "matchPackageNames": ["aquaproj/aqua-registry", "aquaproj/aqua"],
-      "extends": ["schedule:weekly"],
+      "matchPackageNames": [
+        "aquaproj/aqua-registry",
+        "aquaproj/aqua"
+      ],
+      "extends": [
+        "schedule:weekly"
+      ],
       "groupName": "aqua"
     },
     {
       "description": "Auto merge GitHub Actions weekly",
-      "matchManagers": ["github-actions"],
+      "matchManagers": [
+        "github-actions"
+      ],
       "automerge": true,
       "automergeType": "branch",
       "ignoreTests": true,
-      "extends": ["schedule:weekly"],
+      "extends": [
+        "schedule:weekly"
+      ],
       "groupName": "github-actions"
     },
     {
       "description": "Auto merge pre-commit hooks weekly",
-      "matchManagers": ["pre-commit"],
+      "matchManagers": [
+        "pre-commit"
+      ],
       "automerge": true,
       "automergeType": "branch",
       "ignoreTests": true,
-      "extends": ["schedule:weekly"],
+      "extends": [
+        "schedule:weekly"
+      ],
       "groupName": "pre-commit"
     }
   ]

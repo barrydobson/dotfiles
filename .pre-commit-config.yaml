@@ -1,64 +1,46 @@
+---
+fail_fast: false
+ci:
+  autofix_commit_msg: |
+    [pre-commit.ci] Auto fixes from pre-commit.com hooks
+  autofix_prs: true
+  autoupdate_commit_msg: "[pre-commit.ci] pre-commit autoupdate"
+  autoupdate_schedule: weekly
+  submodules: false
+
 repos:
-- repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.6.0
-  hooks:
-  - id: check-added-large-files
-  - id: check-case-conflict
-  - id: check-executables-have-shebangs
-    exclude: .*\.tmpl
-  - id: check-merge-conflict
-  - id: check-shebang-scripts-are-executable
-    exclude: .*\.tmpl
-  - id: check-yaml
-  - id: detect-private-key
-  - id: end-of-file-fixer
-  - id: fix-byte-order-marker
-  - id: mixed-line-ending
-  - id: trailing-whitespace
-- repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
-  rev: v2.14.0
-  hooks:
-  - id: pretty-format-yaml
-    args: [--autofix, --indent, '2']
-- repo: https://github.com/gruntwork-io/pre-commit
-  rev: v0.1.23
-  hooks:
-  - id: shellcheck
-    exclude: .*\.tmpl|.*\.bats
-- repo: https://github.com/adrienverge/yamllint
-  rev: v1.35.1
-  hooks:
-  - id: yamllint
-- repo: https://github.com/sirosen/check-jsonschema
-  rev: 0.29.2
-  hooks:
-  - id: check-github-workflows
-- repo: https://github.com/codespell-project/codespell
-  rev: v2.3.0
-  hooks:
-  - id: codespell
-    name: Run codespell
-    args:
-    - --quiet-level=2
-    - --check-filenames
-    - --check-hidden
-    - --ignore-words=.codespell-ignore
-- repo: https://github.com/Yelp/detect-secrets
-  rev: v1.5.0
-  hooks:
-  - id: detect-secrets
-- repo: https://github.com/Lucas-C/pre-commit-hooks
-  rev: v1.5.5
-  hooks:
-  - id: remove-crlf
-  - id: forbid-crlf
-  - id: forbid-tabs
-- repo: https://github.com/editorconfig-checker/editorconfig-checker.python
-  rev: 2.7.3
-  hooks:
-  - id: editorconfig-checker
-    exclude: plist|tmpl|pub
-- repo: https://github.com/renovatebot/pre-commit-hooks
-  rev: 37.440.7
-  hooks:
-  - id: renovate-config-validator
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.35.1
+    hooks:
+      - id: yamllint
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+      - id: fix-byte-order-marker
+      - id: mixed-line-ending
+      - id: check-added-large-files
+        args: [--maxkb=2048]
+      - id: check-merge-conflict
+      - id: check-executables-have-shebangs
+
+  - repo: https://github.com/Lucas-C/pre-commit-hooks
+    rev: v1.5.5
+    hooks:
+      - id: forbid-crlf
+
+  - repo: https://github.com/sirosen/fix-smartquotes
+    rev: 0.2.0
+    hooks:
+      - id: fix-smartquotes
+
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.4
+    hooks:
+      - id: gitleaks
+
+  - repo: https://github.com/renovatebot/pre-commit-hooks
+    rev: 38.72.1
+    hooks:
+      - id: renovate-config-validator
