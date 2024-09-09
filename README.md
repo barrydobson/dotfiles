@@ -11,7 +11,8 @@ Set the follwing environment variables to determine some of the tooling installe
 | OP_SERVICE_ACCOUNT_TOKEN | 1Password token            |         | yes      |
 | WITHOUT_TOOLCHAINS       | Disable all toolchains     | false   | no       |
 | WITHOUT_<TOOLCHAIN_NAME> | Disable specific toolchain | false   | no       |
-| WITH_<TOOLCHAIN_NAME>    | Enable specific toolchain  | true    | no       |
+| WITH_TOOLCHAINS          | Enabled all toolchains     | false   | no       |
+| WITH_<TOOLCHAIN_NAME>    | Enable specific toolchain  | false   | no       |
 
 ## Tool Chains
 

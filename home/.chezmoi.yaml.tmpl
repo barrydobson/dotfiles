@@ -35,14 +35,14 @@
 {{- if eq .chezmoi.os "darwin" -}}
 {{-   $computerName := output "scutil" "--get" "ComputerName" | trim -}}
 {{-   if eq $computerName "barrydobson-aarch64-darwin" -}}
-{{-     $hostname = "barrydobson-aarch64-darwin" -}}
+{{-     $hostname = "TDCO00290" -}}
 {{-   else -}}
 {{-     $hostname = $computerName -}}
 {{-   end -}}
 {{- end -}}
 
 {{- if not $ephemeral -}}
-{{-   if eq $hostname "barrydobson-aarch64-darwin" -}}
+{{-   if eq $hostname "TDCO00290" -}}
 {{-     $personal = false -}}
 {{-     $headless = false -}}
 {{-     $ephemeral = false -}}
@@ -63,9 +63,12 @@
     {{- $withoutToolchains := (eq (env "WITHOUT_TOOLCHAINS") "true") -}}
     {{- $withoutToolchain := eq (env (list "WITHOUT" (upper $toolchain) | join "_")) "true" -}}
     
+    {{- $withToolchains := (eq (env "WITH_TOOLCHAINS") "true") -}}
     {{- $withToolchain := (eq (env (list "WITH" (upper $toolchain) | join "_")) "true") -}}
+    
     {{- $explicitWithout := or $withoutToolchains $withoutToolchain -}}
-    {{- $explicitWith := $withToolchain -}}
+    {{- $explicitWith := or $withToolchains $withToolchain -}}
+    
     {{- $chainEnabled := $default -}}
 
     {{- if $explicitWith -}}
@@ -80,8 +83,10 @@
 
 onepassword:
   mode: service
+{{- if lookPath "delta" }}
 diff:
   pager: delta
+{{- end }}
 data:
   gpg_keyid: DF808E7FF90BF7D8
   headless: {{ $headless }}
@@ -101,7 +106,7 @@ data:
     email: op://work/git_user/email
     signingKey: op://work/github_signing_key/public key
     signingFormat: ssh
-    {{- if eq $osID "darwin" -}}
+    {{- if eq $osID "darwin" }}
     signingProgram: /Applications/1Password.app/Contents/MacOS/op-ssh-sign
     {{- end }}
   toolchains:
