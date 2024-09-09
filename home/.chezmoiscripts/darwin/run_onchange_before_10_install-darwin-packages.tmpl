@@ -7,18 +7,18 @@ if ! command -v brew >/dev/null 2>&1; then
   /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
-{{ if eq .host.arch "arm64" -}}
+{{ if eq .arch "arm64" -}}
 eval $(/opt/homebrew/bin/brew shellenv)
 {{- else }}
 eval $(/usr/local/bin/brew shellenv)
 {{- end }}
 
-# {{ includeTemplate "universal/next-update" . }}
+# {{ includeTemplate "common/next-update" . }}
 brew update
 brew bundle --verbose --no-lock --file=/dev/stdin <<EOF
 {{ includeTemplate "darwin/brewfile" . }}
 EOF
-{{- if .host.interactive }}
+{{- if .interactive }}
 brew upgrade
 brew upgrade --cask --greedy
 brew cleanup

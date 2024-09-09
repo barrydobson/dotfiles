@@ -6,7 +6,7 @@ zstyle ':z4h:' auto-update-days '7'
 zstyle ':z4h:' prompt-at-bottom 'yes'
 
 # Keyboard type: 'mac' or 'pc'.
-{{- if (eq .host.distro.family "darwin") }}
+{{- if (eq .osid "darwin") }}
 zstyle ':z4h:bindkey' keyboard  'mac'
 zstyle ':z4h:' iterm2-integration yes
 {{- else }}
@@ -71,7 +71,7 @@ z4h source ohmyzsh/ohmyzsh/lib/directories.zsh
 # kubectl completions
 mkdir -p "$ZSH_CACHE_DIR/completions"
 
-{{- if eq .host.distro.family "darwin" }}
+{{- if eq .osid "darwin" }}
 z4h load ohmyzsh/ohmyzsh/plugins/brew
 {{- end }}
 z4h load ohmyzsh/ohmyzsh/plugins/encode64

@@ -1,4 +1,3 @@
-{{- if .toolchains.docker }}
 #!./test/bats/bin/bats
 
 load 'common-helper'
@@ -16,4 +15,3 @@ setup() {
   run dive --help
   assert_success
 }
-{{- end -}}

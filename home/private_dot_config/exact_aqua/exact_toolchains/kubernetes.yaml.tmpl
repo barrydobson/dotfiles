@@ -1,12 +1,16 @@
 {{- if .toolchains.kubernetes }}
 packages:
-  - name: helm/helm@v3.14.0
-  - name: derailed/k9s@v0.31.7
-  - name: kubernetes/kubectl@v1.29.1
-  - name: kubernetes-sigs/kustomize@kustomize/v5.3.0
-  - name: ahmetb/kubectx@v0.9.5
-  - name: ahmetb/kubectx/kubens@v0.9.5
-  - name: hidetatz/kubecolor@v0.0.25
-  - name: mikefarah/yq@v4.44.3
-  - name: helmfile/helmfile@v0.152.0
+- name: ahmetb/kubectx@v0.9.5
+- name: ahmetb/kubectx/kubens@v0.9.5
+- name: derailed/k9s@v0.32.5
+- name: derailed/popeye@v0.11.3
+- name: helm/helm@v3.15.4
+- name: helmfile/helmfile@v0.152.0
+- name: hidetatz/kubecolor@v0.0.25
+- name: kubernetes-sigs/kustomize@kustomize/v5.4.3
+- name: kubernetes/kubectl@v1.31.0
+- name: loft-sh/devpod@v0.5.19
+- name: stern/stern@v1.30.0
+- name: kubernetes-sigs/kind@v0.24.0
+- name: yannh/kubeconform@v0.6.7
 {{- end -}}

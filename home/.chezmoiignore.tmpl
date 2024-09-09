@@ -2,8 +2,5 @@ README.md
 install.sh
 .keys
 .chezmoiscripts/*/**
-!.chezmoiscripts/{{ .host.distro.id }}/**
-!.chezmoiscripts/universal/**
-{{- if not .secrets.age }}
-**/*.age
-{{- end }}
+!.chezmoiscripts/{{ .distro.id }}/**
+!.chezmoiscripts/common/**

@@ -1,25 +1,54 @@
+default-key {{ .gpg_keyid }}
+
 no-greeting
+
+# When verifying a signature made from a subkey, ensure that the cross
+# certification "back signature" on the subkey is present and valid.
+# This protects against a subtle attack against subkeys that can sign.
+# Defaults to --no-require-cross-certification.  However for new
+# installations it should be enabled.
+
 require-cross-certification
 
-#keyserver
-keyserver-options no-honor-keyserver-url include-subkeys
+# When using --refresh-keys, if the key in question has a preferred keyserver
+# URL, then disable use of that preferred keyserver to refresh the key from
+
+keyserver-options no-honor-keyserver-url
+
+# When searching for a key with --search-keys, include keys that are marked on
+# the keyserver as revoked
+keyserver-options include-revoked
 
 auto-key-locate local https://hkps.pool.sks-keyservers.net
 auto-key-retrieve
 
-cert-digest-algo SHA512
-default-preference-list SHA512 SHA384 SHA256 SHA224 AES256 AES192 AES CAST5 ZLIB BZIP2 ZIP Uncompressed
+# list of personal digest preferences. When multiple digests are supported by
+# all recipients, choose the strongest one
+personal-cipher-preferences AES256 AES192 AES CAST5
+
+# list of personal digest preferences. When multiple ciphers are supported by
+# all recipients, choose the strongest one
 personal-digest-preferences SHA512 SHA384 SHA256 SHA224
+
+# message digest algorithm used when signing a key
+cert-digest-algo SHA512
+
+# Disable inclusion of the version string in ASCII armored output
 no-emit-version
 
+# Disable comment string in clear text signatures and ASCII armored messages
 no-comments
+
+# Display long key IDs
 keyid-format 0xlong
+
+# List all keys (or the specified ones) along with their fingerprints
 with-fingerprint
-use-agent
+
 display-charset utf-8
 armor
 fixed-list-mode
 
-{{ if .gpg.sign -}}
-default-key {{ .gpg.sign }}
-{{- end }}
+# Try to use the GnuPG-Agent. With this option, GnuPG first tries to connect to
+# the agent before it asks for a passphrase.
+use-agent

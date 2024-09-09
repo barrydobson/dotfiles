@@ -1,5 +1,5 @@
-{{- if (eq .host.distro.family "darwin") -}}
-Include {{ .host.home }}/.orbstack/ssh/config
+{{- if (eq .chezmoi.os "darwin") -}}
+Include {{ .home }}/.orbstack/ssh/config
 {{- end }}
 
-Include {{ .host.home }}/.config/ssh/config
+Include {{ .home }}/.config/ssh/config

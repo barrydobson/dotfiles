@@ -1,4 +1,3 @@
-{{- if .toolchains.iac }}
 #!./test/bats/bin/bats
 
 load 'common-helper'
@@ -31,5 +30,3 @@ setup() {
   run tflint --help
   assert_success
 }
-
-{{- end -}}

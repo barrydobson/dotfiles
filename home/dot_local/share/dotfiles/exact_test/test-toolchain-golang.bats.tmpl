@@ -1,4 +1,3 @@
-{{- if .toolchains.golang }}
 #!./test/bats/bin/bats
 
 load 'common-helper'
@@ -11,4 +10,3 @@ setup() {
   run go version
   assert_success
 }
-{{- end -}}

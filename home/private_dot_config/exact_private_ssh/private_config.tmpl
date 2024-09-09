@@ -1,6 +1,1 @@
-{{ if .host.work -}}
-Include {{ .host.home }}/.config/ssh/config.d/work.conf
-{{- else -}}
-Include {{ .host.home }}/.config/ssh/config.d/personal.conf
-{{- end }}
-Include {{ .host.home }}/.config/ssh/config.d/common.conf
+Include {{ .home }}/.config/ssh/config.d/common.conf

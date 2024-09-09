@@ -86,7 +86,7 @@ setup() {
   assert_success
 }
 
-{{ if eq .host.distro.family "darwin" -}}
+{{ if eq .chezmoi.os "darwin" -}}
 @test "orbstack" {
   run orb version
   assert_success
@@ -102,7 +102,7 @@ setup() {
   assert_success
 }
 {{ end }}
-{{ if not (and (eq .host.distro.id "ubuntu") (eq .host.arch "arm64")) -}}
+{{ if not (and (eq .chezmoi.os "ubuntu") (eq .arch "arm64")) -}}
 
 
 @test "sd" {

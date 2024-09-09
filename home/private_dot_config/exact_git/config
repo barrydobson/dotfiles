@@ -1,6 +1,7 @@
 [include]
   path = ~/.config/git/base
   path = ~/.config/git/colour
+  path = ~/.config/git/delta_colours
   path = ~/.config/git/diff
   path = ~/.config/git/merge
   path = ~/.config/git/user

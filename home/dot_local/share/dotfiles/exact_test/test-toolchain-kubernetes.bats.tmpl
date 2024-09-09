@@ -1,4 +1,3 @@
-{{- if .toolchains.kubernetes }}
 #!./test/bats/bin/bats
 
 load 'common-helper'
@@ -36,4 +35,3 @@ setup() {
   run yq --help
   assert_success
 }
-{{- end -}}

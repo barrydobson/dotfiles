@@ -1,5 +1,4 @@
 {{- $packages := list
-  "age"
   "bash"
   "bat"
   "coreutils"
@@ -12,6 +11,11 @@
   "gnupg"
   "httpie"
   "jq"
+  "neovim"
+  "procs"
+  "ripgrep"
+  "sd"
+  "tokei"
   "tmux"
   "wget"
   "zsh"

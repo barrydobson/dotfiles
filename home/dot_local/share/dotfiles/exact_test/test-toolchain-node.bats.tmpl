@@ -1,4 +1,3 @@
-{{- if .toolchains.node }}
 #!./test/bats/bin/bats
 
 load 'common-helper'
@@ -12,8 +11,7 @@ setup() {
   assert_success
 }
 
-@test "yarn" {
-  run yarn --help
+@test "pnpm" {
+  run pnpm --help
   assert_success
 }
-{{- end -}}

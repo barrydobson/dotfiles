@@ -1,8 +1,11 @@
-default-cache-ttl 120
-max-cache-ttl 60
+default-cache-ttl 18000
 enable-ssh-support
-write-env-file
-use-standard-socket
-{{ if lookPath "pinentry-mac" -}}
-pinentry-program {{ lookPath "pinentry-mac" }}
-{{- end }}
+{{- if eq .chezmoi.os "darwin" }}
+{{ if eq .chezmoi.arch "arm64" -}}
+pinentry-program /opt/homebrew/bin/pinentry-mac
+{{ else -}}
+pinentry-program /usr/local/bin/pinentry-mac
+{{ end -}}
+{{ else -}}
+pinentry-program /usr/bin/pinentry-qt
+{{ end -}}

@@ -1,10 +1,10 @@
 {{- $refreshPeriod := "168h" }}
 
-{{- if not .host.headless }}
+{{- if not .headless }}
 {{-   $fontDir := "" }}
-{{-   if eq .host.distro.family "darwin" }}
+{{-   if eq .osid "darwin" }}
 {{-     $fontDir = "Library/Fonts" }}
-{{-   else if eq .host.distro.family "linux" }}
+{{-   else if eq .osid "linux-ubuntu" }}
 {{-     $fontDir = ".local/share/fonts" }}
 {{-   end }}
 {{-   range (list

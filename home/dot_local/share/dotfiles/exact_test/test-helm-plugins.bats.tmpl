@@ -1,4 +1,3 @@
-{{- if .toolchains.extra -}}
 #!./test/bats/bin/bats
 
 load 'common-helper'
@@ -16,4 +15,3 @@ setup() {
   run helm secrets version
   assert_success
 }
-{{- end -}}

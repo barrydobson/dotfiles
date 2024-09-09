@@ -1,10 +1,30 @@
 [user]
-  name = "{{ .git.name }}"
-  email = "{{ .git.email }}"
-  {{- if get . "git.signingKey" -}}
-  signingKey = "{{ .git.signingKey }}"
+  name = "{{ onepasswordRead .git.name }}"
+  email = "{{ onepasswordRead .git.email }}"
+  {{- if .git.signingKey }}
+  signingKey = "{{ onepasswordRead .git.signingKey }}"
   {{- end }}
-[credential "https://github.com"]
-  helper = !gh auth git-credential
-[credential "https://gist.github.com"]
-  helper = !gh auth git-credential
+
+[credential]
+{{ if (eq .osid "darwin") -}}
+  helper = osxkeychain
+{{ else -}}
+  helper = store
+{{- end }}
+
+[commit]
+  {{ if .git.signingKey -}}
+  gpgsign = true
+  {{ else -}}
+  gpgsign = false
+  {{ end -}}
+
+{{- if and (.git.signingKey) (eq .git.signingFormat "ssh") }}
+[gpg]
+  format = ssh
+
+{{- if (hasKey .git "signingProgram") }}
+[gpg "ssh"]
+  program = {{ .git.signingProgram }}
+{{- end }}
+{{- end }}

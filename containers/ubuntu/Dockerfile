@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.9
 
-FROM buildpack-deps:jammy-curl
+FROM buildpack-deps:noble-curl AS base
 
 ARG USER=devcontainer
 ARG UID=54321
@@ -62,9 +62,9 @@ RUN set -eux \
   && rm -rf /var/lib/apt/lists/* /var/cache/apt/* /var/log/* /tmp/*
 
 USER $USER
-
 COPY --chown=$USER:$USER . .local/share/chezmoi
 
+FROM base
 RUN --mount=type=secret,id=GITHUB_TOKEN,dst=/run/secrets/github_token,uid=$UID \
   GITHUB_ACCESS_TOKEN=$(cat /run/secrets/github_token) \
   GITHUB_API_TOKEN=$(cat /run/secrets/github_token) \

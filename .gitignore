@@ -2,3 +2,4 @@
 .envrc
 /test/bats*
 _x_
+.DS_Store

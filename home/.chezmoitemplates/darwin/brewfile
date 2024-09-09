@@ -11,38 +11,34 @@
 "robusta-dev/homebrew-krr"
 -}}
 
-
 {{- $brews = splitList " " (includeTemplate "darwin/packages" .) }}
 
 {{- $casks = list
 "font-fira-code"
 "font-sauce-code-pro-nerd-font"
 "google-chrome"
-"hammerspoon"
 "iterm2"
+"orbstack"
 "spotify"
 "visual-studio-code"
 "veracrypt"
 -}}
 
-
 {{- range ($taps | sortAlpha | uniq) }}
 tap "{{ . }}"
 {{- end }}
 
-{{- if not .host.restricted }}
 tap "gromgit/fuse"
 cask "macfuse"
-{{- end }}
 
 {{ range ($brews | sortAlpha | uniq) }}
 brew "{{ . }}"
 {{- end }}
 
-{{- if not .host.headless -}}
+{{- if not .headless -}}
 {{- range ($casks | sortAlpha | uniq) }}
 cask "{{ . }}"
 {{- end }}
-mas "Bitwarden", id: 1352778147
+
 mas "Slack", id: 803453959
 {{- end -}}

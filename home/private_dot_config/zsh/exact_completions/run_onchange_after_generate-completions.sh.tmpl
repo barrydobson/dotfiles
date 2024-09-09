@@ -3,24 +3,10 @@ set -eufo pipefail
 
 source $HOME/.config/shell/exports.sh
 
-# {{ includeTemplate "universal/next-update" . }}
+{{- $compDir:= joinPath .home ".config/zsh/completions" }}
 
-{{- $compDir:= joinPath .host.home ".config/zsh/completions" -}}
-
-if [ "$(command -v bw)" ]; then
-  bw completion --shell zsh > "{{ $compDir }}/_bw"
-fi
-
-if [ "$(command -v cht.sh)" ]; then
-  cht.sh :zsh > "{{ $compDir }}/_cht"
-fi
-
-if [ "$(command -v datree)" ]; then
-  datree completion zsh > "{{ $compDir }}/_datree"
-fi
-
-if [ "$(command -v k3d)" ]; then
-  k3d completion zsh > "{{ $compDir }}/_k3d"
+if [ "$(command -v op)" ]; then
+  op completion zsh > "{{ $compDir }}/_op"
 fi
 
 if [ "$(command -v kubectl)" ]; then
