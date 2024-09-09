@@ -74,13 +74,29 @@ mkdir -p "$ZSH_CACHE_DIR/completions"
 {{- if eq .osid "darwin" }}
 z4h load ohmyzsh/ohmyzsh/plugins/brew
 {{- end }}
+{{- if or (lookPath "op") }}
+z4h load ohmyzsh/ohmyzsh/plugins/1password
+{{- end }}
 z4h load ohmyzsh/ohmyzsh/plugins/encode64
 z4h load ohmyzsh/ohmyzsh/plugins/extract
 z4h load ohmyzsh/ohmyzsh/plugins/git
 z4h load ohmyzsh/ohmyzsh/plugins/gpg-agent
+{{- if or (lookPath "kubectl") }}
 z4h load ohmyzsh/ohmyzsh/plugins/kubectl
+{{- end }}
 z4h load ohmyzsh/ohmyzsh/plugins/sudo
+{{- if or (lookPath "terraform") }}
 z4h load ohmyzsh/ohmyzsh/plugins/terraform
+{{- end }}
+{{- if or (lookPath "eza") }}
+z4h load ohmyzsh/ohmyzsh/plugins/eza
+{{- end }}
+{{- if or (lookPath "asdf") }}
+z4h load ohmyzsh/ohmyzsh/plugins/asdf
+{{- end }}
+{{- if or (lookPath "aws") }}
+z4h load ohmyzsh/ohmyzsh/plugins/aws
+{{- end }}
 
 z4h load mroth/evalcache
 z4h load olets/zsh-abbr
