@@ -1,5 +1,5 @@
 {{- $packages := splitList " " (includeTemplate "common/common-packages" .) }}
-{{- $packages = without $packages "gocryptfs" -}}
+{{- $packages = without $packages "twingate" -}}
 {{- $packages = concat $packages (list
 "kcat"
 "pinentry-mac"

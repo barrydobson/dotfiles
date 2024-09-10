@@ -38,4 +38,5 @@ cask "{{ . }}"
 {{- end }}
 
 mas "Slack", id: 803453959
+mas "Twingate", id: 1501592214
 {{- end -}}

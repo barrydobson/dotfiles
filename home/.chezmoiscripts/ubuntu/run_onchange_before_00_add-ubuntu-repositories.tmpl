@@ -39,4 +39,6 @@ app_apt_repo "eza-community" \
 "https://raw.githubusercontent.com/eza-community/eza/main/deb.asc" \
 "deb http://deb.gierens.de stable main"
 
+echo "deb [trusted=yes] https://packages.twingate.com/apt/ /" | tee /etc/apt/sources.list.d/twingate.list
+
 {{ end -}}
