@@ -10,17 +10,14 @@ Host github.com
   AddKeysToAgent yes
   IdentityFile {{ .home }}/.config/ssh/personal-keys.d/id_ed25519
 
+Host *.devpod
+  IdentityAgent ~/.1password/agent.sock
+
 Host *
   IdentityFile {{ .home }}/.config/ssh/personal-keys.d/id_ed25519
   UserKnownHostsFile ${SSH_DATA_HOME}/known_hosts
   AddKeysToAgent yes
-{{- if eq .chezmoi.os "darwin" }}
-  IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
-{{- else }}
-  IdentityAgent "~/.1password/agent.sock"
-{{- end }}
-
-  # Connection
+  IdentityAgent ~/.1password/agent.sock
   Compression yes
   ConnectTimeout 60
   ControlMaster auto
