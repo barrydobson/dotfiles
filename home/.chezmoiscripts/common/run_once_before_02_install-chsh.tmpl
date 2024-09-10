@@ -7,14 +7,4 @@ if [[ $(awk -F ":${HOME}:" 'NF>1 {print $2}' /etc/passwd) != $(which zsh) ]]; th
   sudo chsh -s $(which zsh) $(whoami)
 fi
 
-if command -v script >/dev/null && [[ ! -d "${HOME}/.cache/gitstatus" ]]; then
-  echo "Initializing ZSH"
-  bash -e <<'EOF' >/dev/null
-cd '{{ .chezmoi.workingTree }}'
-
-# We also need to emulate a TTY
-script -qec "zsh -is </dev/null" /dev/null
-EOF
-fi
-
 {{- end -}}
