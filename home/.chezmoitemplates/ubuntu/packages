@@ -1,6 +1,6 @@
 {{- $packages := splitList " " (includeTemplate "common/common-packages" .) }}
 {{- $packages =  concat (without $packages "fd") (list "fd-find") -}}
-{{- $packages =  without $packages "procs" "sd" "tokei" -}}
+{{- $packages =  without $packages "git-delta" "procs" "sd" "tokei" -}}
 
 {{- $pyenvDependencies := list
 "make"
