@@ -4,14 +4,14 @@
 {{- $personal := false -}}{{/* true if this machine should have personal secrets */}}
 {{- "" -}}
 
-{{- $toolchains := dict 
-  "aws" false 
-  "docker" false 
-  "golang" true 
-  "iac" false 
-  "kubernetes" false 
-  "node" true 
-  "python" false 
+{{- $toolchains := dict
+  "aws" false
+  "docker" false
+  "golang" true
+  "iac" false
+  "kubernetes" false
+  "node" true
+  "python" false
   "ops" false -}}
 
 {{- $osID := .chezmoi.os -}}
@@ -62,13 +62,13 @@
 {{- range $toolchain, $default := $toolchains }}
     {{- $withoutToolchains := (eq (env "WITHOUT_TOOLCHAINS") "true") -}}
     {{- $withoutToolchain := eq (env (list "WITHOUT" (upper $toolchain) | join "_")) "true" -}}
-    
+
     {{- $withToolchains := (eq (env "WITH_TOOLCHAINS") "true") -}}
     {{- $withToolchain := (eq (env (list "WITH" (upper $toolchain) | join "_")) "true") -}}
-    
+
     {{- $explicitWithout := or $withoutToolchains $withoutToolchain -}}
     {{- $explicitWith := or $withToolchains $withToolchain -}}
-    
+
     {{- $chainEnabled := $default -}}
 
     {{- if $explicitWith -}}
@@ -81,8 +81,10 @@
 
 {{- end -}}
 
+{{- if (env "OP_SERVICE_ACCOUNT_TOKEN") }}
 onepassword:
   mode: service
+{{- end }}
 {{- if lookPath "delta" }}
 diff:
   pager: delta
