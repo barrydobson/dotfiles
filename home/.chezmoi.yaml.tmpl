@@ -28,6 +28,7 @@
 {{- if or (env "CODESPACES") (env "REMOTE_CONTAINERS_IPC") (eq .chezmoi.username "root" "ubuntu" "vagrant" "vscode" "devcontainer") -}}
 {{-   $ephemeral = true -}}
 {{-   $headless = true -}}
+sourceDir = {{ .chezmoi.sourceDir | quote }}
 {{- end -}}
 
 {{/* work around unreliable hostname on darwin */}}
