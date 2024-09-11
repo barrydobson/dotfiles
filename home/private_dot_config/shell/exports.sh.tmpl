@@ -94,6 +94,20 @@ export LS_COLORS
 # disable pre-commit colors for one-dark
 export PRE_COMMIT_COLOR="never"
 
+SSH_AUTH_SOCK_FILE=~/.1password/agent.sock
+if [ -h $SSH_AUTH_SOCK_FILE ]; then
+  #echo "Using 1Password SSH Agent"
+  export SSH_AUTH_SOCK=$SSH_AUTH_SOCK_FILE
+else
+{{- if eq .chezmoi.os "darwin" }}
+  #echo "macOS Monterey or later"
+  ssh-add --apple-load-keychain
+{{- end }}
+fi
+
+export GPG_TTY=$(tty)
+gpg-connect-agent updatestartuptty /bye
+
 # Path
 add_to_path ()
 case ":$PATH:" in
