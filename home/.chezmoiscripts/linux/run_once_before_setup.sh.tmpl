@@ -83,6 +83,9 @@ set -euo pipefail
 
 # Update packages
 update_packages
+
+{{ if not .ephemeral -}}
+
 # Install 1Password CLI
 install_1password
 
@@ -103,3 +106,4 @@ sudo apt-get install -y --no-install-recommends {{ $packages | sortAlpha | uniq 
 
 # Disable login banner
 touch {{ .chezmoi.homeDir -}}/.hushlogin
+{{- end }}
