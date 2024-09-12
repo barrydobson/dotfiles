@@ -84,10 +84,10 @@ set -euo pipefail
 # Update packages
 update_packages
 
-{{ if not .ephemeral -}}
-
 # Install 1Password CLI
 install_1password
+
+{{ if not .ephemeral -}}
 
 {{ if .toolchains.docker }}
 # Install Docker Engine
