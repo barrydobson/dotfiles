@@ -1,0 +1,18 @@
+echo_blue() {
+  printf "\033[0;34m%s\033[0m\n" "$*"
+}
+
+echo_green() {
+  printf "\033[0;32m%s\033[0m\n" "$*"
+}
+
+echo_red() {
+  printf "\033[0;31m%s\033[0m\n" "$*"
+}
+
+echo_me() {
+  me=$(basename "$0")
+  echo_green $me
+}
+
+echo_me

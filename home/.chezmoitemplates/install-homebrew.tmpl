@@ -1,0 +1,12 @@
+function install_homebrew() {
+  echo "Installing Homebrew..."
+
+  {{- if eq .chezmoi.os "darwin" }}
+  xcode-select -p >/dev/null 2>&1 || xcode-select --install
+  {{- end }}
+
+  if ! command -v brew >/dev/null 2>&1; then
+    echo "Installing Homebrew..."
+    {{ if ne .chezmoi.os "darwin" }}NONINTERACTIVE=1 {{ end }}/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  fi
+}

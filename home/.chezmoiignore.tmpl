@@ -1,6 +1,27 @@
-README.md
-install.sh
-.keys
+# System files
+**/.DS_Store
 .chezmoiscripts/*/**
-!.chezmoiscripts/{{ .distro.id }}/**
 !.chezmoiscripts/common/**
+
+{{ if eq .chezmoi.os "darwin" }}
+!.chezmoiscripts/darwin/**
+.local/share/fonts
+{{- end }}
+
+{{ if eq .chezmoi.os "linux" }}
+.1password
+.config/ssh
+.config/iterm2
+!.chezmoiscripts/linux/**
+
+  {{- if eq .chezmoi.arch "arm64" }}
+.config/homebrew
+.Brewfile
+  {{- end }}
+
+{{ end }}
+
+{{- if not .toolchains.kubernetes }}
+.config/devpod
+.config/k9s
+{{- end }}

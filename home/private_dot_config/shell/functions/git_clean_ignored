@@ -1,0 +1,8 @@
+pushd .;
+currDir=`pwd`
+for i in `find $currDir -maxdepth 7 -type d -name ".git"`; do
+  cd $i/../ > /dev/null;
+  pwd;
+  git clean -dfx
+done;
+popd;

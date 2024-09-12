@@ -1,0 +1,67 @@
+
+{{- /* Tap repositories */ -}}
+{{- $taps := list
+  "homebrew/autoupdate"
+  "homebrew/bundle"
+  "homebrew/command-not-found"
+-}}
+
+{{- /* Formula to install */ -}}
+{{- $formula := splitList " " (includeTemplate "common-packages.tmpl" .) -}}
+
+{{- if eq .chezmoi.os "darwin" -}}
+{{- $formula = concat $formula ( list
+  "coreutils"
+  "mas"
+  "procs"
+  "gnupg"
+  "tokei"
+  "gnu-sed"
+  "pinentry-mac" )
+-}}
+ {{- end -}}
+ {{- if eq .chezmoi.os "linux" -}}
+ {{- $formula = concat $formula ( list
+  "gcc"
+  "xclip" )
+-}}
+{{- end -}}
+
+{{- /* Casks to install */ -}}
+{{- $casks := list -}}
+{{- if eq .chezmoi.os "darwin" -}}
+{{- $casks = concat $casks ( list
+  "1password"
+  "1password-cli"
+  "devpod"
+  "font-fira-code"
+  "font-sauce-code-pro-nerd-font"
+  "google-chrome"
+  "httpie"
+  "iterm2"
+  "orbstack"
+  "slack"
+  "spotify"
+  "visual-studio-code" )
+-}}
+{{- end -}}
+
+{{- /* Taps */ -}}
+{{- range ( $taps | sortAlpha | uniq ) }}
+tap "{{ . }}"
+{{- end }}
+
+{{- /* Formula */ -}}
+{{- range ( $formula | sortAlpha | uniq ) }}
+brew "{{ . }}"
+{{- end }}
+
+{{- /* Casks */ -}}
+{{- range ( $casks | sortAlpha | uniq ) }}
+cask "{{ . }}"
+{{- end }}
+
+{{- /* MacOS App Store */ -}}
+{{- if eq .chezmoi.os "darwin" }}
+mas "Twingate", id: 1501592214
+{{- end }}

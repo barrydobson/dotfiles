@@ -1,0 +1,2 @@
+chezmoi upgrade
+chezmoi update --init

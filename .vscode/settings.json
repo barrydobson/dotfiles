@@ -12,7 +12,8 @@
     "dot_zprofile*": "shellscript",
     "dot_zshrc*": "shellscript",
     "*.json5": "jsonc",
-    "**/private_dot_local/bin/*.tmpl": "shellscript"
+    "**/private_dot_local/bin/*.tmpl": "shellscript",
+    "**/shell/functions/*": "shellscript"
   },
   "yaml.schemas": {
     "https://raw.githubusercontent.com/derailed/k9s/master/plugins/schema.json": "file:///Users/barrydobson/.local/share/chezmoi/home/private_dot_config/k9s/plugin.yml"

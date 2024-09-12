@@ -4,15 +4,16 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
-export XDG_RUNTIME_DIR=
+
 {{- if eq .chezmoi.os "darwin" -}}
-  "$TMPDIR"
-{{- else if not .headless -}}
-  "/run/user/$(id -u)"
+export XDG_RUNTIME_DIR="$TMPDIR"
+{{- else if not .ephemeral -}}
+export XDG_RUNTIME_DIR="/run/user/$(id -u)"
 {{- else -}}
-  "/tmp"
+export XDG_RUNTIME_DIR="/tmp"
 {{- end }}
-{{- if not .headless }}
+
+{{- if not .ephemeral }}
 export XDG_MUSIC_DIR="$HOME/Music"
 export XDG_VIDEOS_DIR="$HOME/Videos"
 export XDG_DESKTOP_DIR="$HOME/Desktop"
@@ -47,7 +48,7 @@ export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 # go
 export GOPATH="$XDG_DATA_HOME/go"
 # homebrew
-export HOMEBREW_BUNDLE_FILE="$XDG_CONFIG_HOME/brew/Brewfile"
+export HOMEBREW_BUNDLE_FILE="$XDG_CONFIG_HOME/homebrew/.Brewfile"
 # httpie
 export HTTPIE_CONFIG_DIR="$XDG_CONFIG_HOME/httpie"
 # krew
@@ -78,9 +79,11 @@ export ZSH_EVALCACHE_DIR="$XDG_CACHE_HOME/zsh-evalcache"
 # devpod
 export DEVPOD_HOME="$XDG_CONFIG_HOME/devpod"
 # Editor
-{{- if not .headless }}
+{{ if not .ephemeral -}}
 export EDITOR="code --wait"
-{{- end -}}
+{{ else -}}
+export EDITOR="nvim"
+{{ end -}}
 
 {{- if eq .chezmoi.os "darwin" }}
 export HOMEBREW_CASK_OPTS="--appdir=~/Applications"
@@ -94,19 +97,13 @@ export LS_COLORS
 # disable pre-commit colors for one-dark
 export PRE_COMMIT_COLOR="never"
 
-SSH_AUTH_SOCK_FILE=~/.1password/agent.sock
-if [ -h $SSH_AUTH_SOCK_FILE ]; then
-  #echo "Using 1Password SSH Agent"
-  export SSH_AUTH_SOCK=$SSH_AUTH_SOCK_FILE
-else
-{{- if eq .chezmoi.os "darwin" }}
-  #echo "macOS Monterey or later"
-  ssh-add --apple-load-keychain
-{{- end }}
+{{ if not .ephemeral -}}
+if command -v op >/dev/null; then
+export SSH_AUTH_SOCK=~/.1password/agent.sock
 fi
-
 export GPG_TTY=$(tty)
 gpg-connect-agent updatestartuptty /bye
+{{ end -}}
 
 # Path
 add_to_path ()

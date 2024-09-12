@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+{{/* Include external functions */}}
+{{ template "install-brewfile.tmpl" . }}
+{{ template "helpers.tmpl" . }}
+set -eo pipefail
+source $HOME/.config/shell/exports.sh
+# Setup environment
+eval "$($(brew --prefix)/bin/brew shellenv)"
+
+# Install dependencies
+install_brewfile

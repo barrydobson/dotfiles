@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+{{/* Include external functions */}}
+{{ template "update-homebrew.tmpl" . }}
+
+function update_apt_packages() {
+  echo "Updating apt packages..."
+  sudo apt update && sudo apt upgrade -y
+  sudo apt autoclean
+  sudo apt autoremove -y
+}
+
+set -eo pipefail
+
+# Update apt packages
+update_apt_packages
+
+{{- if ne .chezmoi.arch "arm64" }}
+
+# Update Homebrew
+update_homebrew
+
+{{- end }}

@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+{{- if ne .chezmoi.arch "arm64" }}
+{{/* Include external functions */}}
+{{ template "install-brewfile.tmpl" . }}
+{{ template "helpers.tmpl" . }}
+source $HOME/.config/shell/exports.sh
+set -eo pipefail
+
+
+# Setup environment
+test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
+test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+# Install dependencies
+install_brewfile
+{{- end }}

@@ -1,0 +1,105 @@
+#!/usr/bin/env bash
+
+{{/* Include external functions */}}
+{{ template "install-homebrew.tmpl" . }}
+{{ template "helpers.tmpl" . }}
+
+source $HOME/.config/shell/exports.sh
+
+function install_1password() {
+  echo_blue "Installing 1Password CLI..."
+
+  # Add key for 1Password repository
+  curl -sS https://downloads.1password.com/linux/keys/1password.asc |
+    sudo gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg
+
+  # Add 1Password repository
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] \
+    https://downloads.1password.com/linux/debian/$(dpkg --print-architecture) stable main" |
+    sudo tee /etc/apt/sources.list.d/1password.list
+
+  # Add the debsig-verify policy
+  sudo mkdir -p /etc/debsig/policies/AC2D62742012EA22/
+  curl -sS https://downloads.1password.com/linux/debian/debsig/1password.pol |
+    sudo tee /etc/debsig/policies/AC2D62742012EA22/1password.pol
+  sudo mkdir -p /usr/share/debsig/keyrings/AC2D62742012EA22
+  curl -sS https://downloads.1password.com/linux/keys/1password.asc |
+    sudo gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg
+
+  # Install 1Password CLI
+  sudo apt update && sudo apt install -y 1password-cli
+
+}
+
+function install_docker() {
+  echo_blue "Installing Docker Engine..."
+
+  # Install dependencies
+  sudo apt update \
+    && sudo apt install -y ca-certificates curl gnupg
+
+  # Add Docker's official GPG key
+  sudo install -m 0755 -d /etc/apt/keyrings
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg |
+    sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+  sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+  # Add Docker's official APT repository
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+    https://download.docker.com/linux/ubuntu \
+    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" |
+    sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
+
+  # Install Docker Engine & Plugins
+  sudo apt update \
+    && sudo apt install -y docker-ce docker-ce-cli containerd.io \
+    && sudo apt install -y docker-buildx-plugin docker-compose-plugin
+
+  # Add current user to docker group
+  sudo usermod "$USER" --append --group docker
+
+}
+
+function update_packages() {
+  echo_blue "Updating Ubuntu packages..."
+  sudo apt update && sudo apt upgrade -y
+}
+
+function homebrew_postinstall() {
+  echo_blue "Running Homebrew post installation steps..."
+
+  # Setup Homebrew in shell environment
+  echo_blue "Setup current environment..."
+  test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
+  test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+  # Install dependencies
+  echo_blue "Installing dependencies..."
+  sudo apt install -y build-essential
+
+}
+
+set -euo pipefail
+
+# Update packages
+update_packages
+# Install 1Password CLI
+install_1password
+
+{{ if .toolchains.docker }}
+# Install Docker Engine
+install_docker
+{{ end }}
+
+{{- if ne .chezmoi.arch "arm64" }}
+install_homebrew
+homebrew_postinstall
+{{- else }}
+{{- $packages := splitList " " (includeTemplate "common-packages.tmpl" .) }}
+{{- $packages =  concat $packages (list "fd-find" "locales") -}}
+{{- $packages =  without $packages "git-delta" "procs" "sd" "fd" "tokei" -}}
+sudo apt-get install -y --no-install-recommends {{ $packages | sortAlpha | uniq | join " " -}}
+{{- end }}
+
+# Disable login banner
+touch {{ .chezmoi.homeDir -}}/.hushlogin

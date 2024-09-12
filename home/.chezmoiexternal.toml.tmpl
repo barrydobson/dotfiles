@@ -1,6 +1,6 @@
 {{- $refreshPeriod := "168h" }}
 
-{{- if not .headless }}
+{{- if not .ephemeral }}
 {{-   $fontDir := "" }}
 {{-   if eq .osid "darwin" }}
 {{-     $fontDir = "Library/Fonts" }}

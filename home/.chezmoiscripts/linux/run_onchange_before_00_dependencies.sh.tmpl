@@ -1,0 +1,17 @@
+{{- /* Default packages */ -}}
+{{ $packages := list "curl" "fzf" "gnupg" "unzip" "wget" "zsh" -}}
+
+{{- $sudo := "sudo " -}}
+{{ if eq .chezmoi.username "root" -}}
+{{   $sudo = "" -}}
+{{ end -}}
+
+
+#!/usr/bin/env bash
+set -euo pipefail
+
+{{ template "helpers.tmpl" . }}
+
+# Install packages
+{{ $sudo }}apt-get update
+{{ $sudo }}apt-get install -y {{ $packages | join " " }}

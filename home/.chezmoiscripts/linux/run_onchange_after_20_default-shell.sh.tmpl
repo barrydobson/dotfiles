@@ -1,0 +1,18 @@
+
+{{- $sudo := "sudo " -}}
+{{ if eq .chezmoi.username "root" -}}
+{{   $sudo = "" -}}
+{{ end -}}
+
+#!/usr/bin/env bash
+set -euo pipefail
+{{ template "helpers.tmpl" . }}
+
+{{ if .ephemeral -}}
+
+# Update default shell
+if [[ ! $SHELL =~ "zsh" ]]; then
+  {{ $sudo }}chsh -s $(which zsh) {{ .chezmoi.username }}
+fi
+
+{{- end }}

@@ -1,21 +1,14 @@
 Host github.com
   User git
-  AddKeysToAgent yes
-  IdentityFile {{ .home }}/.config/ssh/personal-keys.d/id_ed25519
-
-Host *.devpod
-  IdentityAgent ~/.1password/agent.sock
 
 Host *
-  IdentityFile {{ .home }}/.config/ssh/personal-keys.d/id_ed25519
   UserKnownHostsFile ${SSH_DATA_HOME}/known_hosts
   AddKeysToAgent yes
-  IdentityAgent ~/.1password/agent.sock
   Compression yes
   ConnectTimeout 60
   ControlMaster auto
   ControlPath ${SSH_DATA_HOME}/%C
-  ControlPersist 72000
-  ServerAliveInterval 600
-  StrictHostKeyChecking accept-new
-  EscapeChar `
+  {{ if not .ephemeral -}}
+  IdentityFile {{ .home }}/.config/ssh/personal-keys.d/id_ed25519
+  IdentityAgent ~/.1password/agent.sock
+  {{ end -}}

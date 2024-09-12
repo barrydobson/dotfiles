@@ -1,0 +1,18 @@
+{{- $packages := list
+"bash"
+"bat"
+"curl"
+"direnv"
+"eza"
+"fd"
+"git"
+"git-delta"
+"httpie"
+"ripgrep"
+"openssl"
+"sd"
+"tmux"
+"wget"
+"zsh"
+-}}
+{{- $packages | sortAlpha | join " " -}}

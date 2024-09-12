@@ -1,7 +1,5 @@
 {{/* boolean feature tags */}}
 {{- $ephemeral := false -}}{{/* true if this machine is ephemeral, e.g. a cloud or VM instance */}}
-{{- $headless := false -}}{{/* true if this machine does not have a screen and keyboard */}}
-{{- $personal := false -}}{{/* true if this machine should have personal secrets */}}
 {{- "" -}}
 
 {{- $toolchains := dict
@@ -24,38 +22,16 @@
 {{- $_ := set $distro "id" "archlinux" -}}
 {{- end -}}
 
-{{/* detect GitHub codespaces, VSCode remote containers, Docker containers, Multipass VMs, and Vagrant boxes */}}
-{{- if or (env "CODESPACES") (env "REMOTE_CONTAINERS_IPC") (eq .chezmoi.username "root" "ubuntu" "vagrant" "vscode" "devcontainer") -}}
-{{-   $ephemeral = true -}}
-{{-   $headless = true -}}
-sourceDir: {{ .chezmoi.sourceDir }}
-{{- end -}}
-
-{{/* work around unreliable hostname on darwin */}}
+{{- $codespaces := env "CODESPACES" | not | not -}}
+{{- $devcontainer := env "REMOTE_CONTAINERS" | not | not -}}
+{{- $ephemeral = or $codespaces $devcontainer -}}
 {{- $hostname := .chezmoi.hostname -}}
-{{- if eq .chezmoi.os "darwin" -}}
-{{-   $computerName := output "scutil" "--get" "ComputerName" | trim -}}
-{{-   if eq $computerName "barrydobson-aarch64-darwin" -}}
-{{-     $hostname = "TDCO00290" -}}
-{{-   else -}}
-{{-     $hostname = $computerName -}}
-{{-   end -}}
-{{- end -}}
 
 {{- if not $ephemeral -}}
 {{-   if eq $hostname "TDCO00290" -}}
-{{-     $personal = false -}}
-{{-     $headless = false -}}
 {{-     $ephemeral = false -}}
-{{-   else if eq $hostname "ubuntu" -}}
-{{-     $headless = true -}}
-{{-     $personal = true -}}
-{{-   else if stdinIsATTY -}}
-{{-     $headless = promptBoolOnce . "headless" "headless" -}}
-{{-     $ephemeral = promptBoolOnce . "ephemeral" "ephemeral" -}}
 {{-   else -}}
 {{-     $ephemeral = true -}}
-{{-     $headless = true -}}
 {{-   end -}}
 {{- end -}}
 
@@ -82,6 +58,7 @@ sourceDir: {{ .chezmoi.sourceDir }}
 
 {{- end -}}
 
+sourceDir: {{ .chezmoi.sourceDir }}
 {{- if (env "OP_SERVICE_ACCOUNT_TOKEN") }}
 onepassword:
   mode: service
@@ -92,9 +69,7 @@ diff:
 {{- end }}
 data:
   gpg_keyid: DF808E7FF90BF7D8
-  headless: {{ $headless }}
   hostname: {{ $hostname }}
-  personal: {{ $personal }}
   ephemeral: {{ $ephemeral }}
   osid: {{ $osID}}
   arch: {{ .chezmoi.arch }}
