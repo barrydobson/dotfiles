@@ -8,7 +8,7 @@ args+=( install.sh )
 
 while true; do
   case "$1" in
-    -i | --id ) args+=( --id "$2" ); shift 2 ;;
+    -w | --workspace ) devp_workspace="$2"; shift 2 ;;
     -e | --ide ) devp_ide="$2"; shift 2 ;;
     -x | --no-ide ) devp_noide="true"; shift ;;
     -- ) shift; break ;;
@@ -17,6 +17,7 @@ while true; do
 done
 
 devp_ide=${devp_ide:-"vscode"}
+devp_workspace=${devp_workspace:-"."}
 
 if [[ -n "${devp_noide}" ]]; then
   args+=( --open-ide "false" )
@@ -24,4 +25,4 @@ else
   args+=( --ide $devp_ide )
 fi
 
-echo devpod up ${args[@]} $@
+devpod up $devp_workspace ${args[@]} $@
