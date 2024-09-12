@@ -15,7 +15,7 @@ set -eo pipefail
 # Update apt packages
 update_apt_packages
 
-{{- if ne .chezmoi.arch "arm64" }}
+{{- if and (not .ephemeral) (ne .chezmoi.arch "arm64") }}
 
 # Update Homebrew
 update_homebrew
