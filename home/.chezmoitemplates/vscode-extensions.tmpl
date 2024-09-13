@@ -1,0 +1,59 @@
+
+{{- /* Extensions to install */ -}}
+{{- $extensions := list
+  "adrientoub.base64utils"
+  "ahebrank.yaml2json"
+  "aaron-bond.better-comments"
+  "bierner.github-markdown-preview"
+  "biomejs.biome"
+  "catppuccin.catppuccin-vsc"
+  "catppuccin.catppuccin-vsc-icons"
+  "cybai.yaml-key-viewer"
+  "davidanson.vscode-markdownlint"
+  "dbaeumer.vscode-eslint"
+  "dotenv.dotenv-vscode"
+  "eamodio.gitlens"
+  "editorconfig.editorconfig"
+  "esbenp.prettier-vscode"
+  "flesler.url-encode"
+  "foxundermoon.shell-format"
+  "github.copilot"
+  "github.remotehub"
+  "github.vscode-pull-request-github"
+  "golang.go"
+  "hashicorp.hcl"
+  "hashicorp.terraform"
+  "hbenl.vscode-mocha-test-adapter"
+  "hbenl.vscode-test-explorer"
+  "humao.rest-client"
+  "jinliming2.vscode-go-template"
+  "milovidov.escape-quotes"
+  "ms-azuretools.vscode-docker"
+  "ms-kubernetes-tools.vscode-kubernetes-tools"
+  "ms-vscode-remote.remote-containers"
+  "ms-vscode-remote.remote-ssh"
+  "ms-vscode-remote.remote-ssh-edit"
+  "ms-vscode-remote.vscode-remote-extensionpack"
+  "ms-vscode.makefile-tools"
+  "oderwat.indent-rainbow"
+  "redhat.vscode-yaml"
+  "richie5um2.vscode-sort-json"
+  "sonarsource.sonarlint-vscode"
+  "streetsidesoftware.code-spell-checker"
+  "tsandall.opa"
+  "tyriar.sort-lines"
+ -}}
+
+#######################################
+# Install common VSCode extensions
+# Globals:
+#   None
+# Arguments:
+#   None
+#######################################
+function install_extensions() {
+  echo "Installing VSCode extensions..."
+  {{ range $extensions -}}
+  code --force --install-extension {{ . }}
+  {{ end -}}
+}

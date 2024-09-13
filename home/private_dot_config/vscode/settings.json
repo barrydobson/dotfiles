@@ -1,0 +1,303 @@
+{
+  // General
+  "diffEditor.ignoreTrimWhitespace": true,
+  "diffEditor.maxComputationTime": 0,
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+  "explorer.compactFolders": true,
+  "explorer.fileNesting.enabled": true,
+  "extensions.ignoreRecommendations": true,
+  "extensions.autoCheckUpdates": true,
+  "files.associations": { ".env": "dotenv", ".env.*": "dotenv", "*.rest": "http" },
+  "files.exclude": { "**/.git": false, "**/__pycache__": true },
+  "security.workspace.trust.untrustedFiles": "open",
+  "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+  "workbench.colorTheme": "Catppuccin Mocha",
+  "workbench.iconTheme": "catppuccin-mocha",
+  "workbench.layoutControl.enabled": false,
+  "workbench.localHistory.enabled": false,
+  "workbench.settings.editor": "json",
+  "workbench.experimental.enableNewProfilesUI": true,
+
+  // Editor Config
+  "editor.accessibilitySupport": "off",
+  "editor.acceptSuggestionOnEnter": "on",
+  "editor.codeActionsOnSave": {
+    "addMissingImports": "explicit",
+    "source.fixAll": "explicit",
+    "source.sortImports": "explicit"
+  },
+  "editor.bracketPairColorization.enabled": true,
+  "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+  "editor.fontFamily": "JetBrains Mono",
+  "editor.fontLigatures": true,
+  "editor.fontSize": 13,
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.formatOnType": false,
+  "editor.fontVariations": false,
+  "editor.fontWeight": 400,
+  "editor.letterSpacing": 0.5,
+  "editor.lineHeight": 22,
+  "editor.lineNumbers": "on",
+  "editor.linkedEditing": true,
+  "editor.minimap.enabled": false,
+  "editor.guides.bracketPairs": "active",
+  "editor.inlineSuggest.enabled": true,
+  "editor.language.brackets": [],
+  "editor.tabSize": 2,
+  "editor.cursorStyle": "line",
+  "editor.cursorWidth": 3,
+  "editor.cursorBlinking": "phase",
+  "editor.unicodeHighlight.invisibleCharacters": false,
+  "editor.quickSuggestions": { "other": true, "comments": false, "strings": false },
+  "editor.snippetSuggestions": "top",
+  "editor.suggest.preview": true,
+  "editor.suggest.showMethods": true,
+  "editor.suggestSelection": "recentlyUsedByPrefix",
+  "editor.tokenColorCustomizations": {
+    "[*Light*]": { "textMateRules": [{ "scope": "ref.matchtext", "settings": { "foreground": "#000" } }] },
+    "[*Dark*]": { "textMateRules": [{ "scope": "ref.matchtext", "settings": { "foreground": "#fff" } }] },
+    "textMateRules": []
+  },
+  "editor.wordWrap": "on",
+  "editor.multiCursorModifier": "ctrlCmd",
+
+  // Terminal
+  "terminal.external.osxExec": "iterm2.app",
+  "terminal.integrated.cwd": "${workspaceRoot}",
+  "terminal.integrated.defaultProfile.linux": "zsh",
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  "terminal.integrated.enablePersistentSessions": false,
+  "terminal.integrated.fontFamily": "MesloLGS NF",
+  "terminal.integrated.fontSize": 12,
+  "terminal.integrated.macOptionClickForcesSelection": true,
+  "terminal.integrated.profiles.linux": {
+    "bash": { "path": "/bin/bash", "icon": "terminal-bash" },
+    "zsh": { "path": "/usr/bin/zsh", "icon": "terminal" },
+    "JavaScript Debug Terminal": null,
+    "tmux": null
+  },
+  "terminal.integrated.profiles.osx": {
+    "bash": { "path": "bash", "icon": "terminal-bash" },
+    "zsh": { "path": "zsh", "icon": "terminal" },
+    "JavaScript Debug Terminal": null,
+    "tmux": null
+  },
+  "terminal.integrated.shellIntegration.enabled": false,
+  "terminal.integrated.tabs.enabled": true,
+
+  // Themes
+  "catppuccin.accentColor": "green",
+
+  // Git
+  "git.closeDiffOnOperation": true,
+  "git.confirmSync": false,
+  "git.pruneOnFetch": true,
+  "git.rebaseWhenSync": true,
+  "git.mergeEditor": true,
+  "git.openRepositoryInParentFolders": "never",
+  "git.enableCommitSigning": true,
+
+  // GitHub Copilot
+  "github.copilot.enable": {
+    "*": true,
+    "env": false,
+    "json": true,
+    "markdown": true,
+    "yaml": true
+  },
+  "github.copilot.advanced": {},
+  "github.copilot.editor.enableAutoCompletions": true,
+
+  // GitHub Pull Request
+  "githubPullRequests.pullBranch": "never",
+
+  // Git Lens
+  "gitlens.codeLens.scopes": ["document", "containers"],
+  "gitlens.graph.layout": "editor",
+  "gitlens.graph.minimap.enabled": false,
+  "gitlens.showWelcomeOnInstall": false,
+
+  // Prettier
+  "prettier.bracketSpacing": true,
+  "prettier.printWidth": 120,
+  "prettier.semi": true,
+  "prettier.singleQuote": false,
+  "prettier.tabWidth": 2,
+  "prettier.trailingComma": "es5",
+  "prettier.useTabs": false,
+
+  // ESLint
+  "eslint.codeActionsOnSave.mode": "problems",
+  "eslint.format.enable": true,
+  "eslint.validate": ["javascript", "typescript"],
+
+  // Dev Containers
+  "dev.containers.copyGitConfig": false,
+  "dev.containers.defaultExtensions": [
+    "dotenv.dotenv-vscode",
+    "eamodio.gitlens",
+    "esbenp.prettier-vscode",
+    "github.copilot",
+    "humao.rest-client",
+    "streetsidesoftware.code-spell-checker",
+    "visualstudioexptteam.vscodeintellicode"
+  ],
+  "dev.containers.defaultFeatures": {},
+  "dev.containers.gitCredentialHelperConfigLocation": "none",
+  "dotfiles.repository": "https://github.com/barrydobson/dotfiles.git",
+  "remote.autoForwardPortsSource": "hybrid",
+
+  // Kubernetes
+  "vs-kubernetes": {
+    "checkForMinikubeUpgrade": true,
+    "imageBuildTool": "Docker",
+    "logsDisplay": "webview",
+    "vs-kubernetes.autoCleanupOnDebugTerminate": false,
+    "vs-kubernetes.crd-code-completion": "enabled",
+    "vs-kubernetes.draft-path": "",
+    "vs-kubernetes.helm-path": "",
+    "vs-kubernetes.knownKubeconfigs": [],
+    "vs-kubernetes.kubeconfig": "",
+    "vs-kubernetes.kubectl-path": "",
+    "vs-kubernetes.kubectlVersioning": "user-provided",
+    "vs-kubernetes.minikube-path": "",
+    "vs-kubernetes.namespace": "",
+    "vs-kubernetes.nodejs-autodetect-remote-root": true,
+    "vs-kubernetes.nodejs-debug-port": 9229,
+    "vs-kubernetes.nodejs-remote-root": "",
+    "vs-kubernetes.outputFormat": "yaml"
+  },
+
+  // SonarLint
+  "sonarlint.rules": {
+    "typescript:S6535": {
+      "level": "off"
+    },
+    "docker:S6596": {
+      "level": "off"
+    }
+  },
+  "sonarlint.pathToNodeExecutable": "/usr/local/bin/node",
+  "sonarlint.connectedMode.connections.sonarqube": [
+    {
+      "serverUrl": "https://sonarqube.tote.engineering",
+      "connectionId": "sonarqube-tote-engineering"
+    }
+  ],
+
+  // Bash
+  "shellcheck.exclude": ["1091"],
+  "shellformat.effectLanguages": ["shellscript"],
+  "shellformat.flag": "-i 2 -ci",
+  "[shellscript]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format",
+    "editor.rulers": [100],
+    "editor.tabSize": 2
+  },
+
+  // Markdown
+  "markdown.styles": ["https://use.fontawesome.com/releases/v5.7.1/css/all.css"],
+  "markdown.validate.enabled": true,
+  "markdownlint.config": {
+    "MD025": { "front_matter_title": "" },
+    "MD028": false
+  },
+  "[markdown]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeLinkDefinitions": "explicit"
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+
+  // Javascript/Typescript
+  "[javascript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "typescript.referencesCodeLens.enabled": true,
+  "typescript.tsserver.log": "off",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+
+  // JSON
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "json.schemas": [],
+
+  // DotENV
+  "dotenv.enableAutocloaking": false,
+  "[dotenv]": {
+    "editor.rulers": [120]
+  },
+
+  // Terraform
+  "[terraform]": {
+    "editor.defaultFormatter": "hashicorp.terraform",
+    "editor.formatOnSave": true
+  },
+  "terraform.languageServer.enable": false,
+
+  // YAML
+  "[yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "yaml.customTags": [],
+  "yaml.schemas": {},
+  "redhat.telemetry.enabled": false,
+
+  // HTML
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // Go
+  "[go]": {
+    "editor.defaultFormatter": "golang.go",
+    "editor.rulers": [120]
+  },
+  "[gotmpl]": {
+    "editor.defaultFormatter": "golang.go",
+    "editor.rulers": [120]
+  },
+  "go.delveConfig": {
+    "apiVersion": 2,
+    "dlvLoadConfig": {
+      "followPointers": true,
+      "maxArrayValues": 64,
+      "maxStringLen": 300,
+      "maxStructFields": -1,
+      "maxVariableRecurse": 1
+    },
+    "showGlobalVariables": false
+  },
+  "go.lintOnSave": "file",
+  "go.lintTool": "golangci-lint",
+  "go.lintFlags": ["--fast"],
+  "go.toolsEnvVars": {
+    "GOPRIVATE": "github.com/thetote/*"
+  },
+  "go.toolsManagement.autoUpdate": true,
+  "go.useLanguageServer": true,
+  "gopls": {
+    "formatting.gofumpt": true,
+    "ui.diagnostic.analyses": {},
+    "ui.diagnostic.staticcheck": true,
+    "ui.completion.usePlaceholders": false
+  },
+
+  // Docker
+  "docker.commands.build": "${containerCommand} build --pull --rm -f \"${dockerfile}\" -t ${tag} \"${context}\""
+}
