@@ -36,7 +36,7 @@
       "matchPackageNames": [
         "helmfile/helmfile"
       ],
-      "enabled": false
+      "enabled": true
     },
     {
       "description": "Require dashboard approval for major updates",
