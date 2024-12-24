@@ -170,3 +170,8 @@ zstyle :bracketed-paste-magic paste-finish pastefinish
 
 # Load local configuration.
 z4h source $ZDOTDIR/.zshrc.local
+
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac

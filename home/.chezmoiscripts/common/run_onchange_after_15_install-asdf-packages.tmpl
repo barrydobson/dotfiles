@@ -17,6 +17,7 @@ asdf plugin-add terragrunt
 {{- end -}}
 {{- if .toolchains.node }}
 asdf plugin-add nodejs
+asdf plugin-add pnpm
 {{- end }}
 {{- if .toolchains.python }}
 asdf plugin-add python
