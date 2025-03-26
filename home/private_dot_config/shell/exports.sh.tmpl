@@ -99,20 +99,18 @@ export PRE_COMMIT_COLOR="never"
 
 {{ if not .ephemeral -}}
 if command -v op >/dev/null; then
-export SSH_AUTH_SOCK=~/.1password/agent.sock
+  export SSH_AUTH_SOCK=~/.1password/agent.sock
 fi
 export GPG_TTY=$(tty)
 gpg-connect-agent updatestartuptty /bye
 {{ end -}}
 
 # Path
-add_to_path ()
-case ":$PATH:" in
-    *:"$1":*)
-        ;;
-    *)
-        export PATH="$1:$PATH"
-        ;;
+add_to_path() case ":$PATH:" in
+  *:"$1":*) ;;
+  *)
+    export PATH="$1:$PATH"
+    ;;
 esac
 {{- if eq .chezmoi.os "darwin" }}
 if [ -n "${HOMEBREW_PREFIX-}" ]; then
@@ -123,6 +121,7 @@ fi
 add_to_path $KREW_ROOT/bin
 add_to_path $AQUA_ROOT_DIR/bin
 add_to_path $HOME/.local/bin
+add_to_path $XDG_DATA_HOME/go/bin
 
 [ -f "$ASDF_DIR/asdf.sh" ] && source "$ASDF_DIR/asdf.sh"
 

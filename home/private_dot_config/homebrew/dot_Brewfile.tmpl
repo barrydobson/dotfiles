@@ -20,12 +20,11 @@
   "gnu-sed"
   "pinentry-mac"
   "eks-node-viewer"
-  "kcat"
   )
 -}}
- {{- end -}}
- {{- if eq .chezmoi.os "linux" -}}
- {{- $formula = concat $formula ( list
+{{- end -}}
+{{- if eq .chezmoi.os "linux" -}}
+{{- $formula = concat $formula ( list
   "gcc"
   "xclip" )
 -}}
