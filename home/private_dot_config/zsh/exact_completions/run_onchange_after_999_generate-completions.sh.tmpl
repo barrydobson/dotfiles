@@ -24,3 +24,7 @@ fi
 if [ "$(command -v yq)" ]; then
   yq shell-completion zsh > "{{ $compDir }}/_yq"
 fi
+
+if [ "$(command -v asdf)" ]; then
+  asdf completion zsh > "{{ $compDir }}/_asdf"
+fi
