@@ -23,8 +23,8 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": [
-        "\\.chezmoiscripts\\/common\\/.*aqua-packages\\.sh\\.tmpl$"
+      "managerFilePatterns": [
+        "/\\.chezmoiscripts\\/common\\/.*aqua-packages\\.sh\\.tmpl$/"
       ],
       "matchStrings": [
         "# renovate: depName=(?<depName>.*) datasource=(?<datasource>.*)\\n\\s*current_\\w+_version=(?<currentValue>.+)\\b"
