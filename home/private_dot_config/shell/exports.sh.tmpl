@@ -82,6 +82,8 @@ export EDITOR="code --wait"
 {{ else -}}
 export EDITOR="nvim"
 {{ end -}}
+# GO (most are set by asdf)
+export GOPROXY="https://proxy.golang.org,direct"
 
 {{- if eq .chezmoi.os "darwin" }}
 export HOMEBREW_CASK_OPTS="--appdir=~/Applications"
