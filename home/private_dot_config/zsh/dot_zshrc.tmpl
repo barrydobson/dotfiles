@@ -176,3 +176,9 @@ case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
+
+if command -v asdf &>/dev/null; then
+  if [ -d "$ASDF_DATA_DIR/plugins/golang" ]; then
+    z4h source $ASDF_DATA_DIR/plugins/golang/set-env.zsh
+  fi
+fi
