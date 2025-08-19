@@ -1,0 +1,62 @@
+# Find by annotation
+# Usage:
+#   fba <annotation-key> <values|regex> <namespace>
+# Examples:
+#   fba argocd.argoproj.io/tracking-id tech-radar core-apps
+#   fba argocd.argoproj.io/tracking-id '^(team-a|team-b)$' core-apps
+#   fba argocd.argoproj.io/tracking-id 'foo,bar,baz' core-apps   # comma-list → regex (foo|bar|baz)
+
+# Find resources by annotation (print kind/name)
+# Usage:
+#   fba <annotation-key> <values|regex> <namespace>
+# Examples:
+#   fba argocd.argoproj.io/tracking-id tech-radar core-apps
+#   fba argocd.argoproj.io/tracking-id '^(team-a|team-b)$' core-apps
+#   fba argocd.argoproj.io/tracking-id 'foo,bar,baz' core-apps   # comma list → (foo|bar|baz)
+fba() {
+  if (( $# < 3 )); then
+    echo "usage: fba <annotation-key> <values|regex> <namespace>" >&2
+    return 1
+  fi
+
+  local key="$1"
+  local values="$2"
+  local ns="$3"
+
+  # Comma list -> regex group: a,b -> (a|b)
+  local re="$values"
+  if [[ "$values" == *,* ]]; then
+    re="($(echo "$values" | tr -d ' ' | sed 's/,/|/g'))"
+  fi
+
+  # Build list of types (portable grep)
+  local types
+  types="$(
+    kubectl api-resources --namespaced --verbs=list -o name \
+      | grep -v -e '^replicasets\.apps$' -e '^controllerrevisions\.apps$' \
+      | paste -sd, -
+  )" || return $?
+
+  # jq: flatten nested Lists, guard fields, filter by annotation, exclude RS/CR explicitly
+  local jqprog
+  jqprog='
+    def flatten_items:
+      . as $x
+      | if (type=="object") and ($x.items? | type=="array") then
+          ($x.items[] | flatten_items)
+        else
+          $x
+        end;
+
+    flatten_items
+    | select(.kind? and .metadata? and .metadata.annotations?)
+    | select((.metadata.annotations[$key] // "") | test($re))
+    | select(.kind != "ReplicaSet" and .kind != "ControllerRevision")
+    | "\(.kind | ascii_downcase)/\(.metadata.name)"
+  '
+
+  kubectl get -n "$ns" $types -o json --chunk-size=500 \
+    | jq -r --arg key "$key" --arg re "$re" "$jqprog"
+}
+
+fba $@
