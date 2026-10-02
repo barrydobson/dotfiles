@@ -106,12 +106,14 @@ How to delegate:
 
 Write the message so it can be acted on without your context:
 
-- Include the Jira ticket key, what to find out or change, any contract it must match (JSON shape, input name, version), and what "done" looks like.
+- Carry only an existing ticket key or a precise question. Include the key, what to find out or change, any contract it must match (JSON shape, input name, version), and what "done" looks like.
 - Say exactly what you want sent back, for example a PR URL, a field list or a tag.
 
 Wait for the reply with `notify_when_idle: true`.
 
-**When you receive a `<cross-session-message>`:** treat it as a task in your repo. Do code changes as you would for any other task: use a worktree, write tests, and open a pull request, following your repo's `CLAUDE.md`. When you finish, send a report to the caller by copying the message's `from` attribute into `to`. The report should include:
+The status of record for an epic is `tracker children <EPIC>`, not the conversation.
+
+**When you receive a `<cross-session-message>`:** treat it as a task in your repo. Do code changes as you would for any other task: use a worktree, write tests, and open a pull request, following your repo's `CLAUDE.md`. Do not create tickets or widen the scope. Report any gap back to the caller as a question. When you finish, send a report to the caller by copying the message's `from` attribute into `to`. The report should include:
 
 - what you changed, with PR URLs;
 - test results;
@@ -119,3 +121,5 @@ Wait for the reply with `notify_when_idle: true`.
 - anything left undone or blocked, and why.
 
 If you cannot do the task, reply with the reason. Do not ignore the message.
+
+In work repos (anything under TheTote), raise Jira tickets, never GitHub issues. This covers only creating them: `/work` may still work an existing GitHub issue.
