@@ -1,6 +1,6 @@
 ---
 name: til
-description: Capture a hard-won lesson from the current session as a single article in the Obsidian vault wiki at ~/vault, filed under the right topic with indexes updated. Works from any repo - the lesson comes from wherever you are working, the article always lands in the vault. Use this whenever the user says "/til", "TIL", "save this", "capture that", "write that up", "add that to the wiki", "don't want to lose this", "remember how we fixed that", or "that took ages to work out" - and also proactively offer it whenever something transferable has just been worked out - a tool or technology understood for the first time, a process finding that holds beyond this repo, a durable behaviour that will bite again elsewhere, or a conclusion that changes how a class of problem gets approached. Offer it while the detail is still fresh, because it is gone by tomorrow. Do not use it for one-off incidents whose fix already lives in a commit, PR or ticket, and not for general note-taking, daily logs, task capture, or compiling clipped articles from raw/ (that is the compile skill).
+description: Captures a hard-won, transferable lesson from the current session as one article in the Obsidian wiki at ~/vault/wiki, filed under the right topic with its hub index updated. Works from any repo. Use when the user says "/til", "TIL", "save this", "capture that", "write that up", "add that to the wiki" or "that took ages to work out", and offer it when something transferable has just been worked out. Do not use for one-off incidents whose fix lives in a commit, PR or ticket, or for daily logs and task notes.
 ---
 
 # TIL
@@ -129,7 +129,7 @@ Notes on the template:
 
 ## 4. Update the indexes
 
-An unlinked article is invisible to `vault-query` and to Obsidian's graph, so this step is what makes the capture actually pay off later.
+An unlinked article is invisible to the hub-note navigation and to Obsidian's graph, so this step is what makes the capture actually pay off later.
 
 **Topic index** - the hub note in that folder, tagged `[index, ...]` and named after the topic. Look it up rather than deriving it from the folder name, because the Title Case form isn't mechanical (`llm-infrastructure/` holds `LLM Infrastructure.md`, not `Llm Infrastructure.md`):
 

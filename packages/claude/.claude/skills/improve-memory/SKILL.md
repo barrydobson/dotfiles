@@ -1,6 +1,6 @@
 ---
 name: improve-memory
-description: Reconcile and restructure this project's Claude Code memory - the auto-memory files under ~/.claude/projects/<project>/memory/, the CLAUDE.md files, and .claude/rules/. Merges duplicates, resolves contradictions, and proposes a thin always-loaded CLAUDE.md with the detail in path-scoped rules files. Writes its findings to memory-improvement-overview.md, applies only the unambiguous fixes, and leaves the rest for approval. Needs a session-analysis digest handed in with the invocation and stops if none is supplied - it never sweeps transcripts itself. Use when a caller hands over candidate memories, when the user runs "/improve-memory", or when the user asks to tidy up, deduplicate or restructure memory, CLAUDE.md or rules. This is the second stage of dream - for the whole cycle including the transcript sweep, that is dream.
+description: Reconciles and restructures this project's Claude Code memory (auto-memory files, CLAUDE.md and .claude/rules/). Merges duplicates, resolves contradictions, and proposes a thin CLAUDE.md with detail in path-scoped rules. Requires a session-analysis digest and stops without one. Use when a caller hands over candidate memories, or when the user runs /improve-memory or asks to tidy or restructure memory. For the full cycle, the user runs /dream.
 ---
 
 # Improve memory
