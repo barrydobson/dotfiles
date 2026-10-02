@@ -18,6 +18,11 @@ export EDITOR=nvim
 export VISUAL=nvim
 export LANG=en_GB.UTF-8
 
+# herdr 0.9.2+ sets TERM_PROGRAM=herdr, which isn't on Claude Code's hyperlink
+# allowlist, so it stops emitting OSC 8 links. Drop once either side fixes it:
+# herdrdev/herdr#4748, anthropics/claude-code#83508
+[[ "$TERM_PROGRAM" == "herdr" ]] && export FORCE_HYPERLINK=1
+
 # Tool configurations
 export STARSHIP_CONFIG=~/.config/starship/starship.toml
 export HOMEBREW_BUNDLE_FILE="$HOME/.Brewfile"

@@ -50,26 +50,25 @@
     "tavily-cli": "off"
   },
   "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Read|Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash '/Users/barrydobson/.claude/hooks/deny-secret-reads.sh'",
-            "timeout": 5
-          }
-        ]
-      }
-    ],
     "SessionStart": [
       {
-        "matcher": "*",
+        "matcher": "^(startup|resume|clear|compact|fork)$",
         "hooks": [
           {
             "type": "command",
             "command": "bash '/Users/barrydobson/.claude/hooks/herdr-agent-state.sh' session",
             "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/acli-jira-rules.sh"
           }
         ]
       }
@@ -91,7 +90,10 @@
     "drawio@365-skills": false,
     "skill-creator@claude-plugins-official": true,
     "engineering-workflow@barrydobson": true,
-    "mattpocock-skills@claude-plugins-official": true
+    "mattpocock-skills@claude-plugins-official": true,
+    "open-code-review@open-code-review": true,
+    "typesafe@typesafe-ai": true,
+    "tote-issue-tracker@tote-skills": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
@@ -142,6 +144,20 @@
         "repo": "AminBlg/SimpleEnglish"
       },
       "autoUpdate": true
+    },
+    "open-code-review": {
+      "source": {
+        "source": "github",
+        "repo": "alibaba/open-code-review"
+      },
+      "autoUpdate": true
+    },
+    "typesafe-ai": {
+      "source": {
+        "source": "github",
+        "repo": "typesafe-ai/skills"
+      },
+      "autoUpdate": true
     }
   },
   "alwaysThinkingEnabled": true,
@@ -162,5 +178,6 @@
   "remoteControlAtStartup": false,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "mcpServers": {}
+  "mcpServers": {},
+  "feedbackDrafts": "off"
 }

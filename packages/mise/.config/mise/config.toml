@@ -1,6 +1,9 @@
 [settings]
 activate_aggressive = true               # mise shims win over other PATH entries
 
+[settings.github]
+credential_command = 'gh auth token'
+
 [tools]
 atuin = { version = "latest", os = ["linux"] }
 ripgrep = { version = "latest", os = ["linux"] }

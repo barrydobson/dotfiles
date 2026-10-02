@@ -22,14 +22,6 @@
       {
         "id": "bb00e88d-d44e-4ecd-abc5-d46592832b9e",
         "type": "tokens-total"
-      },
-      {
-        "id": "aa000948-df60-4fa0-a55c-305308a60afb",
-        "type": "separator"
-      },
-      {
-        "id": "fb138b9b-1102-403e-aa6b-6af60b6ed409",
-        "type": "tokens-cached"
       }
     ],
     [
@@ -46,6 +38,14 @@
         "id": "45905daf-f370-4e75-988c-87c0d17c9a11",
         "type": "git-worktree",
         "color": "white"
+      },
+      {
+        "id": "2f234663-5d41-49f0-a9ef-5227bedde7a0",
+        "type": "separator"
+      },
+      {
+        "id": "c86a6df6-f36d-49bc-b0a1-9e1f7904f25a",
+        "type": "git-review"
       },
       {
         "id": "ca659423-dc60-4950-b8e6-4436f5907140",
@@ -69,8 +69,13 @@
   "compactThreshold": 60,
   "colorLevel": 3,
   "defaultPadding": " ",
+  "defaultPaddingSide": "both",
   "inheritSeparatorColors": false,
   "globalBold": false,
+  "gitCacheTtlSeconds": 5,
+  "terminalWidthCacheTtlSeconds": 5,
+  "customCommandCacheTtlSeconds": 0,
+  "minimalistMode": false,
   "powerline": {
     "enabled": false,
     "separators": [
@@ -81,6 +86,7 @@
     ],
     "startCaps": [],
     "endCaps": [],
-    "autoAlign": false
+    "autoAlign": false,
+    "continueThemeAcrossLines": false
   }
 }

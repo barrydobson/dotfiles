@@ -112,7 +112,7 @@ Gitignored, so absent on a fresh clone: `.zprofile`, `.zsh_history`, `99_private
 
 **`~/.claude` is a real directory holding stow symlinks.** Claude Code's runtime state stays in your home directory and never enters the working tree.
 
-- `CLAUDE.md`, `RTK.md` and `settings.json` are individual file symlinks into `packages/claude/.claude/`.
+- `CLAUDE.md`, `me.md`, `work.md` and `settings.json` are individual file symlinks into `packages/claude/.claude/`.
 - `agents/`, `rules/`, `skills/`, `themes/` and `scheduled-tasks/` are folded directory symlinks, so files you author in them are live immediately with no stow step.
 - Everything else in `~/.claude` (`projects/`, `history.jsonl`, `plugins/`, `shell-snapshots/`, `statsig/`, ...) is a real path outside this repo.
 - Only after adding a **new top-level entry** to the package does stow need re-running: `cd packages && stow -R -t "${HOME}" claude`.

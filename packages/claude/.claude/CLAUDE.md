@@ -43,16 +43,14 @@ Senior-engineer test: look overcomplicated?
 
 Convert tasks to verifiable goals. "Fix bug" → "Write failing test, make pass." Multi-step work: state plan with verification per step.
 
-# High-risk changes (migrations, auth, refactors, breaking)
+## High-risk changes (migrations, auth, refactors, breaking)
 
 Research first, no code. State the plan - what changes, risks, rollback - and get sign-off before implementing.
 
 ## Detailed rules (load when relevant)
 
-- **Testing** (behaviour, edges, mocks, red-green) → `~/.claude/rules/testing.md`
-- **Workflow** (branches, commits, PRs) → `~/.claude/rules/workflow.md`
-
-Read relevant file before writing tests, opening PR, committing.
+- **Testing** (behaviour, edges, mocks, red-green): `~/.claude/rules/testing.md`. It auto-loads for Go, TypeScript, Python and C# test files. Read it before writing tests in any other language.
+- **Workflow** (branches, commits, PRs): `~/.claude/rules/workflow.md`. It is always loaded.
 
 ## Tracer Bullets
 
@@ -73,16 +71,13 @@ When building features, build a tiny end-to-end slice through every layer first,
 ## Never
 
 - **Time estimates.** Break work into testable outcomes.
-- **Complex heredocs.** Use Task tool.
+- **Complex heredocs.** Use the Write tool.
 - **Non-idempotent setup/install scripts.**
 - **State tracking files.** Detect state from system.
-- **Em dashes (—).** Use hyphens.
 
-## Gotchas
+## Code that calls AI or external APIs
 
-- When I merge pull requests I use squash-merge. This means that the commit history of the PR is not preserved in the main branch.
-
-## AI & Automation Rules
+These override scope discipline for that code only.
 
 - Minimize API calls. Batch where possible.
 - Design for idempotency. Same input = same result.
@@ -92,3 +87,35 @@ When building features, build a tiny end-to-end slice through every layer first,
 - Prefer structured outputs (JSON schema) over free text.
 - Log meaningful errors with context, not just "AI call failed".
 - Ground responses in available data. Avoid hallucination by limiting scope.
+
+## Cross-repo work: delegate to the agent in that repo
+
+Do not load another repo into your own context. When your ticket needs work from a repo other than the one you are working in, hand that part to the session already running there.
+
+What to delegate:
+
+- **Code changes:** always delegate them when a peer is running.
+- **Questions that need an understanding of the whole repo** (how something works, where a contract is defined): delegate them.
+- **Simple lookups** (reading a known file or checking a value): do them yourself.
+
+How to delegate:
+
+1. Call `ListAgents`. A session's name starts with the folder name of the repo it runs in (`platform-integrations-6a`, `development-metrics-e5`).
+2. **A peer is running in that repo:** send it every task for that repo in one `SendMessage`. After that, do not edit its files yourself.
+3. **No peer is running there:** say in your output that you found no agent running in `<repo>` and are doing the work yourself. Then do it, following that repo's `CLAUDE.md`. Do not wait for your user, who may not be at the keyboard.
+
+Write the message so it can be acted on without your context:
+
+- Include the Jira ticket key, what to find out or change, any contract it must match (JSON shape, input name, version), and what "done" looks like.
+- Say exactly what you want sent back, for example a PR URL, a field list or a tag.
+
+Wait for the reply with `notify_when_idle: true`.
+
+**When you receive a `<cross-session-message>`:** treat it as a task in your repo. Do code changes as you would for any other task: use a worktree, write tests, and open a pull request, following your repo's `CLAUDE.md`. When you finish, send a report to the caller by copying the message's `from` attribute into `to`. The report should include:
+
+- what you changed, with PR URLs;
+- test results;
+- the information the caller asked for;
+- anything left undone or blocked, and why.
+
+If you cannot do the task, reply with the reason. Do not ignore the message.

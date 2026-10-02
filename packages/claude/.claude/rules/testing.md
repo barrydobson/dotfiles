@@ -4,6 +4,8 @@ paths:
   - "**/*.test.ts"
   - "**/*.spec.ts"
   - "**/test_*.py"
+  - "**/*Tests.cs"
+  - "**/*Test.cs"
 ---
 
 # Testing

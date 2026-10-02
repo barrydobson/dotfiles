@@ -56,7 +56,8 @@ keybind = super+5=goto_tab:5
 adjust-cell-height = 2
 macos-option-as-alt = true
 macos-non-native-fullscreen = true
-macos-titlebar-style = tabs
+macos-titlebar-style = native 
+# tabs
 window-save-state = always
 
 # keybind = shift+enter=text:\n
