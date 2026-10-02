@@ -2,12 +2,14 @@
 
 Detailed rules distilled from the Google Developer Documentation Style Guide. "Rec:" = recommended, "Not:" = not recommended.
 
+Contents: Headings · Paragraphs · Lists · Procedures · Tables · Notices · Numbers · Units of measure · Dates and times · Italics and emphasis · Examples and example values · Links and cross-references
+
 ## Headings
 
 - Sentence case, always. No ending period. No links inside headings.
 - Task headings start with a bare infinitive: "Create an instance," not "Creating an instance."
 - Conceptual headings are noun phrases without -ing verbs: "Migration to Google Cloud," not "Migrating to Google Cloud."
-- Optional sections: "Optional: Customize your alias," not "Customize your alias (optional)."
+- Optional sections: "Optional: Customise your alias," not "Customise your alias (optional)."
 - Keep articles: "Create a VM instance," not "Create VM instance."
 - Don't skip heading levels, number headings to show sequence, or leave a heading with no text before its subheading.
 - Avoid unfamiliar abbreviations and bare code items in headings; add a descriptive noun ("The `runtime` property").
@@ -24,15 +26,15 @@ Detailed rules distilled from the Google Developer Documentation Style Guide. "R
 - Numbered lists when order matters; bulleted lists otherwise; term-definition pairs as a description list (in markdown, a bold run-in term).
 - Introduce every list with a complete sentence ending in a colon.
   - Rec: "Use the **Submit** button for any of the following purposes:" | Not: "Use the **Submit** button to:"
-- Capitalize the first word of each item. End items with a period unless they are single words, verbless fragments, or entirely code or link text.
-- Keep items grammatically parallel - same structure, same capitalization, same punctuation.
+- Capitalise the first word of each item. End items with a period unless they are single words, verbless fragments, or entirely code or link text.
+- Keep items grammatically parallel - same structure, same capitalisation, same punctuation.
 - Run-in bold lead-ins: "**Term**: description in lowercase" (colon) or "**Term.** Description as a sentence." (period) - pick one pattern per list; never a dash.
 - No one-item lists. Nested numbered lists use lowercase letters, then lowercase Roman numerals.
 - Don't end a list with "etc." - give the full set, or introduce it as illustrative ("such as").
 
 ## Procedures
 
-- Introduce with a complete sentence: "To customize the buttons, follow these steps:"
+- Introduce with a complete sentence: "To customise the buttons, follow these steps:"
 - One imperative action per step; start each step with the verb; write complete sentences; keep steps parallel.
 - Order within a step: location, then goal, then action, then result.
   - Rec: "In Google Docs, click **File > New > Document**."
@@ -76,23 +78,23 @@ Detailed rules distilled from the Google Developer Documentation Style Guide. "R
 ## Units of measure
 
 - Space between number and unit: "64 GB," not "64GB." No space before %, °, or currency symbols.
-- Don't pluralize unit symbols ("64 GB," never "64 GBs").
+- Don't pluralise unit symbols ("64 GB," never "64 GBs").
 - Ranges repeat the unit with "to": "-40 °C to 85 °C."
 - Hyphenate multiplied units: "40 person-hours."
 - Decimal (MB, GB) versus binary (MiB, GiB) units must match the technology - never interchange them.
 
 ## Dates and times
 
-- Spell out dates: "January 19, 2017"; with weekday: "Tuesday, January 19, 2017." No comma in "January 2017"; comma after the year mid-sentence.
+- Spell out dates day first: "19 January 2017"; with weekday: "Tuesday 19 January 2017". No commas in dates.
 - Numeric dates only as ISO 8601: 2017-04-15. Never 3/4/2026.
-- 12-hour clock with a space and capitals: "3:45 PM"; drop ":00" on the hour ("3 PM").
+- 24-hour clock with a colon: "15:45", "09:00".
 - Prefer "10 AM your local time"; otherwise name the zone with offset: "Pacific Standard Time (UTC-8)."
 - Never use seasons to mark time of year - hemispheres differ. Use months or quarters.
 
 ## Italics and emphasis
 
-- Italicize a term only when introducing and defining it: "A _Clos network_ is a multistage switching network."
-- Italicize words-as-words: "Use the word _and_ instead."
+- Italicise a term only when introducing and defining it: "A _Clos network_ is a multistage switching network."
+- Italicise words-as-words: "Use the word _and_ instead."
 - Bold is for UI elements and run-in list lead-ins, not general emphasis. Use sparingly for genuinely critical emphasis.
 
 ## Examples and example values
@@ -102,7 +104,7 @@ Detailed rules distilled from the Google Developer Documentation Style Guide. "R
 - Placeholder data must never be real:
   - Domains: example.com, example.org, altostrat.com. Emails: dana@example.com.
   - Names: gender-neutral (Alex, Dana, Quinn) with they/them; no stereotyped roles; Alice/Bob only where protocol convention requires.
-  - Companies: "Example Organization." Phones: 800-555-0100 through 0199. IPs: RFC 5737 ranges (192.0.2.0/24, 198.51.100.0/24, 203.0.113.0/24); IPv6 2001:db8::/32.
+  - Companies: "Example Organisation." Phones: Ofcom drama ranges, 01632 960000 through 960999 (landline) and 07700 900000 through 900999 (mobile). IPs: RFC 5737 ranges (192.0.2.0/24, 198.51.100.0/24, 203.0.113.0/24); IPv6 2001:db8::/32.
   - Resource names: meaningful and descriptive - never foo, bar, or baz.
 - In numeric example dates, pick days greater than 12 so day and month can't be confused.
 

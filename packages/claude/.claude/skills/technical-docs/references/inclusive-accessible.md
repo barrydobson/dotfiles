@@ -17,7 +17,7 @@ Rules distilled from the Google Developer Documentation Style Guide's inclusive-
 - Replace non-inclusive established terms; mention the old term once in parentheses only if readers need it for recognition:
   - allowlist (not whitelist), denylist (not blacklist)
   - primary/replica or controller/worker (not master/slave)
-  - "Jenkins controller (master)" - old term parenthesized once, then dropped
+  - "Jenkins controller (master)" - old term parenthesised once, then dropped
 - When code itself requires a non-inclusive term, keep it in code font and use the preferred term in prose: "Start the replica by using the `START SLAVE` statement."
 - Disability: person-first unless the community prefers identity-first - "people with disabilities," not "the disabled." Don't call nondisabled people "normal" or "healthy." Avoid "suffering from," "wheelchair-bound," "victim of" - use "living with," "uses a wheelchair." No euphemisms ("differently abled," "special").
 - Age: "older adults," not "the elderly" or "seniors."

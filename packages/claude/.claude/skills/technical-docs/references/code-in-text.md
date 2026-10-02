@@ -27,8 +27,8 @@ Don't use code font for: product names ("Google Docs"), domain names in ordinary
 
 Grammar around code items:
 
-- Never pluralize: "an array of `INT64` values," not "`INT64`s."
-- Never possessivize: "the value of the `ADDRESS` constant," not "`ADDRESS`'s value."
+- Never pluralise: "an array of `INT64` values," not "`INT64`s."
+- Never possessivise: "the value of the `ADDRESS` constant," not "`ADDRESS`'s value."
 - Never verb: "send a `POST` request," not "`POST` the data."
 - Add a qualifying noun: "the `example.yaml` file," not bare "`example.yaml`."
 - Method names drop the class unless ambiguity requires it: "call its `get` method."
@@ -37,7 +37,7 @@ Grammar around code items:
 ## Placeholders
 
 - Format: `UPPERCASE_WITH_UNDERSCORES`, descriptive - `PROJECT_ID`, never `foo`, `x`, or `MY_PROJECT`.
-- In markdown, italicize inline placeholders in code font: _`BUCKET_NAME`_.
+- In markdown, italicise inline placeholders in code font: _`BUCKET_NAME`_.
 - Explain every placeholder at first use. One placeholder: "Replace `PROJECT_ID` with the ID of your project." Several: introduce with "Replace the following:" and list "`PLACEHOLDER`: description" items, in order of appearance, descriptions starting lowercase.
 
 ## Command-line syntax
@@ -57,7 +57,7 @@ Grammar around code items:
 
 ## UI elements
 
-- Bold the element's name, matching the UI's capitalization (sentence case if the label is ALL CAPS): "In the **New project** window, select the **New activity** checkbox."
+- Bold the element's name, matching the UI's capitalisation (sentence case if the label is ALL CAPS): "In the **New project** window, select the **New activity** checkbox."
 - Drop the word "button": "Click **OK**," not "Click the OK button." Drop trailing ellipses: "Click **Browse**."
 - Prefer the task over the widget: "Refresh the page" beats "Click **Refresh**" unless the specific control matters.
 - Never use an element name as a verb: "In the **Name** field, enter…" not "**Name** the account."
@@ -66,17 +66,17 @@ Grammar around code items:
 - Prepositions: **in** dialogs, fields, lists, menus, and panes; **on** pages, tabs, and toolbars.
 - Terms: "dialog" (not "dialog box" or "pop-up"), "the **Owner** box" or "field," "navigation menu" (not "left nav"), "expander arrow" (not "zippy"), a menu item is a "command," "toggle" is a noun only.
 - Icon buttons: use the icon's accessible name ("click **Menu**"), never a description of its appearance ("the button with three lines").
-- Keyboard: spell out modifiers, capitalize letters, name ambiguous characters: "Press Control+Shift+P," "Press Control+hyphen."
+- Keyboard: spell out modifiers, capitalise letters, name ambiguous characters: "Press Control+Shift+P," "Press Control+hyphen."
 - No directional language: name the element instead of "above," "below," or "on the left."
 
 ## Filenames and file types
 
-- New filenames: lowercase, hyphen-separated, ASCII only: `query-data.html` (underscores only for consistency with existing neighbors).
+- New filenames: lowercase, hyphen-separated, ASCII only: `query-data.html` (underscores only for consistency with existing neighbours).
 - In prose: code font plus the word "file": "edit the `build.sh` file." Preserve a real file's actual spelling.
 - Name file types formally, not by extension: "a PNG file," not "a `.png` file."
 
 ## Example values
 
-In **invented samples** - documentation, tutorials, fake walkthroughs, placeholder snippets - never use real data. Domains: example.com, altostrat.com. Emails: dana@example.com. People: gender-neutral names (Alex, Dana, Quinn) with they/them. Companies: Example Organization. Phones: 800-555-0100 to 0199. IPv4: 192.0.2.0/24, 198.51.100.0/24, 203.0.113.0/24; IPv6: 2001:db8::/32. Resource names: descriptive (`frontend-development`), never `foo`, `bar`, or `baz`.
+In **invented samples** - documentation, tutorials, fake walkthroughs, placeholder snippets - never use real data. Domains: example.com, altostrat.com. Emails: dana@example.com. People: gender-neutral names (Alex, Dana, Quinn) with they/them. Companies: Example Organisation. Phones: Ofcom drama ranges, 01632 960000 to 960999 and 07700 900000 to 900999. IPv4: 192.0.2.0/24, 198.51.100.0/24, 203.0.113.0/24; IPv6: 2001:db8::/32. Resource names: descriptive (`frontend-development`), never `foo`, `bar`, or `baz`.
 
-When the user or environment already supplied facts about their situation, project, or data, use those facts in reader-facing answers, reports, plans, and other artifacts that consume them. Do not anonymize or substitute sample values unless they ask. A single artifact can mix both: keep supplied facts, and still use example.com (and the ranges above) in any invented snippet.
+When the user or environment already supplied facts about their situation, project, or data, use those facts in reader-facing answers, reports, plans, and other artifacts that consume them. Do not anonymise or substitute sample values unless they ask. A single artifact can mix both: keep supplied facts, and still use example.com (and the ranges above) in any invented snippet.

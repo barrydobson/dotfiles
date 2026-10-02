@@ -2,6 +2,8 @@
 
 High-value entries distilled from the Google Developer Documentation Style Guide word list (598 entries; verified against the raw page). Scan this when choosing between terms or when a word feels like jargon.
 
+Contents: Modal verbs · Words to delete outright · Substitutions · Inclusive replacements · Usage notes · Spelling and compounds · Product names and trademarks
+
 ## Modal verbs
 
 **can** = ability or option. **might** = possibility. **must** = requirement. **may** = reserved for policy or legal permission. Avoid **should**, **could**, **would** (ambiguous - state the requirement or recommendation explicitly), **will** (use present tense), and **shall**.
@@ -19,7 +21,7 @@ please (in instructions) · simply · simple · easy · easily · quick(ly) · s
 | e.g. / i.e.                    | for example / that is                            |
 | etc. / and so on               | specific examples, or "such as" (non-exhaustive) |
 | allows you to / enables you to | lets you                                         |
-| leverage / utilize             | use                                              |
+| leverage / utilise             | use                                              |
 | comprise                       | consist of, contain, include                     |
 | impact (verb)                  | affect                                           |
 | execute                        | run                                              |
@@ -57,7 +59,7 @@ please (in instructions) · simply · simple · easy · easily · quick(ly) · s
 | ingest (plain moving)          | import, load, copy                               |
 | roll out (figurative)          | phased, gradual, in stages                       |
 | copy and paste (mechanics)     | say what to enter                                |
-| tl;dr                          | To summarize,                                    |
+| tl;dr                          | To summarise,                                    |
 | aka                            | also known as                                    |
 | vice versa                     | state the reverse, or "conversely"               |
 | N/A (unexplained)              | not applicable (spell out on first use)          |
@@ -68,7 +70,7 @@ please (in instructions) · simply · simple · easy · easily · quick(ly) · s
 | ------------------------------ | -------------------------------------------------------------- |
 | whitelist / blacklist          | allowlist / denylist (nouns only; rewrite verb forms)          |
 | master / slave                 | primary, main, controller, leader / replica, worker, secondary |
-| sanity check / sane            | quick check, validation / valid, sensible                      |
+| sanity check / sane            | final check, validation / valid, sensible                      |
 | crazy, insane                  | complicated, unexpected, strange (inanimate only)              |
 | cripples                       | slows down                                                     |
 | dummy variable                 | placeholder                                                    |
@@ -120,8 +122,8 @@ When code itself uses a non-inclusive term, keep the literal term in code font a
 ## Spelling and compounds
 
 - One word: backend, frontend, checkbox, codebase, dataset (per product), endpoint, filename, hostname, inline, lifecycle, microservices, namespace, timestamp, toolkit, touchscreen, walkthrough, website, webpage, whitespace, wildcard, whitepaper, healthcare, hardcoded, screenshot, runbook.
-- Two words: data center, data source, data type, file system, name server, web server, plain text (plaintext only in cryptography), time zone (noun).
-- Verb/noun splits: set up / setup, sign in / sign-in, log in / login, back up / backup, start up / startup, time out / timeout, fail over / failover, plug in / plugin, roll back / rollback.
+- Two words: data centre, data source, data type, file system, name server, web server, plain text (plaintext only in cryptography), time zone (noun).
+- Verb/noun splits: set up / setup, sign in / sign-in, back up / backup, start up / startup, time out / timeout, fail over / failover, plug in / plugin, roll back / rollback.
 - Prefixes usually close up: autoscaling, prebuilt, preemptible, multiregional, nonempty. Exceptions: pre-existing, pre-shared key, multi-region, multi-tenancy, self-_, cross-_.
 - Always hyphenated: on-premises (never on-prem), read-only, third-party (adjective; "third party" as noun), drag-and-drop (adjective only).
 - Plurals: appendixes, indexes, matrixes (not -ices, outside math).
@@ -129,7 +131,7 @@ When code itself uses a non-inclusive term, keep the literal term in code font a
 
 ## Product names and trademarks
 
-- Capitalize product names exactly as officially styled; if a name starts lowercase (macOS), don't start a sentence with it.
+- Capitalise product names exactly as officially styled; if a name starts lowercase (macOS), don't start a sentence with it.
 - No "the" before product names ("using Cloud Datastore"); "the" before tool and API names ("the Transcoder API," "the `gcloud` CLI").
-- Never abbreviate official names (no "GCP"), never verb them, never pluralize or possessivize them.
+- Never abbreviate official names (no "GCP"), never verb them, never pluralise or possessivise them.
 - Trademarks modify a noun: "a Chromebook computer," not "a Chromebook"; "Chromebook computers," not "Chromebooks."

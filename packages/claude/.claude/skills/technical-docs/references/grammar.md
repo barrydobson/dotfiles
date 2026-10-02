@@ -2,24 +2,26 @@
 
 Detailed rules distilled from the Google Developer Documentation Style Guide. "Rec:" = recommended, "Not:" = not recommended.
 
+Contents: Voice, person, and mood · Tense · Prescriptive wording: must, can, might · Timeless writing · Sentence structure · Writing for a global audience · Claims and objectivity · Jargon · Abbreviations · Capitalisation · Contractions · Pronouns · Plurals and possessives · Articles and prepositions · Reference-doc verbs
+
 ## Voice, person, and mood
 
 - Use active voice; make the actor explicit.
-  - Rec: "Send a query to the service. The server sends an acknowledgment." | Not: "The service is queried, and an acknowledgment is sent."
+  - Rec: "Send a query to the service. The server sends an acknowledgement." | Not: "The service is queried, and an acknowledgement is sent."
 - Never patch passive voice with "by" phrases - recast as active.
-- Passive is acceptable in three cases: to emphasize the object ("The file is saved"), to de-emphasize the actor ("Over 50 conflicts were found in the file" - kinder than "You created over 50 conflicts"), or when the actor is irrelevant ("The database was purged in January").
+- Passive is acceptable in three cases: to emphasise the object ("The file is saved"), to de-emphasise the actor ("Over 50 conflicts were found in the file" - kinder than "You created over 50 conflicts"), or when the actor is irrelevant ("The database was purged in January").
 - Address the reader as "you"; use imperative mood for instructions ("Click **Submit**").
 - "The user" means the reader's users, never the reader.
-  - Rec: "This document shows you how to develop an app for your organization." | Not: "This document shows the user how to develop an app."
+  - Rec: "This document shows you how to develop an app for your organisation." | Not: "This document shows the user how to develop an app."
 - First person plural only when speaking as the organisation ("we recommend"); never "let's."
   - Rec: "Consider adding a description to your table." | Not: "Let's add a description to our table."
-- Don't anthropomorphize software: a system doesn't "see," "think," "want," or "tell" - it detects, checks, requires, specifies.
+- Don't anthropomorphise software: a system doesn't "see," "think," "want," or "tell" - it detects, checks, requires, specifies.
   - Rec: "The PC detects a new device." | Not: "The PC sees a new device."
 
 ## Tense
 
 - Present tense for product behaviour and general statements.
-  - Rec: "The server sends an acknowledgment." | Not: "The server will send an acknowledgment."
+  - Rec: "The server sends an acknowledgement." | Not: "The server will send an acknowledgement."
 - Future tense only for events genuinely later than the action described.
   - Rec: "Add the filename to the backup list. The file will be archived the next time the backup process runs."
 - Avoid hypothetical "would."
@@ -63,7 +65,7 @@ Avoid "should" - it leaves the reader unsure whether something is required. Map 
 
 ## Writing for a global audience
 
-- Prefer simple words: "use" not "utilize" or "leverage"; "start" not "commence"; "so" not "consequently"; "some" not "a number of."
+- Prefer simple words: "use" not "utilise" or "leverage"; "start" not "commence"; "so" not "consequently"; "some" not "a number of."
 - Keep optional helper words - they cost nothing and remove ambiguity:
   - Rec: "If the key is not found, then the default value is returned." (keep "then")
   - Rec: "assumes that you have the following knowledge" (keep "that")
@@ -73,9 +75,9 @@ Avoid "should" - it leaves the reader unsure whether something is required. Map 
 - Limit noun stacks to two nouns modifying another noun; break up longer stacks with prepositions or hyphens.
 - Place modifiers next to what they modify: "Request only one token," not "Only request one token."
 - Add a qualifying noun to technical keywords: "the `example.yaml` file," not bare "`example.yaml`."
-- Use each word in one consistent sense; one term per concept, with identical capitalization throughout.
+- Use each word in one consistent sense; one term per concept, with identical capitalisation throughout.
 - Standard subject-verb-object order; keep subject and verb near the start.
-- No culturally specific references, idioms, humor, holidays, sports, or hemisphere-dependent seasons; use globally diverse example names.
+- No culturally specific references, idioms, humour, holidays, sports, or hemisphere-dependent seasons; use globally diverse example names.
 
 ## Claims and objectivity
 
@@ -94,22 +96,22 @@ Avoid "should" - it leaves the reader unsure whether something is required. Map 
 ## Abbreviations
 
 - Spell out on first use with the abbreviation in parentheses; use the abbreviation alone afterward.
-- Capitalize the spelled-out form only if it's a proper noun: "data manipulation language (DML)," not "Data Manipulation Language (DML)."
+- Capitalise the spelled-out form only if it's a proper noun: "data manipulation language (DML)," not "Data Manipulation Language (DML)."
 - Skip spelling out abbreviations better known than their expansions: API, URL, HTML, PDF, RAM, REST, USB, AI, file formats, units.
-- Never "i.e." or "e.g." - write "that is" or "for example." Never "etc." - write "and so on," or rewrite with "such as" or "like."
+- Never "i.e." or "e.g." - write "that is" or "for example." Never "etc." - give the specific items, or introduce a non-exhaustive list with "such as" or "like."
 - No internet slang (tl;dr, ymmv, RTFM). Prefer "approximately" over "approx.," "10 times" over "10x."
 - Don't use abbreviations as verbs.
   - Rec: "Use SSH to log in to your remote shell." | Not: "Then ssh into your remote shell."
 - Choose a/an by spoken pronunciation: "a SQL query," "an SAP system."
 
-## Capitalization
+## Capitalisation
 
 - Sentence case for titles, headings, list items, table headers and cells, and figure captions. No trailing periods on headings.
-- Don't capitalize for emphasis or to coin meaning; no ALL CAPS or camelCase outside official names and code.
-- Product names exactly as officially styled; capitalization of a product name never varies.
+- Don't capitalise for emphasis or to coin meaning; no ALL CAPS or camelCase outside official names and code.
+- Product names exactly as officially styled; capitalisation of a product name never varies.
 - After a colon: lowercase, unless what follows is a proper noun, a heading, or a quotation.
-- A hyphenated word starting a sentence or heading capitalizes only its first element ("Load-balance the traffic").
-- Don't name casing styles in prose - show the format: "with no spaces and each word capitalized - for example, `AssertionAccount`."
+- A hyphenated word starting a sentence or heading capitalises only its first element ("Load-balance the traffic").
+- Don't name casing styles in prose - show the format: "with no spaces and each word capitalised - for example, `AssertionAccount`."
 
 ## Contractions
 
@@ -129,10 +131,10 @@ Avoid "should" - it leaves the reader unsure whether something is required. Map 
 ## Plurals and possessives
 
 - Never form a plural with 's: "APIs," "IDEs," "the 2020s."
-- Don't pluralize code names: "`Intent` objects," not "`Intent`s." Don't pluralize trademarks or product names.
+- Don't pluralise code names: "`Intent` objects," not "`Intent`s." Don't pluralise trademarks or product names.
 - No optional plurals: "your API key," never "your API key(s)."
 - "One or more X" takes a plural verb; "more than one X" takes singular.
-- Units: "1 degree, 15 degrees"; don't pluralize unit symbols ("64 GB," not "64 GBs").
+- Units: "1 degree, 15 degrees"; don't pluralise unit symbols ("64 GB," not "64 GBs").
 - Singular possessive: 's (even after s); plural ending in s: apostrophe only.
 - No possessives on product names or code items - restructure: "the return value of `wordCount`," not "`wordCount`'s return value."
 
