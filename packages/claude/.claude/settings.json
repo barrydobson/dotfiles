@@ -38,7 +38,9 @@
       "Edit(~/.ssh/**)"
     ],
     "defaultMode": "auto",
-    "additionalDirectories": ["~/vault"]
+    "additionalDirectories": [
+      "~/vault"
+    ]
   },
   "enableAllProjectMcpServers": false,
   "disabledMcpjsonServers": [],
@@ -75,11 +77,10 @@
     "ponytail@ponytail": true,
     "drawio@365-skills": false,
     "skill-creator@claude-plugins-official": true,
-    "engineering-workflow@barrydobson": true,
     "mattpocock-skills@claude-plugins-official": true,
-    "open-code-review@open-code-review": true,
     "typesafe@typesafe-ai": true,
-    "tote-issue-tracker@tote-skills": true
+    "tote-issue-tracker@tote-skills": true,
+    "barrydobson-skills@barrydobson": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
@@ -110,31 +111,10 @@
       },
       "autoUpdate": true
     },
-    "barrydobson": {
-      "source": {
-        "source": "github",
-        "repo": "barrydobson/claude-plugins"
-      },
-      "autoUpdate": true
-    },
     "go-skills": {
       "source": {
         "source": "github",
         "repo": "spf13/go-skills"
-      },
-      "autoUpdate": true
-    },
-    "simple-english": {
-      "source": {
-        "source": "github",
-        "repo": "AminBlg/SimpleEnglish"
-      },
-      "autoUpdate": true
-    },
-    "open-code-review": {
-      "source": {
-        "source": "github",
-        "repo": "alibaba/open-code-review"
       },
       "autoUpdate": true
     },
@@ -144,8 +124,16 @@
         "repo": "typesafe-ai/skills"
       },
       "autoUpdate": true
+    },
+    "barrydobson": {
+      "source": {
+        "source": "github",
+        "repo": "barrydobson/skills"
+      },
+      "autoUpdate": true
     }
   },
+  "feedbackDrafts": "off",
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
   "autoUpdatesChannel": "latest",
@@ -164,6 +152,5 @@
   "remoteControlAtStartup": false,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "mcpServers": {},
-  "feedbackDrafts": "off"
+  "mcpServers": {}
 }
