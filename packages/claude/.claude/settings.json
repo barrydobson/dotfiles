@@ -72,7 +72,6 @@
   },
   "enabledPlugins": {
     "claude-md-management@claude-plugins-official": true,
-    "humanizer@barrydobson": true,
     "ponytail@ponytail": true,
     "drawio@365-skills": false,
     "skill-creator@claude-plugins-official": true,

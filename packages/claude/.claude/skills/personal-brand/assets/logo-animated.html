@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Logo — Animated</title>
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #0C0A09;
+      color: #FAFAFA;
+      font-family: "Geist", "Inter", system-ui, sans-serif;
+    }
+    .frame {
+      width: min(72vmin, 420px);
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+    }
+    svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      filter: drop-shadow(0 0 12px rgba(202, 234, 40, 0.25));
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <svg viewBox="0 0 100 100" fill="none" aria-hidden="true">
+      <g id="group">
+        <path id="path" stroke="#CAEA28" stroke-linecap="round" stroke-linejoin="round" opacity="0.1"></path>
+      </g>
+    </svg>
+  </div>
+  <script>
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+    const config = {
+      particleCount: 76,
+      trailSpan: 0.31,
+      durationMs: 5300,
+      rotationDurationMs: 28000,
+      pulseDurationMs: 4400,
+      strokeWidth: 4.6,
+      roseA: 9.2,
+      roseABoost: 0.6,
+      roseBreathBase: 0.72,
+      roseBreathBoost: 0.28,
+      roseScale: 3.25,
+      rotate: true,
+      point(progress, detailScale) {
+        const t = progress * Math.PI * 2;
+        const a = this.roseA + detailScale * this.roseABoost;
+        const r = a * (this.roseBreathBase + detailScale * this.roseBreathBoost) * Math.cos(3 * t);
+        return {
+          x: 50 + Math.cos(t) * r * this.roseScale,
+          y: 50 + Math.sin(t) * r * this.roseScale,
+        };
+      },
+    };
+
+    const group = document.querySelector('#group');
+    const path = document.querySelector('#path');
+    path.setAttribute('stroke-width', String(config.strokeWidth));
+
+    const particles = Array.from({ length: config.particleCount }, () => {
+      const circle = document.createElementNS(SVG_NS, 'circle');
+      circle.setAttribute('fill', '#CAEA28');
+      group.appendChild(circle);
+      return circle;
+    });
+
+    function normalizeProgress(p) { return ((p % 1) + 1) % 1; }
+
+    function getDetailScale(time) {
+      const p = (time % config.pulseDurationMs) / config.pulseDurationMs;
+      return 0.52 + ((Math.sin(p * Math.PI * 2 + 0.55) + 1) / 2) * 0.48;
+    }
+
+    function getRotation(time) {
+      if (!config.rotate) return 0;
+      return -((time % config.rotationDurationMs) / config.rotationDurationMs) * 360;
+    }
+
+    function buildPath(detailScale, steps = 480) {
+      return Array.from({ length: steps + 1 }, (_, i) => {
+        const pt = config.point(i / steps, detailScale);
+        return `${i === 0 ? 'M' : 'L'} ${pt.x.toFixed(2)} ${pt.y.toFixed(2)}`;
+      }).join(' ');
+    }
+
+    function getParticle(index, progress, detailScale) {
+      const tailOffset = index / (config.particleCount - 1);
+      const pt = config.point(normalizeProgress(progress - tailOffset * config.trailSpan), detailScale);
+      const fade = Math.pow(1 - tailOffset, 0.56);
+      return { x: pt.x, y: pt.y, radius: 0.9 + fade * 2.7, opacity: 0.04 + fade * 0.96 };
+    }
+
+    const startedAt = performance.now();
+    function render(now) {
+      const time = now - startedAt;
+      const progress = (time % config.durationMs) / config.durationMs;
+      const detailScale = getDetailScale(time);
+      group.setAttribute('transform', `rotate(${getRotation(time)} 50 50)`);
+      path.setAttribute('d', buildPath(detailScale));
+      particles.forEach((node, i) => {
+        const p = getParticle(i, progress, detailScale);
+        node.setAttribute('cx', p.x.toFixed(2));
+        node.setAttribute('cy', p.y.toFixed(2));
+        node.setAttribute('r', p.radius.toFixed(2));
+        node.setAttribute('opacity', p.opacity.toFixed(3));
+      });
+      requestAnimationFrame(render);
+    }
+    requestAnimationFrame(render);
+  </script>
+</body>
+</html>
