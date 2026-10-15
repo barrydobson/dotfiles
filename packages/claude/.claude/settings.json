@@ -81,7 +81,8 @@
     "tote-brand-guidelines@synced": false,
     "tote-engineering-context@synced": false,
     "tote-github-skills@synced": false,
-    "cowork-plugin-management@synced": false
+    "cowork-plugin-management@synced": false,
+    "tote-issue-tracker@claudeai-thetote-skills": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
@@ -109,13 +110,6 @@
       "source": {
         "source": "github",
         "repo": "typesafe-ai/skills"
-      },
-      "autoUpdate": true
-    },
-    "barrydobson": {
-      "source": {
-        "source": "github",
-        "repo": "barrydobson/skills"
       },
       "autoUpdate": true
     },

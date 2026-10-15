@@ -100,28 +100,13 @@ These override scope discipline for that code only.
 - Log meaningful errors with context, not just "AI call failed".
 - Ground responses in available data. Avoid hallucination by limiting scope.
 
-## Cross-repo work: delegate to the agent in that repo
+## Cross-repo work
 
-Do not load another repo into your own context. When your ticket needs work from a repo other than the one you are working in, hand that part to the session already running there.
+Prefer to delegate work in another repo to the session already running there, rather than loading that repo into your own context. `ListAgents` shows peers; a session's name starts with its repo's folder name.
 
-What to delegate:
-
-- **Code changes:** always delegate them when a peer is running.
-- **Questions that need an understanding of the whole repo** (how something works, where a contract is defined): delegate them.
-- **Simple lookups** (reading a known file or checking a value): do them yourself.
-
-How to delegate:
-
-1. Call `ListAgents`. A session's name starts with the folder name of the repo it runs in (`platform-integrations-6a`, `development-metrics-e5`).
-2. **A peer is running in that repo:** send it every task for that repo in one `SendMessage`. After that, do not edit its files yourself.
-3. **No peer is running there:** say in your output that you found no agent running in `<repo>` and are doing the work yourself. Then do it, following that repo's `CLAUDE.md`. Do not wait for your user, who may not be at the keyboard.
-
-Write the message so it can be acted on without your context:
-
-- Carry only an existing ticket key or a precise question. Include the key, what to find out or change, any contract it must match (JSON shape, input name, version), and what "done" looks like.
-- Say exactly what you want sent back, for example a PR URL, a field list or a tag.
-
-Wait for the reply with `notify_when_idle: true`.
+- Delegate code changes and questions that need the whole repo. Do simple lookups (a known file, a value) yourself.
+- Send a peer all its tasks in one `SendMessage`, written so it can act without your context: the ticket key or precise question, any contract to match, what done looks like, and what to send back. Wait with `notify_when_idle: true`.
+- With no peer running, use judgement: do it yourself following that repo's `CLAUDE.md`, or report it. A skill's own rule wins.
 
 The status of record for an epic is `tracker children <EPIC>`, not the conversation.
 
