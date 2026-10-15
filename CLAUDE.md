@@ -25,7 +25,7 @@ packages/
 ### Major Components
 
 - **Shell**: Zsh with Zinit plugin management and Starship prompt
-- **Editor**: Neovim (LazyVim plus four small plugin overrides, Copilot for AI); also `zed`, `vscode`
+- **Editor**: Neovim (single-file minimal config, no AI); also `zed`, `vscode`
 - **Terminal**: Ghostty (`voltaic-dark`/`voltaic-light`)
 - **Git**: Modular config - `config` includes `.gitalias` (short single-letter aliases) and a gitignored `.gitconfig-local`
 - **Tools**: `atuin`, `eza`, `mise`, `k9s`, `homebrew` (Brewfile), `yamllint`, `editorconfig`, `worktrunk`, `ccstatusline`
@@ -84,15 +84,7 @@ Commits are signed with `gpg.format = ssh` and verified against `~/.ssh/allowed_
 
 ### Neovim Configuration
 
-LazyVim with a thin override layer in `packages/nvim/.config/nvim/`:
-
-- `init.lua` - Entry point (`require("config.lazy")`)
-- `lazyvim.json` - Enabled LazyVim extras (Copilot, Go, Docker, Helm, JSON, YAML, Markdown, DAP, REST, mini-surround, mini-files)
-- `lazy-lock.json` - Plugin versions (commit this)
-- `lua/plugins/` - Only four files: `colorschemes`, `conform`, `copilot`, `git`
-- `lua/config/keymaps.lua` - Only `jj`/`jk` to escape insert mode
-
-AI in the editor is GitHub Copilot, not CodeCompanion. See `KEYMAPS.md`.
+Deliberately minimal, aimed at an occasional user. Everything is in `packages/nvim/.config/nvim/init.lua`: options, keymaps and plugins via Neovim 0.12's built-in `vim.pack` (lockfile `nvim-pack-lock.json`, commit it). No LazyVim, lazy.nvim, LSP or Copilot; `relativenumber` stays off. See `KEYMAPS.md`.
 
 ### Zsh Configuration
 

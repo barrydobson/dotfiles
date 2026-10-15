@@ -4,7 +4,6 @@ A cross-platform dotfiles configuration for macOS, Windows (WSL2), and Linux. Th
 
 ## 🤖 AI Development Features
 
-- **Neovim**: GitHub Copilot inline suggestions via the LazyVim `ai.copilot` extra
 - **Claude Code**: Global config, skills, agents and rules in `packages/claude/.claude/`, symlinked into `~/.claude`
 
 **📖 See [CLAUDE.md](CLAUDE.md) for detailed Claude Code integration setup**
@@ -14,7 +13,7 @@ A cross-platform dotfiles configuration for macOS, Windows (WSL2), and Linux. Th
 - **Cross-Platform Support**: Works on macOS, Windows (WSL2), and Linux
 - **Modern CLI Tools**: Replaces traditional tools with faster, feature-rich alternatives
 - **Theming**: Catppuccin Mocha in Neovim, tmux and Starship; voltaic-dark in Ghostty and k9s
-- **Modern Editor**: LazyVim-based Neovim configuration
+- **Editor**: Minimal single-file Neovim configuration
 - **Git Workflow**: Signed commits, linear-history defaults and worktree tooling
 - **Shell Enhancement**: Zsh with modern completions and smart directory navigation
 
@@ -93,17 +92,10 @@ A cross-platform dotfiles configuration for macOS, Windows (WSL2), and Linux. Th
 
 #### Neovim
 
-[LazyVim](https://www.lazyvim.org/) with a thin layer of overrides in
-`packages/nvim/.config/nvim/`:
-
-- **Copilot**: inline suggestions, auto-triggered, also in markdown and help
-- **Language extras**: Go, Docker, Helm, JSON, YAML, Markdown, plus DAP and REST
-- **YAML formatting**: `yamlfmt` with indentless arrays, Kubernetes-friendly
-- **Git**: gitsigns from LazyVim plus `git-conflict.nvim` for conflict resolution
-- **Colourscheme**: `catppuccin-mocha`
-
-LSP, Treesitter, completion and fuzzy finding are all LazyVim defaults - see
-[KEYMAPS.md](KEYMAPS.md).
+A minimal, beginner-friendly config in one file,
+`packages/nvim/.config/nvim/init.lua`. Needs Neovim 0.12+ for the built-in
+`vim.pack` plugin manager. Plugins: catppuccin, which-key, telescope and
+gitsigns. See [KEYMAPS.md](KEYMAPS.md).
 
 ### Git Configuration
 
@@ -143,7 +135,7 @@ shellcheck -x --source-path=SCRIPTDIR install.sh install/*.sh   # Lint shell scr
 
 ### Key Bindings and Shortcuts
 
-- **📖 [Neovim Keymap Reference](KEYMAPS.md)** - custom keymaps and where LazyVim's defaults live
+- **📖 [Neovim Keymap Reference](KEYMAPS.md)** - keymaps and plugins
 - **Ghostty**: split and tab bindings in `packages/ghostty/.config/ghostty/config`
 - **tmux**: `Ctrl-A` prefix, `|` and `-` to split, `r` to reload
 
@@ -179,7 +171,7 @@ shellcheck -x --source-path=SCRIPTDIR install.sh install/*.sh   # Lint shell scr
 
 Themes are set per application, so changing one means editing each config:
 
-- Neovim: `packages/nvim/.config/nvim/lua/plugins/colorschemes.lua`
+- Neovim: `vim.cmd.colorscheme` in `packages/nvim/.config/nvim/init.lua`
 - tmux: the `@catppuccin_*` settings in `packages/tmux/.config/tmux/tmux.conf`
 - Starship: `palette` in `packages/starship/.config/starship/starship.toml`
 - Ghostty: `theme` in `packages/ghostty/.config/ghostty/config`
