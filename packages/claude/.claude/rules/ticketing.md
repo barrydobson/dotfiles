@@ -1,0 +1,11 @@
+# Ticketing
+
+Applies whenever you write an epic or tickets, from any skill (`to-spec`, `to-tickets`, or by hand). These rules override the skill where they conflict.
+
+- **One repo per ticket.** Each ticket names exactly one repo and sets it as the Jira component. A vertical slice is vertical within one repo. A tracer that needs two repos is two tickets joined by a blocking link. A sweep across N repos is N tickets.
+- **No component for the repo?** Say so in the quiz and ask. Never leave it blank silently, and never put in a guess.
+- **Read the code first.** Before drafting, read every repo a ticket will touch. Ask the peer session in that repo if one is running (see "Cross-repo work" in `CLAUDE.md`); otherwise use an Explore agent. Never ticket a repo you have not read. A spec or vault note is not a substitute.
+- **Size gate blocks publishing.** If a ticket might not fit one fresh context, split it before you publish. Never publish a placeholder as `ready-for-agent`.
+- **One deliverable per ticket.** If the "What to build" needs a list of unrelated artefacts, or acceptance needs throwaway apps in other repos, split it.
+- **The quiz shows the risk.** Show the repo for each ticket. List the tickets you flagged as large, multi-repo or unsure first. Offer splitting as an option, not just merging. Do not mark "approve as proposed" as recommended while your own warnings are still open.
+- **Epic component** is the repo that holds most of the work. If no repo does, say so rather than guessing.

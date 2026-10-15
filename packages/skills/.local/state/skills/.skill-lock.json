@@ -45,6 +45,15 @@
       "skillFolderHash": "b39bcc918173641199e7ed3e4c54bf8fddd47848",
       "installedAt": "2026-09-07T11:44:51.532Z",
       "updatedAt": "2026-10-05T07:30:11.656Z"
+    },
+    "lavish": {
+      "source": "kunchenguid/lavish-axi",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/kunchenguid/lavish-axi.git",
+      "skillPath": "skills/lavish/SKILL.md",
+      "skillFolderHash": "680ba3c9c9480ae13b515ccf0ad2837957ba10e8",
+      "installedAt": "2026-10-15T07:15:15.434Z",
+      "updatedAt": "2026-10-15T07:15:15.434Z"
     }
   },
   "dismissed": {
@@ -52,16 +61,16 @@
   },
   "lastSelectedAgents": [
     "amp",
-    "antigravity",
-    "antigravity-cli",
     "cline",
     "codex",
     "cursor",
-    "deepagents",
+    "droid",
     "gemini-cli",
     "github-copilot",
+    "kilo",
     "kimi-code-cli",
     "opencode",
+    "pi",
     "warp",
     "zed",
     "claude-code"

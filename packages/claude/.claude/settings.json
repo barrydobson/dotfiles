@@ -75,12 +75,13 @@
   "enabledPlugins": {
     "claude-md-management@claude-plugins-official": true,
     "ponytail@ponytail": true,
-    "drawio@365-skills": false,
     "skill-creator@claude-plugins-official": true,
     "typesafe@typesafe-ai": true,
-    "tote-issue-tracker@tote-skills": true,
-    "barrydobson-skills@barrydobson": true,
-    "mattpocock-skills@mattpocock": true
+    "mattpocock-skills@mattpocock": true,
+    "tote-brand-guidelines@synced": false,
+    "tote-engineering-context@synced": false,
+    "tote-github-skills@synced": false,
+    "cowork-plugin-management@synced": false
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
@@ -90,24 +91,10 @@
       },
       "autoUpdate": true
     },
-    "tote-skills": {
-      "source": {
-        "source": "github",
-        "repo": "thetote/skills"
-      },
-      "autoUpdate": true
-    },
     "ponytail": {
       "source": {
         "source": "github",
         "repo": "DietrichGebert/ponytail"
-      },
-      "autoUpdate": true
-    },
-    "365-skills": {
-      "source": {
-        "source": "github",
-        "repo": "Agents365-ai/365-skills"
       },
       "autoUpdate": true
     },
@@ -136,7 +123,8 @@
       "source": {
         "source": "github",
         "repo": "mattpocock/skills"
-      }
+      },
+      "autoUpdate": true
     }
   },
   "feedbackDrafts": "off",

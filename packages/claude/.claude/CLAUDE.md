@@ -15,6 +15,7 @@ These apply to documentation, code comments, commit and PR messages, and replies
 - Always prefer ISO 24495-1:2023 conformant plain language over dense technical jargon: short sentences, one idea per sentence, define terms on first use.
 - When reporting your own mistake, give the cause and the fix in one sentence each; no apology, no framing ("the mistake was mine"), no post-mortem.
 - Never use em dashes or cataphoric teasers such as "Here's the thing" or "But there's a catch".
+- Never name a person, including me, in tickets, comments, briefs or PR bodies. Describe the role ("a human", "the platform team"). Assignment belongs in the assignee field.
 
 ## How to talk to me
 
@@ -51,6 +52,7 @@ Research first, no code. State the plan - what changes, risks, rollback - and ge
 
 - **Testing** (behaviour, edges, mocks, red-green): `~/.claude/rules/testing.md`. It auto-loads for Go, TypeScript, Python and C# test files. Read it before writing tests in any other language.
 - **Workflow** (branches, commits, PRs): `~/.claude/rules/workflow.md`. It is always loaded.
+- **Ticketing** (epics, tickets, repo scoping): `~/.claude/rules/ticketing.md`. It is always loaded and overrides `to-spec` and `to-tickets` where they conflict.
 
 ## Tracer Bullets
 
@@ -67,6 +69,16 @@ When building features, build a tiny end-to-end slice through every layer first,
 | `trash`        | rm       | `trash file` - **never `rm -rf`**           |
 
 `ast-grep` for code structure. `rg` for literals, log messages. Always look up current stable versions when adding dependencies, CI actions, tool versions.
+
+## Shell gotcha: the Bash tool runs zsh
+
+zsh does not word-split unquoted variables. `$var` is always one argument, however many spaces it holds. Bash habits fail, often silently:
+
+- `for p in "a b" "c d"; do set -- $p` leaves `$1` as `a b` and `$2` empty.
+- `for k in $list` runs once with the whole list.
+- `F="--context=x -n y"; kubectl $F get pods` passes one argument. A polling loop on that never sees success and spins forever.
+
+Use arrays (`keys=(a b c); for k in $keys`, `flags=(--context=x -n y); kubectl $flags`), `${=var}` to force a split, or write the flags inline. When a loop fails or finishes instantly, suspect this before blaming the tool.
 
 ## Never
 
