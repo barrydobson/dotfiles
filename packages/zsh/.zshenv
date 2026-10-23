@@ -12,11 +12,11 @@ export SHELL_SESSIONS_DISABLE=1
 # git hooks, editor tasks) get the same PATH as an interactive one.
 
 add_to_path() {
-    local new_path="$1"
-    case ":$PATH:" in
-        *":$new_path:"*) ;;
-        *) export PATH="$new_path:$PATH" ;;
-    esac
+  local new_path="$1"
+  case ":$PATH:" in
+  *":$new_path:"*) ;;
+  *) export PATH="$new_path:$PATH" ;;
+  esac
 }
 
 add_to_path "$HOME/.local/bin"
@@ -24,6 +24,7 @@ add_to_path "/opt/nvim/bin"
 add_to_path "$HOME/go/bin"
 add_to_path "${KREW_ROOT:-$HOME/.krew}/bin"
 add_to_path "$HOME/.bun/bin"
+add_to_path "$HOME/.groundcover/bin"
 
 #=============================================================================
 # Local Environment
@@ -39,5 +40,5 @@ add_to_path "$HOME/.bun/bin"
 #
 # Sourced after PATH so entries can reference the binaries it adds.
 if [[ -s ~/.env ]]; then
-    source ~/.env
+  source ~/.env
 fi

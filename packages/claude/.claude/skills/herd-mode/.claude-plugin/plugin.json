@@ -1,0 +1,6 @@
+{
+  "name": "herd-mode",
+  "version": "0.3.0",
+  "description": "Herd mode: /herd on|off|<tasks> makes the session the herd head and routes /work and /finish through it, and a band and side pane keep the head's open questions and parked findings in view.",
+  "types": "./types/index.d.ts"
+}

@@ -8,20 +8,26 @@
   "includeCoAuthoredBy": true,
   "permissions": {
     "allow": [
-      "Bash(ls:*)",
-      "Bash(python3:*)",
+      "Bash(acli jira workitem assign:*)",
+      "Bash(curl *)",
+      "Bash(gh issue close:*)",
+      "Bash(gh issue comment:*)",
+      "Bash(gh issue edit:*)",
+      "Bash(gh pr comment:*)",
+      "Bash(gh pr ready:*)",
       "Bash(git add:*)",
       "Bash(git commit -m ':*)",
       "Bash(git push:*)",
-      "Bash(curl *)",
       "Bash(grep *)",
-      "Bash(rg *)",
-      "Bash(gh pr ready:*)",
-      "Bash(gh pr comment:*)",
-      "Bash(gh issue close:*)",
-      "Bash(gh issue edit:*)",
-      "Bash(gh issue comment:*)",
-      "Bash(acli jira workitem assign:*)"
+      "Bash(herdr agent list:*)",
+      "Bash(herdr agent read:*)",
+      "Bash(herdr agent start:*)",
+      "Bash(herdr pane read:*)",
+      "Bash(herdr tab close:*)",
+      "Bash(herdr tab create:*)",
+      "Bash(ls:*)",
+      "Bash(python3:*)",
+      "Bash(rg *)"
     ],
     "deny": [
       "Bash(rm -rf *)",
@@ -38,7 +44,9 @@
       "Edit(~/.ssh/**)"
     ],
     "defaultMode": "auto",
-    "additionalDirectories": ["~/vault"]
+    "additionalDirectories": [
+      "~/vault"
+    ]
   },
   "enableAllProjectMcpServers": false,
   "disabledMcpjsonServers": [],
