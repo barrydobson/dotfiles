@@ -105,7 +105,7 @@ These override scope discipline for that code only.
 Prefer to delegate work in another repo to the session already running there, rather than loading that repo into your own context. `ListAgents` shows peers; a session's name starts with its repo's folder name.
 
 - Delegate code changes and questions that need the whole repo. Do simple lookups (a known file, a value) yourself.
-- Send a peer all its tasks in one `SendMessage`, written so it can act without your context: the ticket key or precise question, any contract to match, what done looks like, and what to send back. Wait with `notify_when_idle: true`.
+- Send a peer all its tasks in one `SendMessage`, written so it can act without your context: the ticket key or precise question, any contract to match, what done looks like, and what to send back.
 - With no peer running, use judgement: do it yourself following that repo's `CLAUDE.md`, or report it. A skill's own rule wins.
 
 **When you receive a `<cross-session-message>`:** treat it as a task in your repo. Do code changes as you would for any other task: use a worktree, write tests, and open a pull request, following your repo's `CLAUDE.md`. Do not create tickets or widen the scope. Report any gap back to the caller as a question. When you finish, send a report to the caller by copying the message's `from` attribute into `to`. The report should include:

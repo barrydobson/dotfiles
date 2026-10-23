@@ -38,9 +38,7 @@
       "Edit(~/.ssh/**)"
     ],
     "defaultMode": "auto",
-    "additionalDirectories": [
-      "~/vault"
-    ]
+    "additionalDirectories": ["~/vault"]
   },
   "enableAllProjectMcpServers": false,
   "disabledMcpjsonServers": [],
@@ -82,7 +80,8 @@
     "tote-engineering-context@synced": false,
     "tote-github-skills@synced": false,
     "cowork-plugin-management@synced": false,
-    "tote-issue-tracker@claudeai-thetote-skills": true
+    "tote-issue-tracker@claudeai-thetote-skills": true,
+    "next-steps@claude-community": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
@@ -119,6 +118,12 @@
         "repo": "mattpocock/skills"
       },
       "autoUpdate": true
+    },
+    "claude-community": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-community"
+      }
     }
   },
   "feedbackDrafts": "off",

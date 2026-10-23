@@ -29,7 +29,7 @@ herdr agent start <name> --kind claude --pane "$pane" -- --name <name>
 
 ## Send the task
 
-Use `SendMessage` with `to: <name>` and `notify_when_idle: true`. The worker receives a `<cross-session-message>`, and its `CLAUDE.md` contract then applies: a worktree, tests, a PR, no new tickets, and a report sent back to you. The task text needs only:
+Use `SendMessage` with `to: <name>`. Do not set `notify_when_idle`: the worker's report arrives as its own message, and idle notices only cost the user turns. The worker receives a `<cross-session-message>`, and its `CLAUDE.md` contract then applies: a worktree, tests, a PR, no new tickets, and a report sent back to you. The task text needs only:
 
 - the ticket key or the exact change;
 - any contract to match, such as an API shape or a field name another repo depends on;
@@ -54,19 +54,23 @@ A fix to an already-open PR goes to the same worker: the evidence, plus "run `/c
 
 For `/tote-issue-tracker:finish`, send `/tote-issue-tracker:finish <key>` to the repo's worker while its tab is open. Pass a waiver the user gives word for word, scoped to the ticket and check they named. Applying it to any other ticket or check needs the user's say-so first.
 
-## Watch for stuck workers
+## Stuck workers
 
-After the first send to a worker, run `herdr agent wait <name> --until blocked` as a background Bash task. It exits when it fires.
+Herdr notifies the user directly when an agent in another tab needs input, so a worker stuck on a permission prompt reaches the user without you. Never answer a worker's permission or question prompt yourself with `send-keys`. The approval belongs to the user.
 
-When it fires, run `herdr agent read <name> --source visible` and tell the user which tab needs them and what it is asking. Never answer a worker's permission or question prompt yourself with `send-keys`. The approval belongs to the user. Re-arm the watcher once the user has dealt with it. Stop it with `TaskStop` when the tab closes.
+## Quiet workers
 
-## Idle notices
+With no idle subscription, a worker that stops without reporting stays silent. When the user asks after one, or a worker has been quiet well past its peers, read its pane (`herdr agent read <name> --source visible`):
 
-Workers go idle several times per task, because `/work` runs its implementer and review in the background. An idle notice is not a report. For each one, read the pane (`herdr agent read <name> --source visible`), then:
-
-- **A question or a plan waiting:** pass it to the user word for word, and name the tab.
-- **Background work running, or the report already passed on:** end the turn with no text to the user. Leave the subscription alone: a `SendMessage` to an idle worker fires a fresh idle notice at once.
+- **A question or a plan waiting:** add it to the waiting-on-you block, and name the tab.
+- **Background work running:** say so in one line.
 - **Neither:** the worker stopped early. Ask it for the report by `SendMessage`.
+
+## Park out-of-scope findings
+
+Workers and your own reads turn up problems outside the tickets in flight. Do not offer a ticket or a fix for each one as it lands, because every offer becomes another open question. Add it to a parked list instead: one line each, with the repo and the evidence. Mention a new entry in one line in the turn it arrives. Offer the whole list once, when the herd is done, so the user can triage it in one go.
+
+The exception is a finding that makes in-flight work unsafe to merge or deploy. Raise it at once as a waiting-on-you item.
 
 ## Relay results
 
@@ -74,6 +78,21 @@ Workers go idle several times per task, because `/work` runs its implementer and
 - Give each report its own heading: worker, PR URL, test result and anything left open.
 - When a check fails or a result looks wrong, send the worker the evidence (the error text, the failing check) and let it diagnose. Your own reads stay read-only and serve to confirm a report.
 - Send follow-ups to the same worker by `SendMessage`. It keeps its context. Wait until it has reported before sending a new task.
-- When the user accepts a worker's result, ask before closing its tab with `herdr tab close <tab_id>`.
+- When `/finish` reports Done for every ticket a worker holds, and nothing else is queued for it, close its tab with `herdr tab close <tab_id>` and say so in one line. Keep the tab only when a ticket stays in review or the user asked to keep it.
 
-The herd is done when every worker's report is in your visible text and every tab is closed or kept at the user's word.
+## Waiting on you
+
+End every turn that leaves anything for the user with this block, always last:
+
+```markdown
+## Waiting on you
+- **Q1** PI-2201: merge PR #19236? Cutover drops compliance dashboards for up to 10 min.
+- **Q2** Raise a ticket for the parked Flux managedFields sweep?
+```
+
+- Number questions once and keep the number until the question is answered. Never renumber, so "Q2 yes" stays unambiguous.
+- Drop an item when the user answers it, and list every item still open, not only new ones.
+- Ask questions only here, never mid-report in prose.
+- One line per item: the ticket or tab, the decision, and the risk if there is one.
+
+The herd is done when every worker's report is in your visible text, every tab is closed or kept at the user's word, and the parked list has been offered.
