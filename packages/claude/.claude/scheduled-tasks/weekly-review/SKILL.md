@@ -3,7 +3,7 @@ name: weekly-review
 description: Review the week just ended and promote its daily notes into the slower vault layers
 ---
 
-Work in the Obsidian vault at `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Personal`. All paths below are relative to it.
+Work in the Obsidian vault at `~/vault` through the `vault` MCP server (`mcp__vault__*` tools) for every read, listing, write and edit. All paths below are relative to `~/vault`.
 
 **Review the week that just ended**, Monday to Sunday, not the current week. This runs Monday morning after `daily-log` has written Friday's and the weekend's notes, so the previous week is complete and every daily note exists. Do not review the day this runs on.
 
@@ -38,7 +38,7 @@ Read the week's briefings anyway, for one question only: does any story change a
 3. Open with `## Key Takeaways`, then one `##` section per subject that ran through the month. A subject with two mentions is not a section.
 4. Link out to wiki articles that exist. Rule 1 applies: no dead links.
 5. Add the article to the list in `wiki/daily-briefings/Daily Briefings.md`.
-6. Log it: `.claude/scripts/wiki-log.sh compile "{Month YYYY} AI and DevOps Trends"`.
+6. Log it with Bash: `~/vault/.claude/scripts/wiki-log.sh compile "{Month YYYY} AI and DevOps Trends"`.
 
 Stay inside the briefings. The synthesis names what was reported, not what you think happened.
 

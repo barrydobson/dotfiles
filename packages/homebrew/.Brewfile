@@ -27,9 +27,11 @@ brew "ripgrep"            # Fast grep replacement
 brew "ast-grep"           # AST-based code search tool
 
 # Development tools
+brew "git-delta"          # Diff renderer; lazygit uses it, styles in git config
 brew "jq"                 # JSON processor
 brew "kubernetes-cli"     # kubectl
 brew "k9s"                # Kubernetes CLI UI
+brew "lazygit"            # Git terminal UI
 brew "mise"               # CLI tool to manage tool versions
 brew "neovim"             # Text editor
 brew "oras"               # OCI registry tool

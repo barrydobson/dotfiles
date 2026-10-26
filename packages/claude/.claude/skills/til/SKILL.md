@@ -13,12 +13,13 @@ Friction is the enemy. A lesson learned at 16:00 is worth writing at 16:01 and w
 
 **The lesson comes from wherever you are. The article always lands in the vault at `~/vault`.** This skill is user-level precisely because the lessons worth keeping get learned in work repos, not in the vault, and a skill that only exists in the vault can only capture what you learned in the vault.
 
-So: `~/vault` is the target for every path below, and every command needs that prefix because the working directory is almost always some other repo. Nothing is written into the current repo. If the lesson is only about the repo you're standing in, it is an incident and step 1 will tell you not to file it at all.
+So: `~/vault` is the target for every path below, because the working directory is almost always some other repo. Nothing is written into the current repo. If the lesson is only about the repo you're standing in, it is an incident and step 1 will tell you not to file it at all.
 
-Two things follow from being outside the vault:
+Three things follow from being outside the vault:
 
+- **Use the `vault` MCP server for every read, listing, write and edit**: `mcp__vault__read_text_file`, `mcp__vault__list_directory`, `mcp__vault__write_file`, `mcp__vault__edit_file`. Bash is only for the two things the server cannot do: the `rg` content search in step 2 and the log script in step 5.
 - **Read `~/vault/wiki/CLAUDE.md` before writing the article.** In a vault session it loads on its own; from a work repo it does not. It holds the canonical tag list and the article format, and both matter in step 3.
-- **The vault has to be reachable.** If a write to `~/vault` is refused, `permissions.additionalDirectories` in `~/.claude/settings.json` is missing `~/vault`. Say so rather than writing the article into the current repo as a consolation prize.
+- **The vault has to be reachable.** If the `mcp__vault__*` tools are missing or fail, the `vault` MCP server is not connected. Say so rather than writing the article into the current repo as a consolation prize.
 
 ## 1. Work out what the lesson actually is
 
@@ -54,11 +55,7 @@ Path: `~/vault/wiki/<topic-folder>/<Title Case Name>.md`
 
 **Folder and tags are two separate decisions** - the two sets overlap but are not the same, so don't derive one from the other or you'll misfile things into a plausible-looking neighbour.
 
-**Folder** - list the topic folders that actually exist and pick the closest:
-
-```bash
-ls -d ~/vault/wiki/*/ | grep -vE '(_resources|assets|logs)/$'
-```
+**Folder** - list the topic folders that actually exist with `mcp__vault__list_directory` on `~/vault/wiki`, ignore `_resources`, `assets` and `logs`, and pick the closest.
 
 Those three are excluded because they are not topic folders: they carry no hub note and no tag, and an article filed into one is invisible to `Knowledge Base.base`.
 
@@ -131,13 +128,9 @@ Notes on the template:
 
 An unlinked article is invisible to the hub-note navigation and to Obsidian's graph, so this step is what makes the capture actually pay off later.
 
-**Topic index** - the hub note in that folder, tagged `[index, ...]` and named after the topic. Look it up rather than deriving it from the folder name, because the Title Case form isn't mechanical (`llm-infrastructure/` holds `LLM Infrastructure.md`, not `Llm Infrastructure.md`):
+**Topic index** - the hub note in that folder, tagged `[index, ...]` and named after the topic. Look it up rather than deriving it from the folder name, because the Title Case form isn't mechanical (`llm-infrastructure/` holds `LLM Infrastructure.md`, not `Llm Infrastructure.md`). Use `mcp__vault__list_directory` on `~/vault/wiki/<topic-folder>`.
 
-```bash
-ls ~/vault/wiki/<topic-folder>/
-```
-
-Append a line, matching the format already used in that file:
+Append a line with `mcp__vault__edit_file`, matching the format already used in that file:
 
 ```markdown
 - [[Your Article Name]] — one-line description

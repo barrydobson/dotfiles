@@ -28,7 +28,7 @@ packages/
 - **Editor**: Neovim (single-file minimal config, no AI); also `zed`, `vscode`
 - **Terminal**: Ghostty (`voltaic-dark`/`voltaic-light`)
 - **Git**: Modular config - `config` includes `.gitalias` (short single-letter aliases) and a gitignored `.gitconfig-local`
-- **Tools**: `atuin`, `eza`, `mise`, `k9s`, `homebrew` (Brewfile), `yamllint`, `editorconfig`, `worktrunk`, `ccstatusline`
+- **Tools**: `atuin`, `eza`, `mise`, `k9s`, `lazygit`, `homebrew` (Brewfile), `yamllint`, `editorconfig`, `worktrunk`, `ccstatusline`
 - **Claude**: Config, skills, agents and rules at `packages/claude/.claude/` - see gotcha below
 - **Other**: `1Password`, `ssh`, `tmux`, `starship`, `claude-mem`, `agents`, `skills`
 
@@ -80,7 +80,7 @@ Git config is **modular**:
 - `.gitalias` - Short single-letter aliases plus `git cleanup`
 - `.gitconfig-local` - Machine-specific overrides (gitignored, included by `config`)
 
-Commits are signed with `gpg.format = ssh` and verified against `~/.ssh/allowed_signers`. Delta is present in the config but commented out, and is not installed - don't re-enable it without adding the binary.
+Commits are signed with `gpg.format = ssh` and verified against `~/.ssh/allowed_signers`. Delta is installed (Brewfile) for lazygit, which picks the `[delta "voltaic-dark"]` or `[delta "voltaic-light"]` feature in git config; `core.pager = delta` itself stays commented out.
 
 ### Neovim Configuration
 
@@ -96,7 +96,7 @@ Shell setup in `packages/zsh/.config/zsh/`:
 - `packages/zsh/.local/bin/` - Standalone scripts (`extract`, `+x`) stowed to `~/.local/bin`
 - `.zshenv` at `packages/zsh/.zshenv` - Sets `ZDOTDIR` and `PATH`, so non-interactive shells get the same `PATH`
 
-Aliases map traditional tools to modern alternatives (`ls`/`ll`/`la` → `eza`, `ps` → `procs`, `rm` → `trash`); zoxide takes over `cd` outright. `grep` and `cat` are deliberately not aliased, and neither `bat` nor `delta` is installed.
+Aliases map traditional tools to modern alternatives (`ls`/`ll`/`la` → `eza`, `ps` → `procs`, `rm` → `trash`); zoxide takes over `cd` outright. `grep` and `cat` are deliberately not aliased, and `bat` is not installed.
 
 Gitignored, so absent on a fresh clone: `.zprofile`, `.zsh_history`, `99_private-environment.zsh` (machine-local secrets/env - picked up automatically by the `conf.d` glob).
 

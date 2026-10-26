@@ -1,0 +1,64 @@
+# https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md
+# macOS reads this from ~/.config only because XDG_CONFIG_HOME is set (zsh conf.d/10_environment.zsh)
+
+os:
+  editPreset: nvim # `e` opens the file in Neovim; $EDITOR is not set
+gui:
+  showCommandLog: false
+  showPanelJumps: false
+  showRandomTip: false
+  showListFooter: false
+  showNumstatInFilesView: true
+  sidePanelWidth: 0.3
+  shrinkSidePanelsToContent: true
+  expandFocusedSidePanel: true
+  expandedSidePanelWeight: 8
+  nerdFontsVersion: "3"
+  # Narrow panes: file list on top, diff full width.
+  portraitModeAutoMaxWidth: 110
+  portraitModeAutoMinHeight: 30
+  # Status, files, stash. Worktrees are a tab on files; branches, commits and reflog are tabs on stash.
+  sidePanels:
+    - [status]
+    - [files, worktrees]
+    - [stash, branches, commits, reflog]
+  # Voltaic: feat = jade, fix = ember, main = arc. Lazygit picks the flavour from the terminal background.
+  darkTheme:
+    branchColorPatterns:
+      "^feat/": "#10b981"
+      "^fix/": "#f7768e"
+      "^main$": "#a3e635"
+  lightTheme:
+    branchColorPatterns:
+      "^feat/": "#047857"
+      "^fix/": "#be123c"
+      "^main$": "#3f6212"
+git:
+  log:
+    showGraph: never
+  diffRenderers:
+    # Unified diff with line numbers; styles are the voltaic-* features in git config. Press | to switch.
+    - name: delta
+      command: delta --{{colorScheme}} --features=voltaic-{{colorScheme}} --paging=never --true-color=always --tabs=4 --relative-paths --line-numbers --line-numbers-left-format="{nm:>3} " --line-numbers-right-format="{np:>3} │ "
+    # Plain git with word-level coloring, for prose and markdown.
+    - type: rawGit
+      args: [--color-words]
+      name: color-words
+# Checkout by name from the files panel. Type to filter, Enter checks out.
+customCommands:
+  - key: b
+    context: "files, status, stash"
+    description: "Checkout branch"
+    loadingText: "Checking out"
+    prompts:
+      - type: input
+        title: "Checkout:"
+        key: Branch
+        suggestions:
+          preset: branches
+    command: git checkout {{.Form.Branch | quote}}
+# Esc goes back in nested views. At the top level it quits, which closes the Herdr popup.
+quitOnTopLevelReturn: true
+disableStartupPopups: true
+update:
+  method: never

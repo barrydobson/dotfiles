@@ -30,6 +30,45 @@
 	# Configure delta for interactive mode with color
 	# diffFilter = delta --color-only
 
+# Voltaic diff styles, picked with `delta --features=voltaic-dark|voltaic-light`
+# (lazygit passes its detected background). Backgrounds are ember/jade at the
+# palette's tint/veil steps over `deep`; syntax colours come from the terminal.
+[delta "voltaic-dark"]
+	dark = true
+	syntax-theme = ansi
+	file-style = bold "#fafafa"
+	file-decoration-style = "#3f3f46" ul
+	hunk-header-style = line-number syntax
+	hunk-header-decoration-style = "#3f3f46" ul
+	hunk-header-line-number-style = "#7aa2f7"
+	line-numbers-left-style = "#52525b"
+	line-numbers-right-style = "#52525b"
+	line-numbers-zero-style = "#52525b"
+	line-numbers-minus-style = "#f7768e"
+	line-numbers-plus-style = "#10b981"
+	minus-style = syntax "#3b2024"
+	minus-emph-style = syntax "#522a31"
+	plus-style = syntax "#0d2d21"
+	plus-emph-style = syntax "#0d3e2d"
+
+[delta "voltaic-light"]
+	light = true
+	syntax-theme = ansi
+	file-style = bold "#27272a"
+	file-decoration-style = "#d4d4d8" ul
+	hunk-header-style = line-number syntax
+	hunk-header-decoration-style = "#d4d4d8" ul
+	hunk-header-line-number-style = "#1d4ed8"
+	line-numbers-left-style = "#a1a1aa"
+	line-numbers-right-style = "#a1a1aa"
+	line-numbers-zero-style = "#a1a1aa"
+	line-numbers-minus-style = "#be123c"
+	line-numbers-plus-style = "#047857"
+	minus-style = syntax "#eecbd2"
+	minus-emph-style = syntax "#e8b4bf"
+	plus-style = syntax "#c9dfd7"
+	plus-emph-style = syntax "#b0d2c7"
+
 # -----------------------------------------------------------------------------
 # Git Operations Behavior
 # -----------------------------------------------------------------------------

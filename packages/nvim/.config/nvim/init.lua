@@ -29,7 +29,7 @@ vim.keymap.set("i", "jk", "<Esc>")
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlight" })
 vim.keymap.set("n", "<leader>w", "<cmd>write<CR>", { desc = "Save file" })
 vim.keymap.set("n", "<leader>q", "<cmd>quit<CR>", { desc = "Quit window" })
-vim.keymap.set("n", "<leader>e", "<cmd>Explore<CR>", { desc = "File explorer" })
+vim.keymap.set("n", "<leader>e", "<cmd>Neotree toggle reveal<CR>", { desc = "File explorer" })
 
 -- Plugins: installed on first start, updated with :lua vim.pack.update()
 vim.pack.add({
@@ -37,15 +37,44 @@ vim.pack.add({
   "https://github.com/nvim-lua/plenary.nvim",
   "https://github.com/nvim-telescope/telescope.nvim",
   "https://github.com/lewis6991/gitsigns.nvim",
+  "https://github.com/MunifTanjim/nui.nvim",
+  "https://github.com/nvim-tree/nvim-web-devicons",
+  { src = "https://github.com/nvim-neo-tree/neo-tree.nvim", version = "v3.x" },
 }, { confirm = false })
 
 vim.opt.rtp:prepend("~/_git/barrydobson/voltaic/nvim")
 vim.cmd.colorscheme("voltaic-dark")
 
 require("which-key").setup({ delay = 300 })
-require("gitsigns").setup()
+
+-- Sidebar file tree; `nvim .` opens it instead of netrw
+require("neo-tree").setup({
+  filesystem = {
+    hijack_netrw_behavior = "open_default",
+    follow_current_file = { enabled = true },
+    filtered_items = { hide_dotfiles = false, never_show = { ".git", ".DS_Store" } },
+  },
+})
+local gitsigns = require("gitsigns")
+gitsigns.setup()
+
+-- In diff mode ]c/[c keep their built-in meaning (next/previous change in the diff)
+vim.keymap.set("n", "]c", function()
+  if vim.wo.diff then return vim.cmd.normal({ "]c", bang = true }) end
+  gitsigns.nav_hunk("next")
+end, { desc = "Next git change" })
+vim.keymap.set("n", "[c", function()
+  if vim.wo.diff then return vim.cmd.normal({ "[c", bang = true }) end
+  gitsigns.nav_hunk("prev")
+end, { desc = "Previous git change" })
+vim.keymap.set("n", "<leader>hp", gitsigns.preview_hunk, { desc = "Preview git change" })
+vim.keymap.set("n", "<leader>hd", gitsigns.diffthis, { desc = "Diff file against index" })
+
+-- Pick up changes lazygit (or anything else) makes on disk
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter" }, { command = "checktime" })
 
 local telescope = require("telescope.builtin")
+vim.keymap.set("n", "<leader>g", telescope.git_status, { desc = "Changed files" })
 vim.keymap.set("n", "<leader>f", telescope.find_files, { desc = "Find file" })
 vim.keymap.set("n", "<leader>/", telescope.live_grep, { desc = "Search text in project" })
 vim.keymap.set("n", "<leader>b", telescope.buffers, { desc = "Open buffers" })

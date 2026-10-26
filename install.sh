@@ -35,6 +35,7 @@ MAC_PACKAGES=(
   homebrew
   ghostty
   k9s
+  lazygit
   skills
   ssh
   vscode

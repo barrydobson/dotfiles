@@ -94,8 +94,8 @@ A cross-platform dotfiles configuration for macOS, Windows (WSL2), and Linux. Th
 
 A minimal, beginner-friendly config in one file,
 `packages/nvim/.config/nvim/init.lua`. Needs Neovim 0.12+ for the built-in
-`vim.pack` plugin manager. Plugins: catppuccin, which-key, telescope and
-gitsigns. See [KEYMAPS.md](KEYMAPS.md).
+`vim.pack` plugin manager. Plugins: catppuccin, which-key, telescope,
+gitsigns and neo-tree. See [KEYMAPS.md](KEYMAPS.md).
 
 ### Git Configuration
 
@@ -145,7 +145,7 @@ shellcheck -x --source-path=SCRIPTDIR install.sh install/*.sh   # Lint shell scr
 
 - Homebrew manages CLI tools, casks and fonts via `~/.Brewfile`
 - The 1Password SSH agent socket is linked into `~/.1password/agent.sock`
-- Extra packages stowed only here: `1Password`, `claude`, `ghostty`, `k9s`, `ssh`, `vscode`, `zed`, and the Claude helpers (see `MAC_PACKAGES` in `install.sh`)
+- Extra packages stowed only here: `1Password`, `claude`, `ghostty`, `k9s`, `lazygit`, `ssh`, `vscode`, `zed`, and the Claude helpers (see `MAC_PACKAGES` in `install.sh`)
 
 ### Linux
 
