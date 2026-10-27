@@ -2,15 +2,17 @@
 paths:
   - "**/*_test.go"
   - "**/*.test.ts"
+  - "**/*.test.tsx"
+  - "**/*.test.js"
   - "**/*.spec.ts"
+  - "**/*.spec.js"
   - "**/test_*.py"
+  - "**/*_test.py"
   - "**/*Tests.cs"
   - "**/*Test.cs"
 ---
 
 # Testing
-
-Detail for the summary in `~/.claude/CLAUDE.md`. Consult when writing or modifying tests.
 
 ## Test behaviour, not implementation
 
@@ -18,16 +20,14 @@ A refactor that breaks tests but not code means the tests were wrong. Tests asse
 
 ## Cover edges and errors
 
-Bugs live at the edges. Always include:
+Bugs live at the edges. Include whichever apply:
 
 - Empty inputs, single-element inputs, max-size inputs
 - Boundary values (off-by-one, zero, negative, overflow)
 - Malformed or unexpected data
 - Missing files, missing fields, missing config
 - Network failures, timeouts, partial reads
-- Concurrent access where relevant
-
-Happy-path-only tests give false confidence.
+- Concurrent access
 
 ## Mock boundaries, not logic
 
