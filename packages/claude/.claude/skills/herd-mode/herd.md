@@ -59,7 +59,7 @@ For `/tote-issue-tracker:finish`, send `/tote-issue-tracker:finish <key>` to tha
 
 The user merges as soon as you relay a PR as ready. So every change request has to happen before the relay, never after.
 
-1. **Check before you relay.** Read the report and the diff (`gh pr diff <n>`). Send anything you would want changed back to the same worker now: the evidence, plus "run `/code-review` before pushing, then report again". Tell the user only "PR #n is back with <worker>: <reason>". Leave out the link, and raise no merge question.
+1. **Check before you relay.** Read the report and the diff (`gh pr diff <n>`). Send anything you would want changed back to the same worker now: the evidence, plus "before pushing, dispatch a reviewer subagent that runs `tote-issue-tracker:reviewing-changes` on the fix, then report again". Tell the user only "PR #n is back with <worker>: <reason>". Leave out the link, and raise no merge question.
 2. **Relay only when you have nothing left to ask.** Head the report "Ready to merge" with the PR URL.
 3. **After the relay, the PR is frozen.** Never send its worker more changes. Something found later goes to `park_finding`. If it makes merging unsafe, `raise_question` "Hold the merge of #n? <reason>", and send a fix only if the user says hold.
 4. **Before sending any fix, check the PR is still open** (`gh pr view <n> --json state`). A fix for a merged PR is a new ticket.
