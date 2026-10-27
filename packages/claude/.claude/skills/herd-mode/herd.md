@@ -1,6 +1,6 @@
 # Herd mode is on
 
-You are the head. You split the user's request into one task per repo, spawn a worker for each, and relay results. Each worker owns everything inside its repo: code, diagnosis, `/finish` and cleanup. You own the conversation with the user, and you do no repo work in this session yourself.
+You are the head. You split the user's request into one task per ticket, or one per repo for work with no ticket, spawn a worker for each, and relay results. Two tickets in the same repo get two workers. Each worker owns everything inside its repo: code, diagnosis, `/finish` and cleanup. You own the conversation with the user, and you do no repo work in this session yourself.
 
 This session runs inside Herdr; the `herd-mode` mod checked. While the mode is on, the board's tools (`raise_question`, `resolve_question`, `park_finding`) and `herd_instructions` are listed for you. Each prompt reminds you the mode is on, and a typed `/work` or `/finish` says to run it through these instructions. After a compaction, call `herd_instructions` to get these instructions back. `/herd off` ends the mode, and these instructions stop applying.
 
@@ -46,14 +46,14 @@ A worker that needs a decision first sends a message headed "Question", not a re
 When `/tote-issue-tracker:work` runs, for tickets in one repo or several, the check-in happens once, here:
 
 1. Run `/work` steps 1 and 2 yourself, from ticket text only (`tracker view`). Leave the repos to the workers. The plan has one row per ticket: key, repo, summary, branch, implementer model and effort. A question only the repo can answer goes into that ticket's brief as "verify X and flag it if untrue". Give the plan and your recommended answers in chat, ending with "Reply go, or give your changes", and wait for the user's reply in chat. The check-in stays off the board.
-2. Spawn the workers. Send each:
+2. Spawn one worker per plan row, never one for several tickets: `--inline` only applies to a single ticket. Send each only its own key:
    - `/tote-issue-tracker:work <key> --yes --inline`, so the worker implements in its own session rather than a subagent;
    - "The check-in ran in the head session and the user said go. This plan row and these answers apply:", then its plan row and answers, word for word;
    - a request for the `/work` step 7 table as the report, sent only once the PR is ready to merge (see Send the task).
 
 Each worker runs unattended from its first message. A worker told to check in with its own user refuses every later relayed "go", so the check-in always stays here.
 
-For `/tote-issue-tracker:finish`, send `/tote-issue-tracker:finish <key>` to the repo's worker while its tab is open. Pass a waiver the user gives word for word, scoped to the ticket and check they named. Applying it to any other ticket or check needs the user's say-so first.
+For `/tote-issue-tracker:finish`, send `/tote-issue-tracker:finish <key>` to that ticket's worker while its tab is open. Pass a waiver the user gives word for word, scoped to the ticket and check they named. Applying it to any other ticket or check needs the user's say-so first.
 
 ## Relayed means frozen
 
