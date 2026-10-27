@@ -12,5 +12,4 @@ Applies whenever you write an epic or tickets, from any skill (`to-spec`, `to-ti
   - list tickets flagged as large, multi-repo or unsure first;
   - offer splitting as an option, not just merging;
   - never recommend "approve as proposed" while your own warnings are open.
-- **Jira, not GitHub issues.** In work repos (anything under TheTote), create Jira tickets, never GitHub issues. `/work` may still work an existing GitHub issue.
 - **Epic component** is the repo that holds most of the work. If no repo does, say so rather than guessing.
