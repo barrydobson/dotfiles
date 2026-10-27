@@ -137,6 +137,11 @@
   "feedbackDrafts": "off",
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
+  "modelSettings": {
+    "gpt-5.6-terra": {
+      "effortLevel": "high"
+    }
+  },
   "autoUpdatesChannel": "latest",
   "plansDirectory": ".claude/plans",
   "tui": "fullscreen",

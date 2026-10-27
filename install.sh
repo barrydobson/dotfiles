@@ -30,6 +30,7 @@ COMMON_PACKAGES=(
 # Packages stowed on macOS only
 MAC_PACKAGES=(
   1Password
+  cli-proxy-api
   ccstatusline
   claude
   homebrew
