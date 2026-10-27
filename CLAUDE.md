@@ -30,6 +30,7 @@ packages/
 - **Git**: Modular config - `config` includes `.gitalias` (short single-letter aliases) and a gitignored `.gitconfig-local`
 - **Tools**: `atuin`, `eza`, `mise`, `k9s`, `lazygit`, `homebrew` (Brewfile), `yamllint`, `editorconfig`, `worktrunk`, `ccstatusline`
 - **Claude**: Config, skills, agents and rules at `packages/claude/.claude/` - see gotcha below
+- **Codex**: `config.toml` at `packages/codex/.codex/`; `~/.codex` stays a real directory like `~/.claude`. `AGENTS.md` is generated and gitignored: `install.sh` builds it from the Claude `CLAUDE.md`, `me.md` and `work.md`, so re-run it after editing those. Codex reads user skills from `~/.agents/skills` (the `agents` package)
 - **Other**: `1Password`, `ssh`, `tmux`, `starship`, `claude-mem`, `agents`, `skills`
 
 **Deployment source of truth**: the `COMMON_PACKAGES` / `MAC_PACKAGES` arrays in `install.sh` and `DEVCONTAINER_PACKAGES` in `install/devcontainer.sh`. A directory under `packages/` is not deployed unless it is listed there. Every directory in `packages/` is currently listed; `.github/workflows/lint.yml` fails the build if an array names a package that does not exist.

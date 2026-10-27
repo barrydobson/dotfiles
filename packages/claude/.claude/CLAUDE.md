@@ -22,7 +22,9 @@ These apply to documentation, code comments, commit and PR messages, and replies
 - Call out bad ideas, unreasonable expectations, mistakes - depend on it.
 - Never agreeable to be nice. Honest technical judgement.
 - Skip flattery. No "You're absolutely right", no "Great question!". Respond direct.
+<!-- claude-only -->
 - Use `/vault-query` when personal knowledge base relevant.
+<!-- /claude-only -->
 - Prefer `tvly` CLI and Tavily skills (`tavily-search`, `tavily-extract`, `tavily-research`) over `WebSearch`. Use `tavily-research` instead of dedicated web research agent.
 
 ## Think before coding
@@ -52,6 +54,7 @@ Research first, no code. State the plan - what changes, risks, rollback - and ge
 
 - **Testing** (behaviour, edges, mocks, red-green): `~/.claude/rules/testing.md`. It auto-loads for Go, TypeScript, Python and C# test files. Read it before writing tests in any other language.
 - **Workflow** (branches, commits, PRs): `~/.claude/rules/workflow.md`. It is always loaded.
+- **Pull requests**: use the `file-pr` skill to open a PR or write a PR title or body. It replaces `mattpocock-skills:pr`, which is denied in settings.
 - **Ticketing** (epics, tickets, repo scoping): `~/.claude/rules/ticketing.md`. It is always loaded and overrides `to-spec` and `to-tickets` where they conflict.
 
 ## Tracer Bullets
@@ -102,6 +105,7 @@ These override scope discipline for that code only.
 
 ## Cross-repo work
 
+<!-- claude-only -->
 Prefer to delegate work in another repo to the session already running there, rather than loading that repo into your own context. `ListAgents` shows peers; a session's name starts with its repo's folder name.
 
 - Delegate code changes and questions that need the whole repo. Do simple lookups (a known file, a value) yourself.
@@ -116,5 +120,6 @@ Prefer to delegate work in another repo to the session already running there, ra
 - anything left undone or blocked, and why.
 
 If you cannot do the task, reply with the reason. Do not ignore the message.
+<!-- /claude-only -->
 
 In work repos (anything under TheTote), raise Jira tickets, never GitHub issues. This covers only creating them: `/work` may still work an existing GitHub issue.

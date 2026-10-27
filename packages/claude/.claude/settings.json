@@ -41,7 +41,8 @@
       "Bash(git push *--force*)",
       "Edit(~/.bashrc)",
       "Edit(~/.zshrc)",
-      "Edit(~/.ssh/**)"
+      "Edit(~/.ssh/**)",
+      "Skill(skill:mattpocock-skills:pr)"
     ],
     "defaultMode": "auto",
     "additionalDirectories": [

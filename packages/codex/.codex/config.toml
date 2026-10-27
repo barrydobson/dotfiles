@@ -1,0 +1,8 @@
+[tui]
+screen_reader_detection_done = true
+
+[tui.model_availability_nux]
+"gpt-6.1-sol" = 1
+
+[projects."/Users/barrydobson/_git/tote/skills"]
+trust_level = "trusted"

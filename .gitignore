@@ -38,6 +38,7 @@ wt
 # Private personal context, imported by packages/claude/.claude/CLAUDE.md
 packages/claude/.claude/me.md
 packages/claude/.claude/work.md
+packages/codex/.codex/AGENTS.md
 packages/claude/.claude/skills/archify
 packages/agents/.agents/skills/archify/
 packages/claude/.claude/skills/tote-tooling-access
