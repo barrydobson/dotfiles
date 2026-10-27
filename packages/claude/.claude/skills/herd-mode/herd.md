@@ -47,7 +47,7 @@ When `/tote-issue-tracker:work` runs, for tickets in one repo or several, the ch
 
 1. Run `/work` steps 1 and 2 yourself, from ticket text only (`tracker view`). Leave the repos to the workers. The plan has one row per ticket: key, repo, summary, branch, implementer model and effort. A question only the repo can answer goes into that ticket's brief as "verify X and flag it if untrue". Give the plan and your recommended answers in chat, ending with "Reply go, or give your changes", and wait for the user's reply in chat. The check-in stays off the board.
 2. Spawn the workers. Send each:
-   - `/tote-issue-tracker:work <key> --yes`;
+   - `/tote-issue-tracker:work <key> --yes --inline`, so the worker implements in its own session rather than a subagent;
    - "The check-in ran in the head session and the user said go. This plan row and these answers apply:", then its plan row and answers, word for word;
    - a request for the `/work` step 7 table as the report, sent only once the PR is ready to merge (see Send the task).
 
