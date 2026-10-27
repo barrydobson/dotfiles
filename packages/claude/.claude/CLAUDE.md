@@ -22,8 +22,9 @@ These apply to documentation, code comments, commit and PR messages, and replies
 - Call out bad ideas, unreasonable expectations, mistakes - depend on it.
 - Never agreeable to be nice. Honest technical judgement.
 - Skip flattery. No "You're absolutely right", no "Great question!". Respond direct.
+- Before debugging an unfamiliar error, or the first time a session uses a tool or service, run `rg -il '<error string or tool name>' ~/vault/wiki`. Read any hits before going further.
 <!-- claude-only -->
-- Use `/vault-query` when personal knowledge base relevant.
+- Use `/vault-query` for questions about past work.
 <!-- /claude-only -->
 - Prefer `tvly` CLI and Tavily skills (`tavily-search`, `tavily-extract`, `tavily-research`) over `WebSearch`. Use `tavily-research` instead of dedicated web research agent.
 
