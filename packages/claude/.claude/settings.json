@@ -88,7 +88,6 @@
   "enabledPlugins": {
     "claude-md-management@claude-plugins-official": true,
     "ponytail@ponytail": true,
-    "skill-creator@claude-plugins-official": true,
     "typesafe@typesafe-ai": true,
     "mattpocock-skills@mattpocock": true,
     "tote-brand-guidelines@synced": false,
