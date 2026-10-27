@@ -53,6 +53,11 @@
   "disabledMcpjsonServers": [],
   "disableClaudeAiConnectors": true,
   "skillOverrides": {
+    "anthropic-skills:deep-research": "off",
+    "anthropic-skills:docs": "off",
+    "anthropic-skills:google-workspace": "off",
+    "anthropic-skills:import-memory": "off",
+    "anthropic-skills:morning": "off",
     "anthropic-skills:pptx": "off",
     "archify": "off",
     "gh-stack": "off"
