@@ -1,4 +1,4 @@
-worktree-path = ".worktrees/{{ branch | sanitize }}"
+worktree-path = ".claude/worktrees/{{ branch | sanitize }}"
 skip-commit-generation-prompt = true
 
 [projects]
