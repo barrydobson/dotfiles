@@ -53,8 +53,9 @@
   "disabledMcpjsonServers": [],
   "disableClaudeAiConnectors": true,
   "skillOverrides": {
-    "gh-stack": "off",
-    "tavily-cli": "off"
+    "anthropic-skills:pptx": "off",
+    "archify": "off",
+    "gh-stack": "off"
   },
   "hooks": {
     "SessionStart": [
