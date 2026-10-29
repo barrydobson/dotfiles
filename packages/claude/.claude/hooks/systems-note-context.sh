@@ -41,7 +41,9 @@ for name in $remote $folder; do
 done
 [ -n "$note" ] || exit 0
 
-printf 'Vault note for this repo (%s). Facts recorded from past work here; treat them as context, and check anything you rely on:\n\n' "${note/#"$HOME"/\~}"
+# The header steers how the note is used. An earlier "check anything you rely on" made
+# sessions re-derive facts from git that the note already answered.
+printf 'Vault note for this repo (%s), written from past work here. When it answers the question, answer from it and cite it. Go to the code or git history only when the note is silent, the question needs more detail than it gives, or you are about to change something because of it:\n\n' "${note/#"$HOME"/\~}"
 # Body only: the frontmatter is Obsidian metadata.
 awk 'NR==1 && /^---$/{fm=1; next} fm && /^---$/{fm=0; next} !fm' "$note"
 exit 0
