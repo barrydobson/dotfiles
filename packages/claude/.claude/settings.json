@@ -73,6 +73,16 @@
             "timeout": 10
           }
         ]
+      },
+      {
+        "matcher": "^(startup|resume|clear|compact)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash '/Users/barrydobson/.claude/hooks/systems-note-context.sh'",
+            "timeout": 5
+          }
+        ]
       }
     ]
   },
