@@ -15,7 +15,8 @@ The point of this run is **promotion**. The review prose is secondary. Nothing e
 2. Scan `Projects/` for movement, and `Systems/` for repos that came up more than once.
 3. Write `Worklog/YYYY-MM/YYYY-MM-DD Weekly Review.md`, dated the Monday of the week reviewed, following `Templates/Weekly Review.md`.
 4. Promote, per the table below. This is the step that has to happen.
-5. Report what was promoted and where, and list anything left open.
+5. If you edited any `Systems/` note, invoke the `systems-memory-check` skill with those note names, so each repo's own Claude Code memory agrees with its note.
+6. Report what was promoted and where, what the memory check changed, and anything left open.
 
 ## Promotion
 
@@ -25,7 +26,7 @@ Read the previous week's `Worklog/` notes, then move what has held up:
 - Durable behaviour of one system → `Systems/{repo}.md`, as a bullet under `## Notes`
 - A transferable lesson with no single system → `/til`
 - A choice about tooling, workflow or the vault → `Decisions/YYYY-MM-DD-{title}.md`
-- A repo linked more than once with no note yet → create `Systems/{repo}.md`
+- A repo mentioned on five or more worklog days, linked or not, with no note yet and a non-obvious fact to record → create `Systems/{repo}.md` (see `Systems/_guide.md`)
 
 Every source gets exactly one roll-up, and no source is summarised in another source's tree. `Worklog/` rolls up weekly into the review note. `DailyNews/` rolls up monthly into the wiki. There is no briefings section in the review.
 
