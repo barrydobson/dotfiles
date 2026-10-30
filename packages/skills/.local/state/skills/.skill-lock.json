@@ -84,6 +84,7 @@
     "codex",
     "cursor",
     "droid",
+    "fx",
     "gemini-cli",
     "github-copilot",
     "kilo",
@@ -92,7 +93,6 @@
     "pi",
     "warp",
     "zed",
-    "fx",
     "claude-code"
   ]
 }

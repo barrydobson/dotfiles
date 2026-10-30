@@ -36,6 +36,7 @@ MAC_PACKAGES=(
   codex
   homebrew
   ghostty
+  herdr-app
   k9s
   lazygit
   skills

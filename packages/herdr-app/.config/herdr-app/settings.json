@@ -1,0 +1,11 @@
+{
+  "zoom": 1,
+  "sounds": {
+    "enabled": true
+  },
+  "minimum_contrast": 1,
+  "theme": {
+    "light": "voltaic-light",
+    "dark": "voltaic-dark"
+  }
+}
