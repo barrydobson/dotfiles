@@ -43,3 +43,7 @@ packages/codex/.codex/AGENTS.md
 packages/claude/.claude/skills/archify
 packages/agents/.agents/skills/archify/
 packages/claude/.claude/skills/tote-tooling-access
+
+# Written by the Herdr app into every mod folder
+packages/herdr-app/.config/herdr-app/mods/*/gpui-kit.d.ts
+packages/herdr-app/.config/herdr-app/mods/*/jsconfig.json

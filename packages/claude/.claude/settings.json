@@ -6,12 +6,7 @@
     "ENABLE_CLAUDEAI_MCP_SERVERS": "false"
   },
   "autoMode": {
-    "allow": [
-      "$defaults",
-      "PI-2381 Sonar baseline: POST https://sonarqube.tote.engineering/api/new_code_periods/set with type=SPECIFIC_ANALYSIS and branch=main, for the Sonar project named after the current working directory's TheTote repo (project key = bare repo name). The analysis key must come from a GET /api/project_analyses/search for that project earlier in this session. The token is passed only as $SONARQUBE_ADMIN_TOKEN (curl -u), never echoed or written to a file. No other Sonar write is allowed by this rule.",
-      "PI-2381 conversion merge: `gh pr merge <PR> -R TheTote/<REPO> --squash --admin --match-head-commit <SHA>` (org name is case-insensitive: TheTote = thetote). Allowed only if, earlier in this session, the agent ran `gh pr view <PR> -R TheTote/<REPO> --json headRefName,headRefOid,mergeable,statusCheckRollup` for the same PR, headRefName was paved-ci-conversion, and <SHA> is that headRefOid. The classifier cannot see that output, so this trusts the agent's reading that every check passed and mergeable was MERGEABLE. This clears only the --admin merge of that PR: no other PR, branch or repo, no merge without --match-head-commit, and no other rule (production deploy, credential leakage, CI changes) is relaxed.",
-      "PI-2381 size-gate override: `gh pr edit <PR> -R TheTote/<REPO> --add-label large-pr-approved` (org name is case-insensitive). Allowed only if, earlier in this session, the agent ran `gh pr view <PR> -R TheTote/<REPO> --json headRefName,headRefOid,mergeable,statusCheckRollup` for the same PR and headRefName was paved-ci-conversion. It adds only that one label to that one PR: no other label, no label removal, no other PR or repo, and no other rule is relaxed."
-    ]
+    "allow": ["$defaults"]
   },
   "includeCoAuthoredBy": true,
   "permissions": {
