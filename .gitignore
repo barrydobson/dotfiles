@@ -12,6 +12,7 @@ Session.vim
 
 **/.config/git/.gitconfig-private
 **/.config/git/.gitconfig-local
+packages/ssh/.ssh/config.local
 
 packages/tmux/.config/tmux/plugins/
 packages/tmux/.config/tmux/resurrect
