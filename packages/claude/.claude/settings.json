@@ -77,6 +77,11 @@
             "type": "command",
             "command": "bash '/Users/barrydobson/.claude/hooks/systems-note-context.sh'",
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "bash '/Users/barrydobson/.claude/hooks/hc-context.sh'",
+            "timeout": 5
           }
         ]
       }
