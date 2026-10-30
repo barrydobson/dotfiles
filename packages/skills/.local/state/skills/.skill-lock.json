@@ -55,15 +55,6 @@
       "installedAt": "2026-10-15T07:15:15.434Z",
       "updatedAt": "2026-10-15T07:15:15.434Z"
     },
-    "herdr": {
-      "source": "herdrdev/herdr",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/herdrdev/herdr.git",
-      "skillPath": "skills/herdr/SKILL.md",
-      "skillFolderHash": "2be0d86d481d1bb29c62e11ef37b78d27d01b478",
-      "installedAt": "2026-10-15T10:00:25.526Z",
-      "updatedAt": "2026-10-15T10:00:25.526Z"
-    },
     "orchestration": {
       "source": "stablyai/orca",
       "sourceType": "github",
@@ -73,6 +64,15 @@
       "skillFolderHash": "b0cd1d58b0c317cf7c3726fef7e6b1197c405246",
       "installedAt": "2026-10-22T15:37:04.403Z",
       "updatedAt": "2026-10-22T15:37:04.403Z"
+    },
+    "herdr-core": {
+      "source": "herdrdev/herdr-core",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/herdrdev/herdr-core.git",
+      "skillPath": "skills/herdr-core/SKILL.md",
+      "skillFolderHash": "9691960a86a372aaa06eae674f93192b8e54cfad",
+      "installedAt": "2026-10-30T10:55:24.743Z",
+      "updatedAt": "2026-10-30T10:55:24.743Z"
     }
   },
   "dismissed": {

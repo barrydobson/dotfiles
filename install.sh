@@ -37,6 +37,7 @@ MAC_PACKAGES=(
   homebrew
   ghostty
   herdr-app
+  herdr-core
   k9s
   lazygit
   skills
@@ -126,7 +127,7 @@ main() {
   macos)
     bash "${DOTFILES_DIR}/install/mac.sh"
     # Real dirs stop stow folding them into one symlink, which would pull runtime state and auth.json into the repo
-    mkdir -p "${HOME}/.claude" "${HOME}/.codex"
+    mkdir -p "${HOME}/.claude" "${HOME}/.codex" "${HOME}/.config/herdr-core"
     generate_codex_agents_md
     stow_packages "${COMMON_PACKAGES[@]}" "${MAC_PACKAGES[@]}"
     install_homebrew_packages

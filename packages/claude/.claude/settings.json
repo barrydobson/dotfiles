@@ -27,15 +27,15 @@
       "Bash(git commit -m ':*)",
       "Bash(git push:*)",
       "Bash(grep *)",
-      "Bash(herdr agent list:*)",
-      "Bash(herdr agent read:*)",
-      "Bash(herdr agent start:*)",
-      "Bash(herdr pane read:*)",
-      "Bash(herdr tab close:*)",
-      "Bash(herdr tab create:*)",
       "Bash(ls:*)",
       "Bash(python3:*)",
-      "Bash(rg *)"
+      "Bash(rg *)",
+      "Bash(hc kill *)",
+      "Bash(hc rm *)",
+      "Bash(hc run *)",
+      "Bash(hc send *)",
+      "Bash(hc read *)",
+      "Bash(hc ls *)"
     ],
     "deny": [
       "Bash(rm -rf *)",
@@ -70,16 +70,6 @@
   },
   "hooks": {
     "SessionStart": [
-      {
-        "matcher": "^(startup|resume|clear|compact|fork)$",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash '/Users/barrydobson/.claude/hooks/herdr-agent-state.sh' session",
-            "timeout": 10
-          }
-        ]
-      },
       {
         "matcher": "^(startup|resume|clear|compact|fork)$",
         "hooks": [
