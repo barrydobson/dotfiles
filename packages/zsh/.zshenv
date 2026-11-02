@@ -19,12 +19,20 @@ add_to_path() {
   esac
 }
 
+add_to_path "$HOME/.local/share/mise/shims" # node etc. for shells that never run `mise activate`
 add_to_path "$HOME/.local/bin"
 add_to_path "/opt/nvim/bin"
 add_to_path "$HOME/go/bin"
 add_to_path "${KREW_ROOT:-$HOME/.krew}/bin"
 add_to_path "$HOME/.bun/bin"
 add_to_path "$HOME/.groundcover/bin"
+
+# 1Password SSH agent. Here, not conf.d, because commit signing (ssh-keygen -Y)
+# reads only SSH_AUTH_SOCK, not ~/.ssh/config's IdentityAgent, and non-interactive
+# shells such as hc-run agents never load conf.d.
+if [[ -S "$HOME/.1password/agent.sock" ]]; then
+  export SSH_AUTH_SOCK="$HOME/.1password/agent.sock"
+fi
 
 #=============================================================================
 # Local Environment
