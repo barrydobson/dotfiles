@@ -8,10 +8,10 @@
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
   "outline_panel": {
-    "dock": "left"
+    "dock": "left",
   },
   "collaboration_panel": {
-    "dock": "left"
+    "dock": "left",
   },
   "edit_predictions": {
     "allow_data_collection": "no",
@@ -33,6 +33,8 @@
     "entry_spacing": "standard",
     "dock": "left",
     "auto_fold_dirs": true,
+    "sort_mode": "directories_first",
+    "sort_order": "unicode",
   },
   "agent": {
     "dock": "right",

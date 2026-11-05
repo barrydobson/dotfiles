@@ -1,6 +1,7 @@
 ---
-name: codex-code-review
-description: Gets an independent code review from a Codex agent (currently Terra) through `claudex -p`, then verifies its findings before reporting them. Use when the user asks for a Codex, Terra or second-opinion review of a PR, branch or uncommitted diff, or when a workflow wants a reviewer from a different model family than Claude.
+name: claudex-code-review
+description: Gets an independent code review from an openai model (currently Terra) through `claudex -p`, then verifies its findings before reporting them. Use when the user asks for a claudex, Terra or second-opinion review of a PR, branch or uncommitted diff, or when a workflow wants a reviewer from a different model family than Claude.
+disable-model-invocation: true
 ---
 
 # Codex code review

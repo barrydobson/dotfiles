@@ -5,9 +5,6 @@
     "DISABLE_ERROR_REPORTING": "1",
     "ENABLE_CLAUDEAI_MCP_SERVERS": "false"
   },
-  "autoMode": {
-    "allow": ["$defaults"]
-  },
   "includeCoAuthoredBy": true,
   "permissions": {
     "allow": [
@@ -48,7 +45,9 @@
       "Skill(skill:mattpocock-skills:pr)"
     ],
     "defaultMode": "auto",
-    "additionalDirectories": ["~/vault"]
+    "additionalDirectories": [
+      "~/vault"
+    ]
   },
   "enableAllProjectMcpServers": false,
   "disabledMcpjsonServers": [],
@@ -101,7 +100,9 @@
     "tote-github-skills@synced": false,
     "cowork-plugin-management@synced": false,
     "tote-issue-tracker@claudeai-thetote-skills": true,
-    "next-steps@claude-community": true
+    "next-steps@claude-community": true,
+    "understand-anything@understand-anything": true,
+    "tokeneconomizer@tokeneconomizer": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
@@ -144,6 +145,18 @@
         "source": "github",
         "repo": "anthropics/claude-plugins-community"
       }
+    },
+    "understand-anything": {
+      "source": {
+        "source": "github",
+        "repo": "Egonex-AI/Understand-Anything"
+      }
+    },
+    "tokeneconomizer": {
+      "source": {
+        "source": "directory",
+        "path": "/Users/barrydobson/_git/barrydobson/TokenEconomizer"
+      }
     }
   },
   "feedbackDrafts": "off",
@@ -170,5 +183,10 @@
   "remoteControlAtStartup": false,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
+  "autoMode": {
+    "allow": [
+      "$defaults"
+    ]
+  },
   "mcpServers": {}
 }

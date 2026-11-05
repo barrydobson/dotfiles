@@ -47,3 +47,6 @@ packages/claude/.claude/skills/tote-tooling-access
 # Written by the Herdr app into every mod folder
 packages/herdr-app/.config/herdr-app/mods/*/gpui-kit.d.ts
 packages/herdr-app/.config/herdr-app/mods/*/jsconfig.json
+
+# Local design specs; may hold employer detail
+docs/specs/
