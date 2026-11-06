@@ -1,27 +1,32 @@
 // The orchestrate layout's worker panel: the selected worker's PR (state, checks, a link), as gh tells it.
 // The worker is the one clicked in the batch sidebar (shared "orch.selected"); its PR number is its orch.pr
 // label, asked in the folder it started in. Asks GitHub on selection, then every 30 s. Read only.
+// Once the head has relayed it (orch.phase=relayed) it adds a Ready to merge section: GitHub's merge
+// verdict, the commits and files, and the head's open items about it. There is no merge button: merge on GitHub.
 // Adapted from Shepherdr mods/task-pr (MIT, Copyright (c) 2026 Elias Stravik).
 import { View, div, svg } from "gpui-kit";
 import { v_flex, h_flex } from "gpui-base";
-import { exec, theme, shared, terminals } from "herdr";
-import { PR_FIELDS, prOf, checksLine } from "./pr.js";
+import { exec, theme, shared, terminals, home, readTextFile } from "herdr";
+import { PR_FIELDS, READY_FIELDS, prOf, checksLine, mergeLine, itemsFor } from "./pr.js";
 
 const EVERY = 30000;
 
-// The selected worker, if it's still there: { address, name, cwd, pr }.
+// The selected worker, if it's still there: { address, name, cwd, parent, pr, relayed }.
 function selected() {
   const address = shared("orch.selected");
   const w = address && terminals().find((t) => t.address === address);
-  return w ? { address, name: w.name ?? address, cwd: w.cwd, pr: w.labels?.["orch.pr"] ?? null } : null;
+  return w ? { address, name: w.name ?? address, cwd: w.cwd, parent: w.parent, pr: w.labels?.["orch.pr"] ?? null,
+    relayed: w.labels?.["orch.phase"] === "relayed" } : null;
 }
+const keyOf = (w) => (w ? `${w.address}:${w.pr}:${w.relayed}` : null);
 
 // { pr } or { why } (nothing to show, and why) or { error }.
 async function ask(w) {
   if (!w.pr) return { why: "No PR yet. The worker sets its orch.pr label when it opens one." };
-  const r = await exec("gh", ["pr", "view", String(w.pr), "--json", PR_FIELDS], { cwd: w.cwd });
+  const r = await exec("gh", ["pr", "view", String(w.pr), "--json", w.relayed ? READY_FIELDS : PR_FIELDS], { cwd: w.cwd });
   if (r.code !== 0) return { error: (r.stderr || r.stdout || "").trim().split("\n")[0] || "GitHub didn't answer." };
-  return { pr: prOf(JSON.parse(r.stdout)) };
+  const items = w.relayed && w.parent ? itemsFor(await readTextFile(`${home()}/.local/state/orchestrate/${w.parent}.md`), w.name, w.cwd) : [];
+  return { pr: prOf(JSON.parse(r.stdout)), items };
 }
 
 export default class WorkerPr extends View {
@@ -32,7 +37,7 @@ export default class WorkerPr extends View {
 
   refresh(cx) {
     if (this.asking) return;
-    const w = selected(), key = w ? `${w.address}:${w.pr}` : null;
+    const w = selected(), key = keyOf(w);
     if (key !== this.key) { this.key = key; this.res = null; this.at = 0; }
     if (!w || Date.now() - this.at < EVERY - 1000) return cx.notify();
     this.asking = true;
@@ -62,7 +67,7 @@ export default class WorkerPr extends View {
 
   render(cx) {
     const t = theme(), w = selected();
-    const key = w ? `${w.address}:${w.pr}` : null;
+    const key = keyOf(w);
     if (key !== this.key || (w && Date.now() - this.at >= EVERY)) cx.timer.after(0, (cx) => this.refresh(cx));
     const res = key === this.key ? this.res : null;
     const root = v_flex().id("worker-pr").size_full().min_h(0).overflow_hidden().bg(t.background).text_color(t.foreground).text_size(13)
@@ -110,6 +115,32 @@ export default class WorkerPr extends View {
               .child(svg(ic).size(14).flex_none().text_color(color))
               .child(div().flex_1().min_w(0).truncate().child(c.name))
               .when(Boolean(c.url), (e) => e.child(svg("mods/worker-pr/external-link.svg").size(12).flex_none().text_color(t.dim)));
-          }))));
+          })))
+        .when(w.relayed, (e) => e.child(this.ready(pr, res.items ?? [], t))));
+  }
+
+  // Shown once the head has relayed the PR: what you'd be merging, from GitHub and the head's file.
+  ready(pr, items, t) {
+    const [verdict, how] = mergeLine(pr);
+    const head = (text) => div().pt(4).text_size(12).font_medium().text_color(t.muted).child(text);
+    const line = (id, left, right) => h_flex().id(id).min_h(24).gap(8).items_center().text_size(12).child(left).child(right);
+    return v_flex().gap(4).pt(12).border_t(1).border_color(t.border)
+      .child(div().text_size(13).font_semibold().child("Ready to merge"))
+      .child(div().text_size(12).text_color({ ok: t.ansi2, bad: t.ansi1, wait: t.working }[how]).child(verdict))
+      .child(head(`Commits · ${pr.commits.length}`))
+      .children(pr.commits.map((c, i) => line(`worker-pr-commit-${i}`,
+        div().flex_none().font_family("JetBrains Mono").text_size(11).text_color(t.dim).child(c.sha),
+        div().flex_1().min_w(0).truncate().child(c.headline))))
+      .child(head(`Files · ${pr.fileList.length}`))
+      .children(pr.fileList.map((f, i) => line(`worker-pr-file-${i}`,
+        div().flex_1().min_w(0).truncate().child(f.path),
+        h_flex().flex_none().gap(6).text_size(11)
+          .when(f.add > 0, (e) => e.child(div().text_color(t.ansi2).child(`+${f.add}`)))
+          .when(f.del > 0, (e) => e.child(div().text_color(t.ansi1).child(`−${f.del}`))))))
+      .child(head("Open items about it"))
+      .when(!items.length, (e) => e.child(div().text_size(12).text_color(t.dim).child("None.")))
+      .children(items.map((it) => line(`worker-pr-item-${it.id}`,
+        div().flex_none().w(26).font_semibold().text_color(it.id.startsWith("Q") ? t.accent : t.muted).child(it.id),
+        div().flex_1().min_w(0).child(it.text))));
   }
 }
