@@ -10,6 +10,8 @@ Run every reviewer as your own hc child, never with the Agent tool, so it nests 
 
 Start no other agents. When the review is in, `hc kill` and `hc rm` the reviewer.
 
+The head's window shows a status line for you. At the start and at each natural step, set it to what you're doing now, in under 40 characters: `hc label $HC_TERMINAL_ID orch.status="Running integration tests"`. Once the PR exists, add `orch.pr=<number>`.
+
 If you need a decision, send your parent a message headed "Question" with `hc send`. Report with `hc send` only once the PR is ready to merge: what you changed (PR URL), test results, the information asked for, and anything undone and why.
 
 Ready to merge means all of:

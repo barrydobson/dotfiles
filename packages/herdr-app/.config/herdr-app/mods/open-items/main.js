@@ -1,9 +1,11 @@
 import { View, div } from "gpui-kit";
 import { v_flex, h_flex, InputState, Input } from "gpui-base";
-import { theme, home, props, exec, readTextFile, watchFolder } from "herdr";
+import { theme, home, props, exec, readTextFile, watchFolder, terminals, focused } from "herdr";
 import { parseItems } from "./open-items-file.js";
+import { activeHead } from "./head.js";
 
 // Opened beside a head: pane.split {direction: "right", mod: "open-items", props: {file}}.
+// With no file (the orchestrate layout's fixed block) it follows the active head instead.
 const expand = (path) => (path.startsWith("~/") ? `${home()}${path.slice(1)}` : path);
 const folderOf = (path) => path.slice(0, path.lastIndexOf("/"));
 // The file is named after the head's terminal (`<HC_TERMINAL_ID>.md`), so that's where answers go.
@@ -13,10 +15,20 @@ export default class OpenItems extends View {
   init(_props, cx) {
     this.items = []; this.answering = null; this.sent = new Set();
     const file = props()?.file;
-    this.path = file ? expand(file) : null;
-    if (!this.path) { this.error = "No file: open this pane with props {file}."; return; }
-    this.head = headOf(this.path);
-    cx.spawn(async (cx) => { await this.reload(cx); this.watch(cx); });
+    if (file) {
+      this.path = expand(file); this.head = headOf(this.path); this.folder = folderOf(this.path);
+      cx.spawn(async (cx) => { await this.reload(cx); this.watch(cx); });
+      return;
+    }
+    this.head = null; this.path = null; this.folder = `${home()}/.local/state/orchestrate`;
+    cx.timer.every(1000, (cx) => {
+      const head = activeHead(terminals(), focused()?.terminal, this.head);
+      if (head === this.head) return;
+      this.head = head; this.path = head ? `${this.folder}/${head}.md` : null;
+      this.items = []; this.sent.clear(); this.answering = null;
+      cx.spawn((cx) => this.reload(cx));
+    });
+    cx.spawn(async (cx) => { await exec("mkdir", ["-p", this.folder]); this.watch(cx); });
   }
 
   open(item, cx) {
@@ -45,6 +57,7 @@ export default class OpenItems extends View {
   }
 
   async reload(cx) {
+    if (!this.path) { this.items = []; this.missing = false; this.error = null; cx.notify(); return; }
     try {
       const content = await readTextFile(this.path);
       this.items = parseItems(content ?? ""); this.missing = content === null; this.error = null;
@@ -56,10 +69,10 @@ export default class OpenItems extends View {
     cx.spawn(async (cx) => {
       try {
         for (;;) {
-          const changed = await watchFolder(folderOf(this.path));
-          if (changed.includes(this.path)) await this.reload(cx);
+          const changed = await watchFolder(this.folder);
+          if (this.path && changed.includes(this.path)) await this.reload(cx);
         }
-      } catch (e) { this.error = `Not watching ${folderOf(this.path)}: ${e}`; cx.notify(); }
+      } catch (e) { this.error = `Not watching ${this.folder}: ${e}`; cx.notify(); }
     });
   }
 
@@ -99,6 +112,6 @@ export default class OpenItems extends View {
         .when(questions.length > 0, (e) => e.child(this.section("Questions", questions, t)))
         .when(findings.length > 0, (e) => e.child(this.section("Findings", findings, t)))
         .when(!this.items.length && !this.error, (e) => e.child(div().p(8).text_color(t.dim)
-          .child(this.missing ? "No open items file yet." : "No open items."))));
+          .child(!this.head ? "No orchestrate head. Focus a head's tab." : this.missing ? "No open items file yet." : "No open items."))));
   }
 }

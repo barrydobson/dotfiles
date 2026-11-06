@@ -55,6 +55,8 @@ For `/tote-issue-tracker:finish`, send `/tote-issue-tracker:finish <key>` to tha
 
 The user merges as soon as you relay a PR as ready, so every change request happens before the relay.
 
+The layout's sidebar shows each worker's stage from a label you set on it: `hc label <worker> orch.phase=checking` when its report arrives, `orch.phase=` (cleared) when you send it back, and `orch.phase=relayed` in the same step as the relay.
+
 1. **Check before you relay.** Read the report and the diff (`gh pr diff <n>`). Send anything you want changed back to the same worker now: the evidence, plus "before pushing, run a reviewer as your hc child that runs `tote-issue-tracker:reviewing-changes` on the fix, then report again". Tell the user only "PR #n is back with <worker>: <reason>", with no link and no merge question.
 2. **Relay only when you have nothing left to ask.** Head the report "Ready to merge" with the PR URL.
 3. **After the relay, the PR is frozen.** Send its worker no more changes. Park anything found later (see Open items). If it makes merging unsafe, ask "Hold the merge of #n? <reason>" at once, and send a fix only if the user says hold.
@@ -77,7 +79,7 @@ Questions and out-of-scope findings are numbered so they survive a fast-moving c
 
 The open items live in a file, shown in an `open-items` pane beside you, not in a list at the end of each turn.
 
-1. **At startup**, before the first question or finding, create `~/.local/state/orchestrate/$HC_TERMINAL_ID.md` (make the folder if needed) and open the pane once. Find your pane with `herdr-app ls` (the entry whose `terminal` is `$HC_TERMINAL_ID`), then run `herdr-app do pane.split '{"direction":"right","pane":"<your pane>","mod":"open-items","props":{"file":"~/.local/state/orchestrate/<HC_TERMINAL_ID>.md"}}'`, with the real ID in the path. If the user closes the pane, don't reopen it unless asked.
+1. **At startup**, before the first worker, question or finding, create `~/.local/state/orchestrate/$HC_TERMINAL_ID.md` (make the folder if needed), mark yourself as the head with `hc label $HC_TERMINAL_ID orch.role=head`, and switch the window to the orchestrate layout with `herdr-app do layout.switch '{"name":"orchestrate"}'`. It shows your workers and this file beside you. If the switch fails, open the pane instead: find your pane with `herdr-app ls` (the entry whose `terminal` is `$HC_TERMINAL_ID`), then run `herdr-app do pane.split '{"direction":"right","pane":"<your pane>","mod":"open-items","props":{"file":"~/.local/state/orchestrate/<HC_TERMINAL_ID>.md"}}'`, with the real ID in the path. If the user switches layout or closes the pane, don't redo it unless asked.
 2. **Keep one line per item** in the file, in this exact form, or the pane skips it:
    ```
    - Q7 (PI-2506) Re-run the failed jobs, then /finish again? Recommend yes.
