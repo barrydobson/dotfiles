@@ -1,20 +1,23 @@
 import { View, div } from "gpui-kit";
 import { v_flex, h_flex } from "gpui-base";
-import { theme, home, terminals, focused, run, exec, readTextFile, watchFolder } from "herdr";
-import { activeHead, askedAbout, groupWorkers } from "./orch.js";
+import { theme, home, terminals, focused, run, exec, readTextFile, watchFolder, notify, shared, setShared } from "herdr";
+import { activeHead, questionsOf, groupWorkers, newEvents } from "./orch.js";
 
-// The orchestrate layout's sidebar: the active head's workers, grouped by repo.
+// The orchestrate layout's sidebar: the active head's workers, grouped by repo. A click selects a
+// worker for the worker-pr panel (shared "orch.selected"); a double click peeks its terminal.
+// It also toasts (Herdr's notify) when a worker's report comes in and when the head adds a question.
 const STATE = "/.local/state/orchestrate";
 const ORDER = ["needs", "ready", "review", "working", "frozen", "done"];
 
 export default class Batch extends View {
   init(_props, cx) {
-    this.head = null; this.asked = []; this.error = null;
+    this.head = null; this.questions = []; this.loadedFor = null; this.seen = null; this.error = null;
     this.folder = `${home()}${STATE}`;
     // terminals() and focused() are live; this only notices the head changing and reloads its questions.
     cx.timer.every(1000, (cx) => {
       const head = activeHead(terminals(), focused()?.terminal, this.head);
-      if (head !== this.head) { this.head = head; cx.spawn((cx) => this.reload(cx)); }
+      if (head !== this.head) { this.head = head; this.seen = null; this.loadedFor = null; cx.spawn((cx) => this.reload(cx)); }
+      if (head && this.loadedFor === head) this.toast(head);
     });
     cx.spawn(async (cx) => {
       try { await exec("mkdir", ["-p", this.folder]); for (;;) { const changed = await watchFolder(this.folder); if (this.head && changed.includes(this.file())) await this.reload(cx); } }
@@ -25,9 +28,24 @@ export default class Batch extends View {
   file() { return `${this.folder}/${this.head}.md`; }
 
   async reload(cx) {
-    try { this.asked = this.head ? askedAbout(await readTextFile(this.file())) : []; this.error = null; }
+    const head = this.head;
+    try { this.questions = head ? questionsOf(await readTextFile(this.file())) : []; this.error = null; }
     catch (e) { this.error = `Can't read ${this.file()}: ${e}`; }
+    if (head === this.head) this.loadedFor = head;
     cx.notify();
+  }
+
+  // Only once the head's questions are loaded, or every question already open would toast.
+  toast(head) {
+    const workers = groupWorkers(terminals(), head).flatMap((g) => g.workers);
+    const { events, seen } = newEvents(this.seen, workers, this.questions);
+    this.seen = seen;
+    for (const e of events) {
+      if (e.kind === "report") notify({ title: `${e.worker.name} reported`, body: e.worker.pr ? `PR #${e.worker.pr}. The head is checking it.` : "The head is checking it.",
+        level: "success", action: { name: "terminal.peek", args: { terminal: e.worker.address } } });
+      else notify({ title: `${e.question.id}${e.question.about ? ` · ${e.question.about}` : ""}`, body: e.question.text,
+        level: "warning", timeout: 20000, action: { name: "pane.focus", args: { terminal: head } } });
+    }
   }
 
   dot(state, t) {
@@ -38,9 +56,10 @@ export default class Batch extends View {
   }
 
   row(w, t) {
+    const selected = shared("orch.selected") === w.address;
     return h_flex().id(`w-${w.address}`).flex_none().pl(14).pr(8).py(5).gap(8).items_start().rounded(7).cursor_pointer()
-      .hover((s) => s.bg(t.surface))
-      .on_click(() => run("terminal.peek", { terminal: w.address }))
+      .when(selected, (e) => e.bg(t.surface).border_l(2).border_color(t.accent)).hover((s) => s.bg(t.surface))
+      .on_mouse_down("left", (e) => { if (e.click_count === 2) run("terminal.peek", { terminal: w.address }); else setShared("orch.selected", w.address); })
       .child(this.dot(w.state, t))
       .child(v_flex().flex_1().min_w(0)
         .child(div().truncate().text_color(t.foreground).child(w.name))
@@ -50,7 +69,7 @@ export default class Batch extends View {
 
   render() {
     const t = theme();
-    const groups = this.head ? groupWorkers(terminals(), this.head, this.asked) : [];
+    const groups = this.head ? groupWorkers(terminals(), this.head, this.questions) : [];
     const all = groups.flatMap((g) => g.workers);
     const count = (s) => all.filter((w) => w.state === s).length;
     for (const g of groups) g.workers.sort((a, b) => ORDER.indexOf(a.state) - ORDER.indexOf(b.state));

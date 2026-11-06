@@ -120,22 +120,50 @@
               }
             },
             {
-              "id": "orch-items",
-              "type": "block",
-              "content": {
-                "mod": "open-items"
-              },
+              "id": "orch",
+              "type": "column",
+              "gap": 8,
               "size": {
                 "px": 380
               },
               "min": 260,
               "max": 700,
-              "background": "background",
-              "border": {
-                "width": 1,
-                "color": "border"
-              },
-              "radius": 10
+              "children": [
+                {
+                  "id": "orch-items",
+                  "type": "block",
+                  "content": {
+                    "mod": "open-items"
+                  },
+                  "size": {
+                    "weight": 1
+                  },
+                  "min": 120,
+                  "background": "background",
+                  "border": {
+                    "width": 1,
+                    "color": "border"
+                  },
+                  "radius": 10
+                },
+                {
+                  "id": "orch-pr",
+                  "type": "block",
+                  "content": {
+                    "mod": "worker-pr"
+                  },
+                  "size": {
+                    "weight": 1
+                  },
+                  "min": 160,
+                  "background": "background",
+                  "border": {
+                    "width": 1,
+                    "color": "border"
+                  },
+                  "radius": 10
+                }
+              ]
             },
             {
               "id": "panel",

@@ -14,20 +14,20 @@ export function activeHead(terms, focusedAddr, last) {
   return heads.length === 1 ? heads[0].address : null;
 }
 
-const ITEM = /^\s*[-*] Q(\d+)(?: \(([^)]*)\))?:? /;
-// What each open question is about ("PI-2046", "betslip-service"), from the head's open-items file.
-export const askedAbout = (content) =>
-  (content ?? "").split("\n").flatMap((l) => { const m = ITEM.exec(l); return m?.[2]?.trim() ? [m[2].trim()] : []; });
+const ITEM = /^\s*[-*] (Q\d+)(?: \(([^)]*)\))?:? (.+)$/;
+// The open questions in the head's open-items file: [{ id: "Q3", about: "PI-2046" | null, text }].
+export const questionsOf = (content) =>
+  (content ?? "").split("\n").flatMap((l) => { const m = ITEM.exec(l); return m ? [{ id: m[1], about: m[2]?.trim() || null, text: m[3].trim() }] : []; });
 
 const norm = (s) => (s ?? "").toLowerCase().replace(/[^a-z0-9]/g, "");
 const base = (p) => (p ?? "").replace(/\/+$/, "").split("/").pop() || "?";
 
 // One of: needs, review, ready, frozen, done, working.
-export function workerState(w, terms, asked) {
+export function workerState(w, terms, questions) {
   if (w.state && w.state !== "live") return "done";
   const phase = w.labels?.["orch.phase"];
   if (phase === "relayed") return "frozen";
-  if (asked.some((a) => norm(w.name).includes(norm(a)) || norm(a) === norm(base(w.cwd)))) return "needs";
+  if (questions.some(({ about: a }) => a && (norm(w.name).includes(norm(a)) || norm(a) === norm(base(w.cwd))))) return "needs";
   if (phase === "checking") return "ready";
   if (w.status === "blocked") return "needs";
   if (terms.some((t) => t.parent === w.address && (!t.state || t.state === "live"))) return "review";
@@ -37,13 +37,26 @@ export function workerState(w, terms, asked) {
 const LINE = { needs: "Needs you", review: "Reviewer running", ready: "Report in · head checking", frozen: "Relayed · frozen until merge", done: "Finished", working: "Working" };
 
 // [{ repo, workers: [{ address, name, pr, state, line }] }], repos in first-seen order.
-export function groupWorkers(terms, head, asked = []) {
+export function groupWorkers(terms, head, questions = []) {
   const groups = new Map();
   for (const w of terms.filter((t) => t.parent === head)) {
-    const state = workerState(w, terms, asked), repo = base(w.cwd);
+    const state = workerState(w, terms, questions), repo = base(w.cwd);
     const line = state === "working" || state === "review" ? w.labels?.["orch.status"] || LINE[state] : LINE[state];
     if (!groups.has(repo)) groups.set(repo, []);
-    groups.get(repo).push({ address: w.address, name: w.name ?? w.address, pr: w.labels?.["orch.pr"] ?? null, state, line });
+    groups.get(repo).push({ address: w.address, name: w.name ?? w.address, pr: w.labels?.["orch.pr"] ?? null, phase: w.labels?.["orch.phase"] ?? null, state, line });
   }
   return [...groups].map(([repo, workers]) => ({ repo, workers }));
+}
+
+// What's new since the last look, for a toast: a worker whose report just came in (orch.phase=checking)
+// and a question just added. seen = { phases: { address: phase }, qs: [ids] }, null on the first look,
+// which only records. Returns { events, seen }.
+export function newEvents(seen, workers, questions) {
+  const next = { phases: Object.fromEntries(workers.map((w) => [w.address, w.phase])), qs: questions.map((q) => q.id) };
+  if (!seen) return { events: [], seen: next };
+  const events = [
+    ...workers.filter((w) => w.phase === "checking" && seen.phases[w.address] !== "checking").map((w) => ({ kind: "report", worker: w })),
+    ...questions.filter((q) => !seen.qs.includes(q.id)).map((q) => ({ kind: "question", question: q })),
+  ];
+  return { events, seen: next };
 }
