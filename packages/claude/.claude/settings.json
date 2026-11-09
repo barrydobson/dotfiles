@@ -166,8 +166,8 @@
     },
     "barrydobson": {
       "source": {
-        "source": "directory",
-        "path": "barrydobson/skills"
+        "source": "github",
+        "repo": "barrydobson/skills"
       }
     }
   },
