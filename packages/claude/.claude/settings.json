@@ -102,7 +102,9 @@
     "tote-issue-tracker@claudeai-thetote-skills": true,
     "next-steps@claude-community": true,
     "understand-anything@understand-anything": true,
-    "tokeneconomizer@tokeneconomizer": true
+    "tokeneconomizer@tokeneconomizer": true,
+    "codex@openai-codex": true,
+    "barrydobson-skills@barrydobson": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
@@ -156,6 +158,18 @@
       "source": {
         "source": "directory",
         "path": "/Users/barrydobson/_git/barrydobson/TokenEconomizer"
+      }
+    },
+    "openai-codex": {
+      "source": {
+        "source": "github",
+        "repo": "openai/codex-plugin-cc"
+      }
+    },
+    "barrydobson": {
+      "source": {
+        "source": "directory",
+        "path": "/Users/barrydobson/_git/barrydobson/skills"
       }
     }
   },
