@@ -41,8 +41,7 @@
       "Bash(git push *--force*)",
       "Edit(~/.bashrc)",
       "Edit(~/.zshrc)",
-      "Edit(~/.ssh/**)",
-      "Skill(skill:mattpocock-skills:pr)"
+      "Edit(~/.ssh/**)"
     ],
     "defaultMode": "auto",
     "additionalDirectories": ["~/vault"]
@@ -92,7 +91,6 @@
     "claude-md-management@claude-plugins-official": true,
     "ponytail@ponytail": true,
     "typesafe@typesafe-ai": true,
-    "mattpocock-skills@mattpocock": true,
     "tote-brand-guidelines@synced": false,
     "tote-engineering-context@synced": false,
     "tote-github-skills@synced": false,
@@ -130,13 +128,6 @@
       "source": {
         "source": "github",
         "repo": "typesafe-ai/skills"
-      },
-      "autoUpdate": true
-    },
-    "mattpocock": {
-      "source": {
-        "source": "github",
-        "repo": "mattpocock/skills"
       },
       "autoUpdate": true
     },
