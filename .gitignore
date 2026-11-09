@@ -50,3 +50,7 @@ packages/herdr-app/.config/herdr-app/mods/*/jsconfig.json
 
 # Local design specs; may hold employer detail
 docs/specs/
+
+# Private fleet hc templates, symlinked in from the fleet repo
+packages/herdr-core/.config/herdr-core/templates/ticket-worker.md
+packages/herdr-core/.config/herdr-core/templates/finisher.md
