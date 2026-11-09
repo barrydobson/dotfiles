@@ -61,7 +61,7 @@ Research first, no code. State the plan - what changes, risks, rollback - and ge
 ## Detailed rules
 
 - Testing rules (`~/.claude/rules/testing.md`) auto-load for Go, TypeScript, Python and C# test files. Read the file before writing tests in any other language.
-- Use the `file-pr` skill to open a PR or write a PR title or body.
+- Use the `barrydobson-skills:file-pr` skill to open a PR or write a PR title or body.
 
 ## Shell gotcha: the Bash tool runs zsh
 
