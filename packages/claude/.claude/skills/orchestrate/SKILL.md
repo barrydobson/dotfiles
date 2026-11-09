@@ -82,7 +82,7 @@ The open items live in a file, shown in an `open-items` pane beside you, not in 
 1. **At startup**, before the first worker, question or finding, create `~/.local/state/orchestrate/$HC_TERMINAL_ID.md` (make the folder if needed), mark yourself as the head with `hc label $HC_TERMINAL_ID orch.role=head`, and switch the window to the orchestrate layout with `herdr-app do layout.switch '{"name":"orchestrate"}'`. It shows your workers and this file beside you. If the switch fails, open the pane instead: find your pane with `herdr-app ls` (the entry whose `terminal` is `$HC_TERMINAL_ID`), then run `herdr-app do pane.split '{"direction":"right","pane":"<your pane>","mod":"open-items","props":{"file":"~/.local/state/orchestrate/<HC_TERMINAL_ID>.md"}}'`, with the real ID in the path. If the user switches layout or closes the pane, don't redo it unless asked.
 2. **Keep one line per item** in the file, in this exact form, or the pane skips it:
    ```
-   - Q7 (PI-2506) Re-run the failed jobs, then /finish again? Recommend yes.
+   - Q7 (ABC-123) Re-run the failed jobs, then /finish again? Recommend yes.
    - F1 (betslip-service) Local-dev compose files use official images without library/.
    ```
    The part in brackets is the ticket, worker or repo. Remove a line when the user answers it or it stops mattering.
