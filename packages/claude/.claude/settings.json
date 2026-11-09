@@ -45,9 +45,7 @@
       "Skill(skill:mattpocock-skills:pr)"
     ],
     "defaultMode": "auto",
-    "additionalDirectories": [
-      "~/vault"
-    ]
+    "additionalDirectories": ["~/vault"]
   },
   "enableAllProjectMcpServers": false,
   "disabledMcpjsonServers": [],
@@ -169,7 +167,7 @@
     "barrydobson": {
       "source": {
         "source": "directory",
-        "path": "/Users/barrydobson/_git/barrydobson/skills"
+        "path": "barrydobson/skills"
       }
     }
   },
@@ -198,9 +196,7 @@
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
   "autoMode": {
-    "allow": [
-      "$defaults"
-    ]
+    "allow": ["$defaults"]
   },
   "mcpServers": {}
 }
