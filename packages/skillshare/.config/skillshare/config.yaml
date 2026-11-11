@@ -10,13 +10,12 @@ targets:
   claude:
     skills:
       path: ~/.claude/skills
-      exclude: [tavily-cli]
     agents:
       path: ~/.claude/agents
   codex:
     skills:
       path: ~/.agents/skills
-      include: [archify, herdr-core, lavish, tavily-cli, tavily-extract, tavily-research, tavily-search]
+      include: [archify, herdr-core, lavish, tavily-research, tavily-search]
 ignore:
   - .DS_Store
   - .git/

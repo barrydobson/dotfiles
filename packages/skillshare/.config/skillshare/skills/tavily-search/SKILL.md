@@ -1,95 +1,84 @@
 ---
 name: tavily-search
 description: |
-  Search the web with LLM-optimized results via the Tavily CLI. Use this skill when the user wants to search the web, find articles, look up information, get recent news, discover sources, or says "search for", "find me", "look up", "what's the latest on", "find articles about", or needs current information from the internet. Returns relevant results with content snippets, relevance scores, and metadata — optimized for LLM consumption. Supports domain filtering, time ranges, and multiple search depths.
+  Use this skill whenever a task needs the web: searching for information, checking current facts or news, finding sources, reading a URL, finding a page on a site, or collecting many pages from a site. Use it for anything past your training data or anything the user wants verified online.
 allowed-tools: Bash(tvly *)
 ---
 
-# tavily search
+# Tavily search
 
-Web search returning LLM-optimized results with content snippets and relevance scores.
+Use the `tavily_search`, `tavily_extract`, `tavily_map` and `tavily_crawl` tools if your tool list has them
+(some clients add a prefix such as `mcp__tavily__`). Otherwise run `tvly <command> --json` directly; there's no
+need to check for it first. If neither works, follow [setup](references/setup.md).
 
-## Before running
+Parameters are named as in the API (`max_results`). The CLI spells them as flags (`--max-results`) with
+comma-separated lists (`--include-domains sec.gov,reuters.com`). For exact parameters, read the tool schema,
+run `tvly <command> --help`, or see the [API reference](https://docs.tavily.com/documentation/api-reference/endpoint/search).
 
-Run search directly when `tvly` is available. Search supports capped keyless
-access, so do not look for an API key or authenticate before the first request.
+| You have | You need | Use |
+|---|---|---|
+| A question or topic | Sources, facts or news | Search |
+| URLs | Their content | Extract |
+| A site, not the exact page | The right page's URL | [Map](references/map.md) |
+| A site section | Many of its pages | [Crawl](references/crawl.md) |
 
-If `tvly` is missing, follow the [tavily-cli setup](../tavily-cli/SKILL.md#setup)
-before retrying. If the keyless cap is reached in an interactive session, run
-`tvly login` to open browser OAuth, then retry the original search once. In an
-unattended environment, report the cap and authentication options instead of
-starting an interactive flow. Do not start a second login immediately after
-guided setup has completed.
+## Search
 
-## When to use
+**Use advanced search.** Set `search_depth` to `advanced` (`--depth advanced` in the CLI) for every search
+unless the user needs a fast answer to a simple lookup. It reaches more sources and ranks the passages that match your query.
 
-- You need to find information on any topic
-- You don't have a specific URL yet
-- First step in the [workflow](../tavily-cli/SKILL.md): **search** → extract → map → crawl → research
+**Write queries for a search engine.** Use the names and terms you expect on the page, not the user's whole
+request. Split a question with several parts into one focused search per part. For a long written report,
+search each part separately and extract the main sources for each before you write.
 
-## Quick start
+**Follow your leads.** When a result names a likely answer, test it right away: search that name with the
+other details you know, or extract its page. Keep a lead that fits most details until a source contradicts it; a detail you can't confirm doesn't rule it out. When a search misses,
+search the details again in their own words before adding names or filters you guessed, and build lists of
+candidates from results, not memory. When a detail keeps coming back empty, work out what it refers to, such as
+the role, event or term, and search for that.
 
-```bash
-# Basic search
-tvly search "your query" --json
+Each result's `content` is already the passages that match your query; print it whole rather than cutting it short.
 
-# Advanced search with more results
-tvly search "quantum computing" --depth advanced --max-results 10 --json
+**Batch independent searches.** Issue the searches for one step together in one turn, one call each: separate
+`tavily_search` calls with MCP tools, or separate Bash calls with the CLI, each holding a single `tvly` command.
+MCP calls run in parallel; Bash calls run one after another but still use one turn. Don't add pipes, `&`, `$(...)`
+or other programs to a `tvly` call, which make the client ask for permission. Put the query in single quotes:
+`tvly search 'Rust 2024 edition release date' --depth advanced --max-results 10 --json`.
 
-# Recent news
-tvly search "AI news" --time-range week --topic news --json
+**Ask for 10 results.** Set `max_results` to 10 (`--max-results 10`). **Narrow before you widen.** Filters help more than raising `max_results` further. Use `time_range` or dates for
+recent events or a stated period. Use `include_domains` when the answer lives on an official or named site; it
+is a hard filter, so search again without it if it doesn't find the page.
 
-# Domain-filtered
-tvly search "SEC filings" --include-domains sec.gov,reuters.com --json
+**Keep large results on disk.** When a result is long, such as raw page content or a crawl, save it with
+`-o <file>` and read the parts you need with your file-reading tool instead of printing it all. To reuse a file,
+use the path you wrote; never look for it with a glob over temp folders, which can read another task's files. An
+MCP result lands straight in your context, so keep those calls small.
 
-# Include full page content in results
-tvly search "react hooks tutorial" --include-raw-content --max-results 3 --json
-```
+**Read the results critically.** Count independent sources, not results. Treat a generated answer as a summary
+to check, never as a source.
 
-## Options
+## Extract
 
-| Option | Description |
-|--------|-------------|
-| `--depth` | `ultra-fast`, `fast`, `basic` (default), `advanced` |
-| `--max-results` | Max results, 0-20 (default: 5) |
-| `--topic` | `general` (default), `news`, `finance` |
-| `--time-range` | `day`, `week`, `month`, `year` |
-| `--start-date` | Results after date (YYYY-MM-DD) |
-| `--end-date` | Results before date (YYYY-MM-DD) |
-| `--include-domains` | Comma-separated domains to include |
-| `--exclude-domains` | Comma-separated domains to exclude |
-| `--country` | Boost results from country |
-| `--include-answer` | Include AI answer (`basic` or `advanced`) |
-| `--include-raw-content` | Include full page content (`markdown` or `text`) |
-| `--include-images` | Include image results |
-| `--include-image-descriptions` | Include AI image descriptions |
-| `--chunks-per-source` | Chunks per source (advanced/fast depth only) |
-| `-o, --output` | Save the JSON response to a file |
-| `--json` | Structured JSON output |
+Extract returns up to 20 URLs per call as markdown, including pages built with JavaScript.
 
-## Search depth
+- Extract only the few results worth reading. Snippets answer most facts.
+- Extract full pages by default. Pass `query` (`--query`) only to isolate one fact on a long page; if the passages come
+  back cut off near what you need, extract again without it.
+- Rerun with `extract_depth` set to `advanced` (`--extract-depth advanced`) when a page is built with JavaScript, the content is in a table, or
+  `basic` came back empty. Check `failed_results` every time and say which pages couldn't be read.
+- When you find a direct link to the data itself, such as a CSV or JSON file, download it if you can.
 
-| Depth | Speed | Relevance | Best for |
-|-------|-------|-----------|----------|
-| `ultra-fast` | Fastest | Lower | Real-time chat, autocomplete |
-| `fast` | Fast | Good | Need chunks, latency matters |
-| `basic` | Medium | High | General-purpose (default) |
-| `advanced` | Slower | Highest | Precision, specific facts |
+## When to stop
 
-## Tips
+- Stop once two independent sources agree on a fact.
+- Before you answer, close any gap your draft would mark unconfirmed or fill from memory: run one targeted
+  search or reread the saved page.
+- For releases, ownership, official figures and decisions by a named body, confirm on the official domain or
+  repository. A secondary site or a generated answer is not enough.
 
-- **Keep queries under 400 characters** — think search query, not prompt.
-- **Break complex queries into sub-queries** for better results.
-- **Use `--include-raw-content`** when you need full page text (saves a separate extract call).
-- **Use `--include-domains`** to focus on trusted sources.
-- **Use `--time-range`** for recent information.
-- **Verify identity-sensitive facts at the exact primary source.** For releases,
-  versions, ownership, or similarly named projects, confirm the official
-  repository or domain instead of trusting a generated answer or package-name
-  match alone.
-- Read from stdin: `echo "query" | tvly search - --json`
+## Hand off the job
 
-## See also
-
-- [tavily-extract](../tavily-extract/SKILL.md) — extract content from specific URLs
-- [tavily-research](../tavily-research/SKILL.md) — comprehensive multi-source research
+When the user wants an in-depth report that needs many sources gathered and weighed, such as an analysis, a
+comparison across several criteria or an in-depth investigation, use `tavily-research` instead of your own searches.
+If it isn't installed, run `npx skills add tavily-ai/skills --skill tavily-research` and read its SKILL.md first. A
+single fact or answer to find stays here.

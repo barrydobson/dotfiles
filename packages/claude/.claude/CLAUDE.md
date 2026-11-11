@@ -29,7 +29,7 @@ These apply to documentation, code comments, commit and PR messages, and replies
 <!-- claude-only -->
 - Use `/vault-query` for questions about past work.
 <!-- /claude-only -->
-- Prefer the `tvly` CLI and Tavily skills (`tavily-search`, `tavily-extract`, `tavily-research`) over `WebSearch`. Use `tavily-research` instead of a dedicated web research agent.
+- Prefer the `tvly` CLI and Tavily skills (`tavily-search`, `tavily-research`) over `WebSearch`. Use `tavily-research` instead of a dedicated web research agent.
 - Use `trash`, never `rm -rf`. Use `ast-grep` for code structure.
 - Look up current stable versions when adding dependencies, CI actions or tools.
 
