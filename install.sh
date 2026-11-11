@@ -112,6 +112,21 @@ generate_codex_agents_md() {
   print_success "Generated Codex AGENTS.md"
 }
 
+# Codex writes trust and state into config.toml, so it is a seeded real file, not a stow link
+seed_codex_config() {
+  local dest="${HOME}/.codex/config.toml"
+  # An old stow link would make cp write into the repo
+  if [[ -L "${dest}" ]]; then
+    rm "${dest}"
+  fi
+  if [[ -e "${dest}" ]]; then
+    return
+  fi
+  cp "${DOTFILES_DIR}/install/codex-config.toml" "${dest}"
+  chmod 600 "${dest}"
+  print_success "Seeded Codex config.toml"
+}
+
 install_linux_extras() {
   export PATH="${HOME}/.local/bin:${PATH}"
   install_starship
@@ -129,6 +144,7 @@ main() {
     # Real dirs stop stow folding them into one symlink, which would pull runtime state and auth.json into the repo
     mkdir -p "${HOME}/.claude" "${HOME}/.codex" "${HOME}/.config/herdr-core"
     generate_codex_agents_md
+    seed_codex_config
     stow_packages "${COMMON_PACKAGES[@]}" "${MAC_PACKAGES[@]}"
     install_homebrew_packages
     setup_macos_1password

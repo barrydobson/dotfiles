@@ -1,0 +1,7 @@
+# Base ~/.codex/config.toml, copied by install.sh only when the file is missing.
+# Codex writes project trust and other state into the live file, so it is not stowed.
+
+approvals_reviewer = "auto_review"
+
+[tui]
+theme = "voltaic-dark"
