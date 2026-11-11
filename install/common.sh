@@ -104,7 +104,8 @@ install_starship() {
         return
     fi
 
-    curl -fsSL https://starship.rs/install.sh | sh -s -- --yes
+    # -b: the default /usr/local/bin needs sudo, and the installer then prompts for it
+    curl -fsSL https://starship.rs/install.sh | sh -s -- --yes -b "${HOME}/.local/bin"
     print_success "Starship prompt installed"
 }
 
@@ -134,6 +135,49 @@ install_tavily_cli() {
 
     curl -fsSL https://cli.tavily.com/install.sh | bash
     print_success "Tavily CLI installed"
+}
+
+# Agent CLIs from their vendor installers, all into ~/.local/bin. macOS gets
+# skillshare from Homebrew; the others install the same way on both.
+install_claude_code() {
+    if command -v claude >/dev/null 2>&1; then
+        print_status "Claude Code is already installed"
+        return
+    fi
+    print_status "Installing Claude Code..."
+    curl -fsSL https://claude.ai/install.sh | bash
+    print_success "Claude Code installed"
+}
+
+install_codex() {
+    if command -v codex >/dev/null 2>&1; then
+        print_status "Codex is already installed"
+        return
+    fi
+    print_status "Installing Codex..."
+    # Without this the installer stops to ask "Start Codex now?"
+    curl -fsSL https://chatgpt.com/codex/install.sh | CODEX_NON_INTERACTIVE=1 sh
+    print_success "Codex installed"
+}
+
+install_herdr_core() {
+    if command -v herdr-core >/dev/null 2>&1; then
+        print_status "herdr-core is already installed"
+        return
+    fi
+    print_status "Installing herdr-core..."
+    curl -fsSL https://releases.herdr.dev/core/install.sh | sh
+    print_success "herdr-core installed"
+}
+
+install_skillshare() {
+    if command -v skillshare >/dev/null 2>&1; then
+        print_status "skillshare is already installed"
+        return
+    fi
+    print_status "Installing skillshare..."
+    curl -fsSL https://raw.githubusercontent.com/runkids/skillshare/main/install.sh | sh
+    print_success "skillshare installed"
 }
 
 # ~/.local/bin is on PATH before anything is installed into it

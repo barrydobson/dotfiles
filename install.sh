@@ -14,14 +14,20 @@ source "${DOTFILES_DIR}/install/common.sh"
 # Packages stowed on every platform
 COMMON_PACKAGES=(
   atuin
+  ccstatusline
+  claude
+  codex
   editorconfig
   eza
   herdr
+  herdr-core
   git
   mise
   nvim
+  skillshare
   starship
   tmux
+  worktrunk
   yamllint
   zsh
 )
@@ -30,20 +36,14 @@ COMMON_PACKAGES=(
 MAC_PACKAGES=(
   1Password
   cli-proxy-api
-  ccstatusline
-  claude
-  codex
   homebrew
   ghostty
   herdr-app
-  herdr-core
   k9s
   lazygit
   skills
-  skillshare
   ssh
   vscode
-  worktrunk
   zed
 )
 
@@ -169,10 +169,64 @@ sync_skillshare() {
   print_success "skillshare synced"
 }
 
+# Real dirs stop stow folding them into one symlink, which would pull runtime state and
+# auth.json into the repo. ~/.codex/rules too: Codex writes default.rules there next to
+# the stowed dotfiles.rules.
+prepare_agent_dirs() {
+  mkdir -p "${HOME}/.claude" "${HOME}/.codex/rules" "${HOME}/.config/herdr-core"
+  generate_codex_agents_md
+  unfold_skill_targets
+}
+
 install_linux_extras() {
-  export PATH="${HOME}/.local/bin:${PATH}"
   install_starship
   install_1password_cli
+  # macOS gets skillshare from the Brewfile
+  install_skillshare
+}
+
+# A key made on this machine, so nothing secret has to reach it. Commits sign once the
+# public key is registered with GitHub (printed in the checklist).
+setup_linux_git_signing() {
+  local local_config="${HOME}/.config/git/.gitconfig-local"
+  local key="${HOME}/.ssh/id_ed25519_signing"
+
+  if git config --file "${local_config}" --get user.signingkey >/dev/null 2>&1; then
+    print_status "Git signing key already configured"
+    return
+  fi
+  mkdir -p "${HOME}/.ssh"
+  chmod 700 "${HOME}/.ssh"
+  if [[ ! -f "${key}" ]]; then
+    ssh-keygen -q -t ed25519 -N "" -C "git-signing@$(hostname)" -f "${key}"
+  fi
+  git config --file "${local_config}" user.signingkey "${key}.pub"
+  print_success "Git signing key created: ${key}.pub"
+}
+
+# gh setup-git would write to the stowed ~/.config/git/config, so set the helper locally
+setup_linux_git_credentials() {
+  local local_config="${HOME}/.config/git/.gitconfig-local"
+  git config --file "${local_config}" 'credential.https://github.com.helper' '!gh auth git-credential'
+  git config --file "${local_config}" 'credential.https://gist.github.com.helper' '!gh auth git-credential'
+}
+
+print_linux_checklist() {
+  # Shown to the user, not expanded
+  # shellcheck disable=SC2088
+  local local_config="~/.config/git/.gitconfig-local"
+  echo
+  print_status "Finish by hand (logins and identity):"
+  if ! git config --file "${HOME}/.config/git/.gitconfig-local" --get user.email >/dev/null 2>&1; then
+    echo "  git config --file ${local_config} user.name  \"Your Name\""
+    echo "  git config --file ${local_config} user.email \"you@example.com\""
+  fi
+  echo "  gh auth login"
+  echo "  gh ssh-key add ~/.ssh/id_ed25519_signing.pub --type signing --title \"$(hostname)\""
+  echo "  claude                      # log in"
+  echo "  codex login --device-auth"
+  echo "  codex, then /hooks          # approve the skillshare SessionStart hook"
+  echo "  codex mcp login <server>    # for each HTTP MCP server in: codex mcp list"
 }
 
 main() {
@@ -180,21 +234,19 @@ main() {
   os=$(detect_os)
   print_status "Detected OS family: ${os}"
 
+  export PATH="${HOME}/.local/bin:${PATH}"
+
   case "${os}" in
   macos)
     bash "${DOTFILES_DIR}/install/mac.sh"
-    # Real dirs stop stow folding them into one symlink, which would pull runtime state and auth.json into the repo
-    # ~/.codex/rules too: Codex writes default.rules there next to the stowed dotfiles.rules
-    mkdir -p "${HOME}/.claude" "${HOME}/.codex/rules" "${HOME}/.config/herdr-core"
-    generate_codex_agents_md
-    unfold_skill_targets
+    prepare_agent_dirs
     stow_packages "${COMMON_PACKAGES[@]}" "${MAC_PACKAGES[@]}"
     install_homebrew_packages
-    sync_skillshare
     setup_macos_1password
     ;;
   debian)
     bash "${DOTFILES_DIR}/install/ubuntu.sh"
+    prepare_agent_dirs
     stow_packages "${COMMON_PACKAGES[@]}"
     install_linux_extras
     ;;
@@ -204,6 +256,9 @@ main() {
     ;;
   esac
 
+  install_claude_code
+  install_codex
+  install_herdr_core
   install_tpm
 
   if ! command -v mise >/dev/null 2>&1; then
@@ -211,8 +266,17 @@ main() {
     exit 1
   fi
   MISE_AQUA_GITHUB_ATTESTATIONS=false mise install
-  # After mise install, which provides yq on Linux
+  # After the agent CLIs: plugin sync installs into Codex
+  sync_skillshare
+  # Last: skillshare writes to config.toml too, and a merge before it would rewrite the
+  # file again on the next run. After mise install, which provides yq on Linux.
   sync_codex_config
+
+  if [[ "${os}" == "debian" ]]; then
+    setup_linux_git_signing
+    setup_linux_git_credentials
+    print_linux_checklist
+  fi
   print_success "Done! Restart your terminal or run: exec zsh"
 }
 
