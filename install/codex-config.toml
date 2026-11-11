@@ -18,6 +18,8 @@ notifications = true
 
 [features]
 memories = true
+# Run in-process, like --no-daemon, instead of starting the self-updating background server.
+daemon_auto_start = false
 
 [[skills.config]]
 name = "barrydobson-skills:reviewing-plugins"
