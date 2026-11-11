@@ -47,13 +47,12 @@ listing what's absent.
 ## What gets installed
 
 `DEVCONTAINER_PACKAGES` in `install/devcontainer.sh` is the source of truth.
-Five packages are stowed into `$HOME`:
+Four packages are stowed into `$HOME`:
 
 - **`zsh`** — `~/.zshenv`, `~/.config/zsh/` (zshrc, conf.d, aliases, functions)
 - **`starship`** — `~/.config/starship/starship.toml`
-- **`claude`** — `~/.claude/` config, rules, agents, skills and `settings.json`
-- **`agents`** — `~/.agents/skills/` (the tavily skills; `packages/claude`'s
-  skill symlinks point here, so it must be stowed alongside `claude`)
+- **`claude`** — `~/.claude/` config, rules, agents and `settings.json`. No
+  skills: they come from skillshare, which devcontainers do not install
 - **`ccstatusline`** — `~/.config/ccstatusline/settings.json` for the Claude
   Code status line
 

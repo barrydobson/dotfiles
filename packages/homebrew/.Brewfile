@@ -46,6 +46,7 @@ brew "shfmt"              # Shell script formatter
 brew "gh"                 # GitHub CLI
 brew "awscli"             # AWS CLI
 brew "worktrunk"          # Git Worktree management
+brew "skillshare"         # Syncs skills, MCP servers and hooks into Claude and Codex
 
 # GUI applications
 

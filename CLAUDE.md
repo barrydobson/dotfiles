@@ -29,13 +29,12 @@ packages/
 - **Terminal**: Ghostty (`voltaic-dark`/`voltaic-light`)
 - **Git**: Modular config - `config` includes `.gitalias` (short single-letter aliases) and a gitignored `.gitconfig-local`
 - **Tools**: `atuin`, `eza`, `mise`, `k9s`, `lazygit`, `homebrew` (Brewfile), `yamllint`, `editorconfig`, `worktrunk`, `ccstatusline`
-- **Claude**: Config, skills, agents and rules at `packages/claude/.claude/` - see gotcha below
-- **Codex**: `~/.codex/config.toml` is a real file, not stowed, because Codex writes project trust and state into it. `install.sh` copies the base `install/codex-config.toml` only when it is missing; edit the live file for local changes. `~/.codex` stays a real directory like `~/.claude`. `AGENTS.md` is generated and gitignored: `install.sh` builds it from the Claude `CLAUDE.md`, `me.md` and `work.md`, so re-run it after editing those. Codex reads user skills from `~/.agents/skills` (the `agents` package)
-- **Other**: `1Password`, `ssh`, `tmux`, `starship`, `claude-mem`, `agents`, `skills`
+- **Claude**: Config, agents and rules at `packages/claude/.claude/` - see gotcha below
+- **Skills, MCP servers and hooks**: managed by skillshare. `packages/skillshare` stows `~/.config/skillshare/` (`config.yaml` plus the `skills/` source). `skillshare sync --all` links each skill into the real dirs `~/.claude/skills` (everything except `tavily-cli`) and `~/.agents/skills` (Codex: an include list), and writes MCP servers and the Codex `SessionStart` hook. Add a skill to the source, then sync. Private skills in the source are gitignored. `~/.claude/skills/synced` is written by the Claude app and stays out of the source
+- **Codex**: `~/.codex/config.toml` is a real file, not stowed, because Codex writes project trust and state into it. `install.sh` copies the base `install/codex-config.toml` only when it is missing; edit the live file for local changes. `~/.codex` stays a real directory like `~/.claude`. `AGENTS.md` is generated and gitignored: `install.sh` builds it from the Claude `CLAUDE.md`, `me.md` and `work.md`, so re-run it after editing those. Codex reads user skills from `~/.agents/skills`
+- **Other**: `1Password`, `ssh`, `tmux`, `starship`, `claude-mem`, `skills`
 
 **Deployment source of truth**: the `COMMON_PACKAGES` / `MAC_PACKAGES` arrays in `install.sh` and `DEVCONTAINER_PACKAGES` in `install/devcontainer.sh`. A directory under `packages/` is not deployed unless it is listed there. Every directory in `packages/` is currently listed; `.github/workflows/lint.yml` fails the build if an array names a package that does not exist.
-
-`packages/agents` must be stowed wherever `packages/claude` is - the tavily skills under `.claude/skills/` are symlinks into `~/.agents/skills/`.
 
 ## Common Development Commands
 
@@ -106,7 +105,7 @@ Gitignored, so absent on a fresh clone: `.zprofile`, `.zsh_history`, `99_private
 **`~/.claude` is a real directory holding stow symlinks.** Claude Code's runtime state stays in your home directory and never enters the working tree.
 
 - `CLAUDE.md`, `me.md`, `work.md` and `settings.json` are individual file symlinks into `packages/claude/.claude/`.
-- `agents/`, `rules/`, `skills/`, `themes/` and `scheduled-tasks/` are folded directory symlinks, so files you author in them are live immediately with no stow step.
+- `agents/`, `rules/`, `themes/` and `scheduled-tasks/` are folded directory symlinks, so files you author in them are live immediately with no stow step.
 - Everything else in `~/.claude` (`projects/`, `history.jsonl`, `plugins/`, `shell-snapshots/`, `statsig/`, ...) is a real path outside this repo.
 - Only after adding a **new top-level entry** to the package does stow need re-running: `cd packages && stow -R -t "${HOME}" claude`.
 - If a runtime path ever appears in `git status` under `packages/claude/`, the arrangement has been undone - re-check `~/.claude` is still a real directory rather than adding a gitignore rule.

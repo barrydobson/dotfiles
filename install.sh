@@ -13,7 +13,6 @@ source "${DOTFILES_DIR}/install/common.sh"
 
 # Packages stowed on every platform
 COMMON_PACKAGES=(
-  agents
   atuin
   editorconfig
   eza
@@ -41,6 +40,7 @@ MAC_PACKAGES=(
   k9s
   lazygit
   skills
+  skillshare
   ssh
   vscode
   worktrunk
@@ -127,6 +127,26 @@ seed_codex_config() {
   print_success "Seeded Codex config.toml"
 }
 
+# skillshare links each skill into these, so they must be real dirs, not old stow folds
+unfold_skill_targets() {
+  local dir
+  for dir in "${HOME}/.claude/skills" "${HOME}/.agents/skills"; do
+    if [[ -L "${dir}" ]]; then
+      rm "${dir}"
+    fi
+    mkdir -p "${dir}"
+  done
+}
+
+sync_skillshare() {
+  if ! command -v skillshare >/dev/null 2>&1; then
+    print_warning "skillshare is not installed, skipping skill, MCP and hook sync"
+    return
+  fi
+  skillshare sync --all --no-tui
+  print_success "skillshare synced"
+}
+
 install_linux_extras() {
   export PATH="${HOME}/.local/bin:${PATH}"
   install_starship
@@ -145,8 +165,10 @@ main() {
     mkdir -p "${HOME}/.claude" "${HOME}/.codex" "${HOME}/.config/herdr-core"
     generate_codex_agents_md
     seed_codex_config
+    unfold_skill_targets
     stow_packages "${COMMON_PACKAGES[@]}" "${MAC_PACKAGES[@]}"
     install_homebrew_packages
+    sync_skillshare
     setup_macos_1password
     ;;
   debian)

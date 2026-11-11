@@ -14,7 +14,6 @@ DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 source "${DOTFILES_DIR}/install/common.sh"
 
 DEVCONTAINER_PACKAGES=(
-    agents
     starship
     zsh
     claude
