@@ -144,6 +144,8 @@ sync_skillshare() {
     return
   fi
   skillshare sync --all --no-tui
+  # --all leaves out plugins
+  skillshare sync plugins --no-tui
   print_success "skillshare synced"
 }
 
