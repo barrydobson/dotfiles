@@ -26,9 +26,14 @@ plugins:
   version: 2
   packages:
     barrydobson-skills:
+      source: https://github.com/barrydobson/skills
+      plugin: barrydobson-skills
       bindings:
         claude:
           imported: true
+        codex:
+          source: https://github.com/barrydobson/skills
+          plugin: barrydobson-skills
     claude-md-management:
       bindings:
         claude:
