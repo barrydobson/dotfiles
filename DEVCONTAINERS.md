@@ -57,7 +57,8 @@ Three packages are stowed into `$HOME`:
 Two settings files are copied rather than stowed, because the apps write to
 them: `~/.claude/settings.json` from `install/claude-settings.json`, and
 `~/.config/ccstatusline/settings.json` from `install/ccstatusline-settings.json`.
-If `yq` is on `PATH` and the file exists, the repo copy is merged in instead.
+For Claude settings, if `yq` is on `PATH` and the file exists, the repo copy is
+merged in instead. The ccstatusline file is only copied when missing.
 
 The zsh config is defensively gated with `command -v` checks, so missing
 optional tools (atuin, zoxide, fzf, mise, etc.) are silently skipped — the

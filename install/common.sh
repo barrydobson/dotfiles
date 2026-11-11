@@ -228,6 +228,26 @@ merge_config() {
     print_success "Merged repo settings into ${dest}"
 }
 
+# For config edited in the app itself: the repo copy only seeds a new machine.
+# Usage: seed_config <repo file> <live file>
+seed_config() {
+    local common=$1 dest=$2
+    local dir
+    dir=$(dirname "${dest}")
+
+    # An old stow fold would point into the repo, where the file no longer is
+    if [[ -L "${dir}" && "$(readlink "${dir}")" == *packages/* ]]; then
+        rm "${dir}"
+    fi
+    if [[ -e "${dest}" ]]; then
+        print_status "${dest} exists, leaving it"
+        return
+    fi
+    mkdir -p "${dir}"
+    cp "${common}" "${dest}"
+    print_success "Copied ${dest}"
+}
+
 # Restow so re-runs pick up new files. Callers must set DOTFILES_DIR.
 stow_packages() {
     print_status "Stowing: $*"

@@ -109,11 +109,11 @@ generate_codex_agents_md() {
   print_success "Generated Codex AGENTS.md"
 }
 
-# Apps that write to their own config: merged, not stowed. See merge_config.
+# Apps that write to their own config are not stowed. See merge_config and seed_config.
 sync_app_configs() {
   merge_config toml "${DOTFILES_DIR}/install/codex-config.toml" "${HOME}/.codex/config.toml"
   merge_config json "${DOTFILES_DIR}/install/claude-settings.json" "${HOME}/.claude/settings.json"
-  merge_config json "${DOTFILES_DIR}/install/ccstatusline-settings.json" "${HOME}/.config/ccstatusline/settings.json"
+  seed_config "${DOTFILES_DIR}/install/ccstatusline-settings.json" "${HOME}/.config/ccstatusline/settings.json"
 }
 
 # skillshare links each skill into these, so they must be real dirs, not old stow folds
