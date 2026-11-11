@@ -11,3 +11,6 @@ vault = "work"
 item = "Hetzner"
 vault = "Personal"
 
+[[ssh-keys]]
+item = "agent_workbox"
+vault = "work"
