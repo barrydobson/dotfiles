@@ -17,7 +17,6 @@ packages/ssh/.ssh/config.local
 packages/tmux/.config/tmux/plugins/
 packages/tmux/.config/tmux/resurrect
 packages/tmux/.config/tmux/notify/*.pid
-packages/ccstatusline/**/*.bak
 
 # Machine-local state written by running apps, not config
 packages/worktrunk/.config/worktrunk/config.toml.lock

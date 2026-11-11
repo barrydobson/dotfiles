@@ -14,12 +14,10 @@ source "${DOTFILES_DIR}/install/common.sh"
 # Packages stowed on every platform
 COMMON_PACKAGES=(
   atuin
-  ccstatusline
   claude
   codex
   editorconfig
   eza
-  herdr
   herdr-core
   git
   mise
@@ -41,7 +39,6 @@ MAC_PACKAGES=(
   herdr-app
   k9s
   lazygit
-  skills
   ssh
   vscode
   zed
@@ -112,39 +109,11 @@ generate_codex_agents_md() {
   print_success "Generated Codex AGENTS.md"
 }
 
-# Codex writes trust and state into config.toml, so it is not stowed. Merge the common
-# settings into it instead: common keys win, everything else in the file is kept.
-# Needs no sudo, unlike Codex's /etc/codex/config.toml layer.
-sync_codex_config() {
-  local dest="${HOME}/.codex/config.toml"
-  local common="${DOTFILES_DIR}/install/codex-config.toml"
-  local yq tmp
-
-  # On Linux yq comes from mise, whose shims may not be on PATH yet
-  yq=$(command -v yq || mise which yq 2>/dev/null) || {
-    print_warning "yq is not installed, skipping Codex config merge"
-    return
-  }
-
-  mkdir -p "${HOME}/.codex"
-  # An old stow link would make the write land in the repo
-  if [[ -L "${dest}" ]]; then
-    rm "${dest}"
-  fi
-  [[ -e "${dest}" ]] || : >"${dest}"
-
-  tmp=$(mktemp)
-  # $f is a yq variable. Comments are dropped so the common file's header is not copied in.
-  # shellcheck disable=SC2016
-  "${yq}" ea -p toml -o toml '(. as $f ireduce ({}; . * $f)) | ... comments = ""' "${dest}" "${common}" >"${tmp}"
-  if cmp -s "${tmp}" "${dest}"; then
-    rm "${tmp}"
-    print_status "Codex config.toml already has the common settings"
-    return
-  fi
-  mv "${tmp}" "${dest}"
-  chmod 600 "${dest}"
-  print_success "Merged common settings into Codex config.toml"
+# Apps that write to their own config: merged, not stowed. See merge_config.
+sync_app_configs() {
+  merge_config toml "${DOTFILES_DIR}/install/codex-config.toml" "${HOME}/.codex/config.toml"
+  merge_config json "${DOTFILES_DIR}/install/claude-settings.json" "${HOME}/.claude/settings.json"
+  merge_config json "${DOTFILES_DIR}/install/ccstatusline-settings.json" "${HOME}/.config/ccstatusline/settings.json"
 }
 
 # skillshare links each skill into these, so they must be real dirs, not old stow folds
@@ -282,9 +251,9 @@ main() {
   MISE_AQUA_GITHUB_ATTESTATIONS=false mise install
   # After the agent CLIs: plugin sync installs into Codex
   sync_skillshare
-  # Last: skillshare writes to config.toml too, and a merge before it would rewrite the
-  # file again on the next run. After mise install, which provides yq on Linux.
-  sync_codex_config
+  # Last: skillshare writes to Codex config.toml too, and a merge before it would rewrite
+  # the file again on the next run. After mise install, which provides yq on Linux.
+  sync_app_configs
 
   if [[ "${os}" == "debian" ]]; then
     setup_linux_git_signing

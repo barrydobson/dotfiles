@@ -44,7 +44,9 @@
       "Edit(~/.ssh/**)"
     ],
     "defaultMode": "auto",
-    "additionalDirectories": ["~/vault"]
+    "additionalDirectories": [
+      "~/vault"
+    ]
   },
   "enableAllProjectMcpServers": false,
   "disabledMcpjsonServers": [],
@@ -187,7 +189,9 @@
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
   "autoMode": {
-    "allow": ["$defaults"]
+    "allow": [
+      "$defaults"
+    ]
   },
   "mcpServers": {}
 }

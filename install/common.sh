@@ -185,6 +185,49 @@ post_install_setup() {
     mkdir -p "${HOME}/.local/bin"
 }
 
+# For config files the app also writes to, so they are not stowed. Merges the repo's
+# copy into the live file: repo keys win (arrays are replaced, not joined), every other
+# key the app wrote is kept. Usage: merge_config <json|toml> <repo file> <live file>
+merge_config() {
+    local fmt=$1 common=$2 dest=$3
+    local dir yq tmp
+    dir=$(dirname "${dest}")
+
+    # Old stow links, to the file or a folded parent dir, would make the write land in the repo
+    if [[ -L "${dir}" && "$(readlink "${dir}")" == *packages/* ]]; then
+        rm "${dir}"
+    fi
+    if [[ -L "${dest}" ]]; then
+        rm "${dest}"
+    fi
+    mkdir -p "${dir}"
+
+    # On Linux yq comes from mise, whose shims may not be on PATH yet
+    if ! yq=$(command -v yq || mise which yq 2>/dev/null); then
+        if [[ -e "${dest}" ]]; then
+            print_warning "yq is not installed, skipping merge into ${dest}"
+        else
+            cp "${common}" "${dest}"
+            print_success "Copied ${dest}"
+        fi
+        return
+    fi
+    [[ -e "${dest}" ]] || : >"${dest}"
+
+    tmp=$(mktemp)
+    # $f is a yq variable. Comments are dropped so the repo file's header is not copied in.
+    # shellcheck disable=SC2016
+    "${yq}" ea -p "${fmt}" -o "${fmt}" '(. as $f ireduce ({}; . * $f)) | ... comments = ""' "${dest}" "${common}" >"${tmp}"
+    if cmp -s "${tmp}" "${dest}"; then
+        rm "${tmp}"
+        print_status "${dest} already has the repo settings"
+        return
+    fi
+    mv "${tmp}" "${dest}"
+    chmod 600 "${dest}"
+    print_success "Merged repo settings into ${dest}"
+}
+
 # Restow so re-runs pick up new files. Callers must set DOTFILES_DIR.
 stow_packages() {
     print_status "Stowing: $*"

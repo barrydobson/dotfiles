@@ -47,14 +47,17 @@ listing what's absent.
 ## What gets installed
 
 `DEVCONTAINER_PACKAGES` in `install/devcontainer.sh` is the source of truth.
-Four packages are stowed into `$HOME`:
+Three packages are stowed into `$HOME`:
 
 - **`zsh`** — `~/.zshenv`, `~/.config/zsh/` (zshrc, conf.d, aliases, functions)
 - **`starship`** — `~/.config/starship/starship.toml`
-- **`claude`** — `~/.claude/` config, rules, agents and `settings.json`. No
-  skills: they come from skillshare, which devcontainers do not install
-- **`ccstatusline`** — `~/.config/ccstatusline/settings.json` for the Claude
-  Code status line
+- **`claude`** — `~/.claude/` config, rules and agents. No skills: they come
+  from skillshare, which devcontainers do not install
+
+Two settings files are copied rather than stowed, because the apps write to
+them: `~/.claude/settings.json` from `install/claude-settings.json`, and
+`~/.config/ccstatusline/settings.json` from `install/ccstatusline-settings.json`.
+If `yq` is on `PATH` and the file exists, the repo copy is merged in instead.
 
 The zsh config is defensively gated with `command -v` checks, so missing
 optional tools (atuin, zoxide, fzf, mise, etc.) are silently skipped — the
@@ -63,12 +66,9 @@ shell still starts cleanly with just zsh and starship.
 `post_install_setup` creates `~/.local/bin` before stowing, so it is on `PATH`
 whether or not anything ends up in it.
 
-Unlike a workstation, a fresh container has no `~/.claude`, so stow symlinks the
-whole directory into the repo rather than creating the per-file symlinks
-described in [CLAUDE.md](CLAUDE.md). Claude Code then writes its runtime state
-(`projects/`, `history.jsonl`, ...) inside the repo checkout, where
-`packages/claude/.gitignore` does not cover it. That is fine for a throwaway
-container, but do not commit from it without checking `git status`.
+The script creates `~/.claude` before stowing, so stow links the files inside it
+one by one, as on a workstation. Claude Code's runtime state stays out of the
+repo checkout.
 
 ## What is **not** installed
 

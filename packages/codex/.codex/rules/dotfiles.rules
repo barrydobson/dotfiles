@@ -1,5 +1,5 @@
 # Codex command rules, translated from the Claude permissions in
-# packages/claude/.claude/settings.json. Stowed into ~/.codex/rules/.
+# install/claude-settings.json. Stowed into ~/.codex/rules/.
 # Codex writes TUI approvals to default.rules, never to this file.
 #
 # "allow" runs the command outside the sandbox without a prompt. The strictest

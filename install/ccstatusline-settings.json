@@ -5,30 +5,35 @@
       {
         "id": "1",
         "type": "model",
-        "color": "brightGreen"
+        "color": "brightGreen",
+        "metadata": {
+          "label": ""
+        }
       },
       {
         "id": "1e5d2c3e-1ad0-4b28-b03f-5213877bdb89",
-        "type": "separator"
+        "type": "separator",
+        "character": "|"
       },
       {
         "id": "3",
         "type": "context-percentage"
       },
       {
-        "id": "28efc1fb-e98d-40e2-a640-679e08dcc9ed",
+        "id": "66b8b9d9-2016-434e-a27f-5ae2b75493a8",
         "type": "separator"
       },
       {
-        "id": "bb00e88d-d44e-4ecd-abc5-d46592832b9e",
-        "type": "tokens-total"
+        "id": "9bbbdef4-7059-4bce-9b0a-a8fdd2715442",
+        "type": "session-usage"
       }
     ],
     [
       {
         "id": "8aa2d72a-465c-4c4a-a630-0c9fde9d0f36",
         "type": "git-branch",
-        "color": "cyan"
+        "color": "cyan",
+        "character": ""
       },
       {
         "id": "67adfbfc-2cd5-4459-b695-79e99e42ece8",
@@ -37,36 +42,23 @@
       {
         "id": "45905daf-f370-4e75-988c-87c0d17c9a11",
         "type": "git-worktree",
-        "color": "white"
+        "color": "white",
+        "character": ""
       },
       {
         "id": "2f234663-5d41-49f0-a9ef-5227bedde7a0",
         "type": "separator"
       },
       {
-        "id": "c86a6df6-f36d-49bc-b0a1-9e1f7904f25a",
-        "type": "git-review"
-      },
-      {
-        "id": "ca659423-dc60-4950-b8e6-4436f5907140",
-        "type": "separator"
-      },
-      {
         "id": "5c6f7811-9dac-4c0a-b0d0-fd171fdfc831",
         "type": "current-working-dir",
-        "color": "brightYellow"
-      }
-    ],
-    [
-      {
-        "id": "ce848efa-5e83-42f2-a779-00b6e2ae4b78",
-        "type": "claude-session-id",
-        "color": "brightBlack"
+        "color": "brightYellow",
+        "metadata": {
+          "segments": "2"
+        }
       }
     ]
   ],
-  "flexMode": "full-minus-40",
-  "compactThreshold": 60,
   "colorLevel": 3,
   "defaultPadding": " ",
   "defaultPaddingSide": "both",
