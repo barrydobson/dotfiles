@@ -1,0 +1,99 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/runkids/skillshare/main/schemas/config.schema.json
+
+sources:
+  skills: ~/.config/skillshare/skills
+  agents: ~/.config/skillshare/agents
+mode: merge
+# The vault skills are symlinks in the source
+follow_source_links: true
+targets:
+  claude:
+    skills:
+      path: ~/.claude/skills
+      exclude: [tavily-cli]
+    agents:
+      path: ~/.claude/agents
+  codex:
+    skills:
+      path: ~/.agents/skills
+      include: [archify, herdr-core, lavish, tavily-cli, tavily-extract, tavily-research, tavily-search]
+ignore:
+  - .DS_Store
+  - .git/
+  - __pycache__/
+audit:
+  block_threshold: CRITICAL
+plugins:
+  version: 2
+  packages:
+    barrydobson-skills:
+      bindings:
+        claude:
+          imported: true
+    claude-md-management:
+      bindings:
+        claude:
+          imported: true
+    codex:
+      bindings:
+        claude:
+          imported: true
+    next-steps:
+      bindings:
+        claude:
+          imported: true
+    ponytail:
+      bindings:
+        claude:
+          imported: true
+    tokeneconomizer:
+      bindings:
+        claude:
+          imported: true
+    tote-issue-tracker:
+      bindings:
+        claude:
+          imported: true
+hooks:
+  entries:
+    session-context:
+      bindings:
+        codex:
+          events:
+            SessionStart:
+              - hooks:
+                  - command: bash "$HOME/.claude/hooks/systems-note-context.sh"
+                    timeout: 5
+                    type: command
+                  - command: bash "$HOME/.claude/hooks/hc-context.sh"
+                    timeout: 5
+                    type: command
+mcp:
+  servers:
+    granola:
+      transport: streamable-http
+      url: https://mcp.granola.ai/mcp
+      targets:
+        - claude
+        - codex
+    groundcover:
+      transport: streamable-http
+      url: https://mcp.groundcover.com/api/mcp
+      targets:
+        - claude
+        - codex
+    notion:
+      transport: streamable-http
+      url: https://mcp.notion.com/mcp
+      targets:
+        - claude
+        - codex
+    vault:
+      command: npx
+      args:
+        - -y
+        - '@modelcontextprotocol/server-filesystem'
+        - /Users/barrydobson/vault/
+      targets:
+        - claude
+        - codex
