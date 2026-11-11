@@ -178,6 +178,19 @@ prepare_agent_dirs() {
   unfold_skill_targets
 }
 
+# A fixed path to the clone, wherever it was cloned, for pulling updates.
+link_dotfiles_dir() {
+  local link="${HOME}/.dotfiles"
+  if [[ "${DOTFILES_DIR}" == "${link}" ]]; then
+    return
+  fi
+  if [[ -e "${link}" && ! -L "${link}" ]]; then
+    print_warning "${link} exists and is not a symlink; leaving it"
+    return
+  fi
+  ln -sfn "${DOTFILES_DIR}" "${link}"
+}
+
 install_linux_extras() {
   install_starship
   install_1password_cli
@@ -235,6 +248,7 @@ main() {
   print_status "Detected OS family: ${os}"
 
   export PATH="${HOME}/.local/bin:${PATH}"
+  link_dotfiles_dir
 
   case "${os}" in
   macos)

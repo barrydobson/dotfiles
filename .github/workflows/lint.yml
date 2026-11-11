@@ -53,5 +53,6 @@ jobs:
           check "Codex has barrydobson-skills" "codex plugin list | grep -q '^barrydobson-skills@'"
           check "Codex common config merged" "grep -q '^approval_policy' ~/.codex/config.toml"
           check "Git signing key configured" "git config --file ~/.config/git/.gitconfig-local --get user.signingkey"
+          check "~/.dotfiles points at the clone" "[ \"\$(readlink ~/.dotfiles)\" = \"\${GITHUB_WORKSPACE}\" ]"
           check "zsh starts" "zsh -ic true"
           exit "${failed}"

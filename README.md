@@ -43,7 +43,8 @@ A cross-platform dotfiles configuration for macOS, Windows (WSL2), and Linux. Th
    ```
 
    `install.sh` runs the platform script first (Homebrew or apt, plus stow, zsh
-   and git), stows the packages, and only then installs tools - the Brewfile and
+   and git), links `~/.dotfiles` to the clone (so `git -C ~/.dotfiles pull` works
+   wherever you cloned it), stows the packages, and only then installs tools - the Brewfile and
    mise config have to be symlinked into `$HOME` before they can be used. The
    platform scripts are runnable on their own if you only want the prerequisites:
 
