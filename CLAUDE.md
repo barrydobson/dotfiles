@@ -135,7 +135,7 @@ When **removing** a package, delete its name from the `install.sh` arrays too. S
 ### Cross-Platform Considerations
 
 - **macOS**: Uses Homebrew for everything, GUI apps to `~/Applications`
-- **Linux**: apt for the bare minimum (curl, fzf, git, gnupg, stow, zsh), then mise for the tools; the `os = ["linux"]` entries in `packages/mise/.config/mise/config.toml` exist because macOS gets those from Homebrew
+- **Linux**: same agent setup as macOS - clone, `./install.sh`, then the printed checklist (git identity, `gh auth login`, register the signing key, Claude and Codex logins). apt for the bare minimum (curl, fzf, git, gnupg, stow, zsh, bubblewrap for the Codex sandbox, locales), vendor installers for Claude Code, Codex, herdr-core and skillshare, then mise for the tools; the `os = ["linux"]` entries in `packages/mise/.config/mise/config.toml` exist because macOS gets those from Homebrew. Git signing uses a key generated on the machine (`~/.ssh/id_ed25519_signing`), set in `.gitconfig-local` with the `gh` credential helper. CI's `linux-install` job runs the whole path on a fresh Ubuntu runner
 - **Fonts**: JetBrainsMono Nerd Font is required; installed by Homebrew on macOS, not installed at all on Linux
 - **Theme**: Mixed - Catppuccin Mocha in Neovim, tmux and Starship; `voltaic-dark` in Ghostty and k9s. Don't assume one theme when editing configs
 

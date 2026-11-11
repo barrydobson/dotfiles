@@ -28,14 +28,18 @@ check_debian_based() {
 install_system_packages() {
     print_status "Installing system packages..."
 
+    # bubblewrap: Codex's bundled bwrap is blocked by Ubuntu's AppArmor user namespaces
     local packages=(
+        bubblewrap
         curl
         fzf
         git
         gnupg
         gpg
         gpg-agent
+        locales
         stow
+        unzip
         zsh
     )
 
@@ -47,6 +51,23 @@ install_system_packages() {
         print_warning "Cannot install packages automatically - requires sudo"
         print_warning "Run: sudo apt install -y ${packages[*]}"
     fi
+}
+
+# macOS ssh forwards LC_* and Ubuntu's sshd accepts it, so every command on the
+# box complains unless this locale exists.
+configure_locale() {
+    local locale="en_GB.UTF-8"
+    # locale -a spells it en_GB.utf8
+    if locale -a 2>/dev/null | grep -qiE '^en_GB\.utf-?8$'; then
+        print_status "Locale ${locale} already generated"
+        return
+    fi
+    if ! check_sudo_access; then
+        print_warning "Run: sudo locale-gen ${locale}"
+        return
+    fi
+    _sudo locale-gen "${locale}"
+    print_success "Locale ${locale} generated"
 }
 
 change_shell() {
@@ -68,6 +89,7 @@ change_shell() {
 main() {
     check_debian_based
     install_system_packages
+    configure_locale
     install_mise
     post_install_setup
     change_shell

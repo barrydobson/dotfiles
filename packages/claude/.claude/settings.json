@@ -66,12 +66,12 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash '/Users/barrydobson/.claude/hooks/systems-note-context.sh'",
+            "command": "bash \"$HOME/.claude/hooks/systems-note-context.sh\"",
             "timeout": 5
           },
           {
             "type": "command",
-            "command": "bash '/Users/barrydobson/.claude/hooks/hc-context.sh'",
+            "command": "bash \"$HOME/.claude/hooks/hc-context.sh\"",
             "timeout": 5
           }
         ]
@@ -84,7 +84,7 @@
   "workflowKeywordTriggerEnabled": false,
   "statusLine": {
     "type": "command",
-    "command": "bunx --silent ccstatusline@latest",
+    "command": "ccstatusline",
     "padding": 0
   },
   "enabledPlugins": {

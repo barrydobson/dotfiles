@@ -28,3 +28,30 @@ jobs:
             fi
           done
           exit "${missing}"
+
+  # The Linux path of install.sh, end to end on a fresh runner. Logins stay manual.
+  linux-install:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      # mise downloads tools from GitHub releases; unauthenticated requests hit rate limits
+      GITHUB_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v7
+      - run: ./install.sh </dev/null
+      - name: Tools, skills and git signing are in place
+        shell: bash
+        run: |
+          export PATH="${HOME}/.local/bin:${HOME}/.local/share/mise/shims:${PATH}"
+          failed=0
+          check() { if eval "$2" >/dev/null 2>&1; then echo "ok    $1"; else echo "::error::$1"; failed=1; fi; }
+          for bin in zsh nvim mise starship gh yq claude codex skillshare herdr-core wt; do
+            check "${bin} on PATH" "command -v ${bin}"
+          done
+          check "Claude skills linked" "[ -n \"\$(ls ~/.claude/skills)\" ]"
+          check "Codex skills linked" "[ -n \"\$(ls ~/.agents/skills)\" ]"
+          check "Codex has barrydobson-skills" "codex plugin list | grep -q '^barrydobson-skills@'"
+          check "Codex common config merged" "grep -q '^approval_policy' ~/.codex/config.toml"
+          check "Git signing key configured" "git config --file ~/.config/git/.gitconfig-local --get user.signingkey"
+          check "zsh starts" "zsh -ic true"
+          exit "${failed}"
