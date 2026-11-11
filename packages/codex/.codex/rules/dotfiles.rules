@@ -1,0 +1,77 @@
+# Codex command rules, translated from the Claude permissions in
+# packages/claude/.claude/settings.json. Stowed into ~/.codex/rules/.
+# Codex writes TUI approvals to default.rules, never to this file.
+#
+# "allow" runs the command outside the sandbox without a prompt. The strictest
+# matching rule wins: forbidden > prompt > allow.
+#
+# Not translatable to prefix rules: Claude's mid-command globs
+# (`git push *--force*`), pipes (`wget * | bash`) and Edit denies. The
+# workspace-write sandbox already blocks writes outside the workspace.
+
+# --- allow ---
+
+prefix_rule(
+    pattern = ["acli", "jira", "workitem", "assign"],
+    match = [["acli", "jira", "workitem", "assign", "--key", "X-1"]],
+)
+
+prefix_rule(pattern = ["curl"])
+
+prefix_rule(
+    pattern = ["gh", "issue", ["close", "comment", "edit"]],
+    match = [["gh", "issue", "comment", "12", "--body", "x"]],
+    not_match = [["gh", "issue", "delete", "12"]],
+)
+
+prefix_rule(
+    pattern = ["gh", "pr", ["comment", "ready"]],
+    not_match = [["gh", "pr", "merge", "1"]],
+)
+
+prefix_rule(pattern = ["git", "add"])
+
+prefix_rule(
+    pattern = ["git", "commit", "-m"],
+    not_match = [["git", "commit", "--amend"]],
+)
+
+# prompt, not allow: a prefix rule cannot catch `git push origin --force`, so
+# every push goes to the approval reviewer (auto_review) instead.
+prefix_rule(
+    pattern = ["git", "push"],
+    decision = "prompt",
+    justification = "Check the push is not a force push.",
+)
+
+prefix_rule(pattern = [["grep", "rg", "ls"]])
+
+prefix_rule(pattern = ["python3"])
+
+prefix_rule(
+    pattern = ["hc", ["kill", "rm", "run", "send", "read", "ls"]],
+    not_match = [["hc", "nuke"]],
+)
+
+# --- forbidden ---
+
+prefix_rule(
+    pattern = ["rm", ["-rf", "-fr", "-Rf", "-fR"]],
+    decision = "forbidden",
+    justification = "Use trash instead of rm -rf.",
+    match = [["rm", "-rf", "build"]],
+    not_match = [["rm", "file.txt"]],
+)
+
+prefix_rule(
+    pattern = [["sudo", "mkfs", "dd"]],
+    decision = "forbidden",
+    justification = "Ask a human to run privileged or disk-level commands.",
+)
+
+prefix_rule(
+    pattern = ["git", "push", ["--force", "-f", "--force-with-lease"]],
+    decision = "forbidden",
+    justification = "Never force-push; ask a human.",
+    match = [["git", "push", "--force", "origin", "main"]],
+)

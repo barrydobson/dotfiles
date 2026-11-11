@@ -1,7 +1,24 @@
-# Base ~/.codex/config.toml, copied by install.sh only when the file is missing.
-# Codex writes project trust and other state into the live file, so it is not stowed.
+# Common Codex settings. install.sh merges them into ~/.codex/config.toml on every run:
+# these keys win, everything else Codex or skillshare wrote there is kept.
+# Comments in the live file do not survive the merge.
 
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
 approvals_reviewer = "auto_review"
+model_reasoning_effort = "high"
+web_search = "live"
+
+[sandbox_workspace_write]
+network_access = true
 
 [tui]
 theme = "voltaic-dark"
+alternate_screen = "always"
+notifications = true
+
+[features]
+memories = true
+
+[[skills.config]]
+name = "barrydobson-skills:reviewing-plugins"
+enabled = false

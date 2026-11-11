@@ -112,19 +112,39 @@ generate_codex_agents_md() {
   print_success "Generated Codex AGENTS.md"
 }
 
-# Codex writes trust and state into config.toml, so it is a seeded real file, not a stow link
-seed_codex_config() {
+# Codex writes trust and state into config.toml, so it is not stowed. Merge the common
+# settings into it instead: common keys win, everything else in the file is kept.
+# Needs no sudo, unlike Codex's /etc/codex/config.toml layer.
+sync_codex_config() {
   local dest="${HOME}/.codex/config.toml"
-  # An old stow link would make cp write into the repo
+  local common="${DOTFILES_DIR}/install/codex-config.toml"
+  local yq tmp
+
+  # On Linux yq comes from mise, whose shims may not be on PATH yet
+  yq=$(command -v yq || mise which yq 2>/dev/null) || {
+    print_warning "yq is not installed, skipping Codex config merge"
+    return
+  }
+
+  mkdir -p "${HOME}/.codex"
+  # An old stow link would make the write land in the repo
   if [[ -L "${dest}" ]]; then
     rm "${dest}"
   fi
-  if [[ -e "${dest}" ]]; then
+  [[ -e "${dest}" ]] || : >"${dest}"
+
+  tmp=$(mktemp)
+  # $f is a yq variable. Comments are dropped so the common file's header is not copied in.
+  # shellcheck disable=SC2016
+  "${yq}" ea -p toml -o toml '(. as $f ireduce ({}; . * $f)) | ... comments = ""' "${dest}" "${common}" >"${tmp}"
+  if cmp -s "${tmp}" "${dest}"; then
+    rm "${tmp}"
+    print_status "Codex config.toml already has the common settings"
     return
   fi
-  cp "${DOTFILES_DIR}/install/codex-config.toml" "${dest}"
+  mv "${tmp}" "${dest}"
   chmod 600 "${dest}"
-  print_success "Seeded Codex config.toml"
+  print_success "Merged common settings into Codex config.toml"
 }
 
 # skillshare links each skill into these, so they must be real dirs, not old stow folds
@@ -164,9 +184,9 @@ main() {
   macos)
     bash "${DOTFILES_DIR}/install/mac.sh"
     # Real dirs stop stow folding them into one symlink, which would pull runtime state and auth.json into the repo
-    mkdir -p "${HOME}/.claude" "${HOME}/.codex" "${HOME}/.config/herdr-core"
+    # ~/.codex/rules too: Codex writes default.rules there next to the stowed dotfiles.rules
+    mkdir -p "${HOME}/.claude" "${HOME}/.codex/rules" "${HOME}/.config/herdr-core"
     generate_codex_agents_md
-    seed_codex_config
     unfold_skill_targets
     stow_packages "${COMMON_PACKAGES[@]}" "${MAC_PACKAGES[@]}"
     install_homebrew_packages
@@ -191,6 +211,8 @@ main() {
     exit 1
   fi
   MISE_AQUA_GITHUB_ATTESTATIONS=false mise install
+  # After mise install, which provides yq on Linux
+  sync_codex_config
   print_success "Done! Restart your terminal or run: exec zsh"
 }
 
