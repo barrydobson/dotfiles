@@ -29,7 +29,7 @@ packages/
 - **Terminal**: Ghostty (`voltaic-dark`/`voltaic-light`)
 - **Git**: Modular config - `config` includes `.gitalias` (short single-letter aliases) and a gitignored `.gitconfig-local`
 - **Tools**: `atuin`, `eza`, `mise`, `k9s`, `lazygit`, `homebrew` (Brewfile), `yamllint`, `editorconfig`, `worktrunk`
-- **Claude**: Config, agents and rules at `packages/claude/.claude/` - see gotcha below
+- **Claude**: Config, hooks and rules at `packages/claude/.claude/` - see gotcha below
 - **Skills, MCP servers and hooks**: managed by skillshare. `packages/skillshare` stows `~/.config/skillshare/` (`config.yaml` plus the `skills/` source). `skillshare sync --all` links each skill into the real dirs `~/.claude/skills` (every skill) and `~/.agents/skills` (Codex: an include list), and writes MCP servers and the Codex `SessionStart` hook. Add a skill to the source, then sync. Private skills in the source are gitignored. `~/.claude/skills/synced` is written by the Claude app and stays out of the source
 - **Codex**: `~/.codex/config.toml` is a real file, not stowed, because Codex writes project trust and state into it. Put common settings in `install/codex-config.toml`: `install.sh` merges it into the live file with `yq` on every run (macOS and Linux, no sudo), so its keys win and Codex's own entries are kept. Edit the live file only for machine-local changes. `~/.codex` stays a real directory like `~/.claude`. `AGENTS.md` is generated and gitignored: `install.sh` builds it from the Claude `CLAUDE.md`, `me.md` and `work.md`, so re-run it after editing those. Codex reads user skills from `~/.agents/skills`
 - **Other**: `1Password`, `ssh`, `tmux`, `starship`, `claude-mem`, `skills`
@@ -106,7 +106,7 @@ Gitignored, so absent on a fresh clone: `.zprofile`, `.zsh_history`, `99_private
 
 - `CLAUDE.md`, `me.md` and `work.md` are individual file symlinks into `packages/claude/.claude/`.
 - `settings.json` is a real file, because Claude Code writes to it. Edit `install/claude-settings.json` and re-run `./install.sh`: `merge_config` (in `install/common.sh`) merges it in, repo keys winning, arrays replaced. Settings added through the app survive only if the repo file does not set that key. `install/codex-config.toml` works the same way. `install/ccstatusline-settings.json` is different: `seed_config` copies it only when the live file is missing, so edits made in the ccstatusline TUI survive. To save a TUI change for new machines, copy the live file back into the repo.
-- `agents/`, `rules/`, `themes/` and `scheduled-tasks/` are folded directory symlinks, so files you author in them are live immediately with no stow step.
+- `hooks/`, `rules/`, `themes/` and `scheduled-tasks/` are folded directory symlinks, so files you author in them are live immediately with no stow step.
 - Everything else in `~/.claude` (`projects/`, `history.jsonl`, `plugins/`, `shell-snapshots/`, `statsig/`, ...) is a real path outside this repo.
 - Only after adding a **new top-level entry** to the package does stow need re-running: `cd packages && stow -R -t "${HOME}" claude`.
 - If a runtime path ever appears in `git status` under `packages/claude/`, the arrangement has been undone - re-check `~/.claude` is still a real directory rather than adding a gitignore rule.
