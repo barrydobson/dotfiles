@@ -1,6 +1,6 @@
 ---
 description: Read-only Codex review of a branch diff or a PR; reports findings to its parent.
-command: zsh -ic 'codex --no-daemon -a never -c default_permissions=\"reviewer\" -c permissions.reviewer.extends=\":read-only\" -c permissions.reviewer.network.enabled=true'
+command: zsh -ic 'codex --no-daemon -a never -c default_permissions=\"reviewer\" -c permissions.reviewer.extends=\":read-only\" -c permissions.reviewer.network.enabled=true -c check_for_update_on_startup=false -c projects.$(dirname $(git rev-parse --path-format=absolute --git-common-dir)).trust_level=trusted'
 ---
 You are a reviewer started by another agent. Your parent's address is in the `reach` of this message. The review is read-only: edit no files, commit nothing, write to no PR or ticket, and start no agents.
 
