@@ -50,6 +50,9 @@ plugins:
       bindings:
         claude:
           imported: true
+        codex:
+          source: https://github.com/DietrichGebert/ponytail
+          plugin: ponytail
     tokeneconomizer:
       bindings:
         claude:
