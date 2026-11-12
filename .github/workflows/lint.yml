@@ -29,6 +29,17 @@ jobs:
           done
           exit "${missing}"
 
+  herdr-mod-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v7
+        with:
+          # 24 runs the mods' ES modules without a package.json
+          node-version: 24
+      - run: node --test
+        working-directory: packages/herdr-app/.config/herdr-app/mods
+
   # The Linux path of install.sh, end to end on a fresh runner. Logins stay manual.
   linux-install:
     runs-on: ubuntu-latest
@@ -50,6 +61,7 @@ jobs:
           done
           check "Claude skills linked" "[ -n \"\$(ls ~/.claude/skills)\" ]"
           check "Codex skills linked" "[ -n \"\$(ls ~/.agents/skills)\" ]"
+          check "Pinned skills restored" "[ -f \"\${HOME}/.config/skillshare/skills/archify/SKILL.md\" ]"
           check "Codex has barrydobson-skills" "codex plugin list | grep -q '^barrydobson-skills@'"
           check "Codex common config merged" "grep -q '^approval_policy' ~/.codex/config.toml"
           check "Git signing key configured" "git config --file ~/.config/git/.gitconfig-local --get user.signingkey"
