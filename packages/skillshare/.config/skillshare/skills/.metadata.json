@@ -220,6 +220,20 @@
         "skill-release.json": "sha256:1ea25551e0359e547267d40e83812ffd1a7bdf7398826b65f2a2fcf1a11ba596"
       }
     },
+    "find-docs": {
+      "source": "github.com/upstash/context7/skills/find-docs",
+      "type": "github-subdir",
+      "branch": "251c6c581108348fec98089cdb4aff7b520cf533",
+      "installed_at": "2026-11-12T07:40:40.492108Z",
+      "repo_url": "https://github.com/upstash/context7.git",
+      "subdir": "skills/find-docs",
+      "version": "251c6c5",
+      "tree_hash": "909aeb8682313970ebfe48b63b149400c8bd65b5",
+      "commit": "251c6c581108348fec98089cdb4aff7b520cf533",
+      "file_hashes": {
+        "SKILL.md": "sha256:b0164a76b50937f80cda62a010c003514a06db8ff32e0ecfa99fbe5844afbe3a"
+      }
+    },
     "herdr-core": {
       "source": "github.com/herdrdev/herdr-core/skills/herdr-core",
       "type": "github-subdir",
