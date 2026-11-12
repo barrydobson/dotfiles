@@ -4,7 +4,8 @@
     "archify": {
       "source": "github.com/tt-a1i/archify/archify",
       "type": "github-subdir",
-      "installed_at": "2026-11-11T14:12:59.651435Z",
+      "branch": "7e45f36c66de1254d5ad6ba1d878f6499ea269fd",
+      "installed_at": "2026-11-12T07:37:40.230885Z",
       "repo_url": "https://github.com/tt-a1i/archify.git",
       "subdir": "archify",
       "version": "7e45f36",
@@ -222,7 +223,8 @@
     "herdr-core": {
       "source": "github.com/herdrdev/herdr-core/skills/herdr-core",
       "type": "github-subdir",
-      "installed_at": "2026-11-11T14:13:01.270606Z",
+      "branch": "e1b3810d58b0b70e5025fa8614423ee8db85e3dc",
+      "installed_at": "2026-11-12T07:37:51.116223Z",
       "repo_url": "https://github.com/herdrdev/herdr-core.git",
       "subdir": "skills/herdr-core",
       "version": "e1b3810",
@@ -235,7 +237,8 @@
     "lavish": {
       "source": "github.com/kunchenguid/lavish-axi/skills/lavish",
       "type": "github-subdir",
-      "installed_at": "2026-11-11T14:13:03.62037Z",
+      "branch": "69bf3090b24a04773ffd05d2e0b23d91ca41923b",
+      "installed_at": "2026-11-12T07:38:18.820026Z",
       "repo_url": "https://github.com/kunchenguid/lavish-axi.git",
       "subdir": "skills/lavish",
       "version": "69bf309",
@@ -248,7 +251,8 @@
     "tavily-research": {
       "source": "github.com/tavily-ai/skills/skills/tasks/tavily-research",
       "type": "github-subdir",
-      "installed_at": "2026-11-11T14:14:51.841772Z",
+      "branch": "2e4115e16312d85029ec6d47cfd097c7df48241c",
+      "installed_at": "2026-11-12T07:37:55.553713Z",
       "repo_url": "https://github.com/tavily-ai/skills.git",
       "subdir": "skills/tasks/tavily-research",
       "version": "2e4115e",
@@ -263,7 +267,8 @@
     "tavily-search": {
       "source": "github.com/tavily-ai/skills/skills/core/tavily-search",
       "type": "github-subdir",
-      "installed_at": "2026-11-11T14:14:51.804136Z",
+      "branch": "2e4115e16312d85029ec6d47cfd097c7df48241c",
+      "installed_at": "2026-11-12T07:38:20.523626Z",
       "repo_url": "https://github.com/tavily-ai/skills.git",
       "subdir": "skills/core/tavily-search",
       "version": "2e4115e",

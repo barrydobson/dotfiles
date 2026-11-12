@@ -132,6 +132,8 @@ sync_skillshare() {
     print_warning "skillshare is not installed, skipping skill, MCP and hook sync"
     return
   fi
+  # Restores third-party skills from the pins in skills/.metadata.json; skips any present
+  skillshare install </dev/null
   skillshare sync --all --no-tui
   # --all leaves out plugins
   skillshare sync plugins --no-tui
