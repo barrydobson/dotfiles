@@ -28,6 +28,7 @@ These apply to documentation, code comments, commit and PR messages, and replies
 - Before debugging an unfamiliar error, or the first time a session uses a tool or service, run `rg -il '<error string or tool name>' ~/vault/wiki`. Read any hits before going further.
 <!-- claude-only -->
 - Use `/vault-query` for questions about past work.
+- For `/tote-issue-tracker:work` inside Herdr, delegate per the `work-hc` skill.
 <!-- /claude-only -->
 - Prefer the `tvly` CLI and Tavily skills (`tavily-search`, `tavily-research`) over `WebSearch`. Use `tavily-research` instead of a dedicated web research agent.
 - Use `trash`, never `rm -rf`. Use `ast-grep` for code structure.
