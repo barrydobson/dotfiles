@@ -31,44 +31,6 @@
         "type": "separator"
       },
       {
-        "id": "eb7c47f7-4225-411d-9278-00106680a5a8",
-        "type": "git-staged-files",
-        "color": "yellow",
-        "bold": true
-      },
-      {
-        "id": "d21b3cee-2c6a-426b-b156-efbec7fe354f",
-        "type": "separator",
-        "character": "-"
-      },
-      {
-        "id": "8d314643-fa64-4929-b6e4-ccf0d6ee7a7b",
-        "type": "git-unstaged-files",
-        "color": "yellow",
-        "bold": true,
-        "metadata": {
-          "label": "U:"
-        }
-      },
-      {
-        "id": "562c34dd-0fac-4221-8737-471dc1ba9ce3",
-        "type": "separator",
-        "character": "-"
-      },
-      {
-        "id": "6be66ec6-d4bf-4eb0-8459-ec8618958a6f",
-        "type": "git-untracked-files",
-        "color": "yellow",
-        "bold": true,
-        "metadata": {
-          "label": "A:"
-        }
-      },
-      {
-        "id": "4c60fae7-d7a9-4962-ba58-041cb628d172",
-        "type": "separator"
-      },
-      {
         "id": "1",
         "type": "model",
         "color": "brightGreen",
