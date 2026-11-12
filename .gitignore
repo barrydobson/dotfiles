@@ -46,6 +46,7 @@ packages/skillshare/.config/skillshare/skills/systems-memory-check
 # Installed by `skillshare install` from the pins in .metadata.json
 packages/skillshare/.config/skillshare/skills/archify
 packages/skillshare/.config/skillshare/skills/find-docs
+packages/skillshare/.config/skillshare/skills/officecli-pptx
 packages/skillshare/.config/skillshare/skills/herdr-core
 packages/skillshare/.config/skillshare/skills/lavish
 packages/skillshare/.config/skillshare/skills/tavily-research

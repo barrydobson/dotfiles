@@ -262,6 +262,20 @@
         "SKILL.md": "sha256:00ea380ff3e993d58029e4467901333138726f734755e0eef254de2fe4c2f1ef"
       }
     },
+    "officecli-pptx": {
+      "source": "github.com/iOfficeAI/OfficeCLI/skills/officecli-pptx",
+      "type": "github-subdir",
+      "branch": "c0764b52176c2b04a3c5a4579be14490b0d71656",
+      "installed_at": "2026-11-12T07:41:37.134674Z",
+      "repo_url": "https://github.com/iOfficeAI/OfficeCLI.git",
+      "subdir": "skills/officecli-pptx",
+      "version": "c0764b5",
+      "tree_hash": "d3be17be1676dadd81494085fe530eeccf867e79",
+      "commit": "c0764b52176c2b04a3c5a4579be14490b0d71656",
+      "file_hashes": {
+        "SKILL.md": "sha256:0d53192751d5770984f16f3c34f9923377651555c667150d7f96e16e8c9757b3"
+      }
+    },
     "tavily-research": {
       "source": "github.com/tavily-ai/skills/skills/tasks/tavily-research",
       "type": "github-subdir",
