@@ -1,5 +1,5 @@
 [settings]
-activate_aggressive = true               # mise shims win over other PATH entries
+activate_aggressive = true # mise shims win over other PATH entries
 
 [settings.github]
 credential_command = 'gh auth token'
@@ -22,4 +22,4 @@ usage = '6.12.0'
 go = '1.27.1'
 golangci-lint = '2.13.2'
 node = "24.13.1"
-"npm:ccstatusline" = '2.0.29'
+"npm:ccstatusline" = '2.2.34'
