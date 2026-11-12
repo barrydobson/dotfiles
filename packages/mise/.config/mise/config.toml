@@ -18,8 +18,8 @@ neovim = { version = "0.12.6", os = ["linux"] }
 worktrunk = { version = "0.81.0", os = ["linux"] }
 kubectx = { version = "0.9.5", os = ["macos"] }
 kubens = { version = "0.9.5", os = ["macos"] }
-usage = '6.12.0'
+usage = '7.3.0'
 go = '1.27.1'
 golangci-lint = '2.13.2'
-node = "24.13.1"
+node = "26.13.1"
 "npm:ccstatusline" = '2.2.34'
