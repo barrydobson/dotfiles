@@ -5,21 +5,21 @@ activate_aggressive = true # mise shims win over other PATH entries
 credential_command = 'gh auth token'
 
 [tools]
-atuin = { version = "18.22.0", os = ["linux"] }
+atuin = { version = "18.24.6", os = ["linux"] }
 ripgrep = { version = "15.2.0", os = ["linux"] }
 eza = { version = "0.23.5", os = ["linux"] }
 zoxide = { version = "0.10.0", os = ["linux"] }
 jq = { version = "1.8.2", os = ["linux"] }
-yq = { version = "4.54.1", os = ["linux"] }
-tmux = { version = "3.7c", os = ["linux"] }
+yq = { version = "4.54.3", os = ["linux"] }
+tmux = { version = "3.8", os = ["linux"] }
 yamlfmt = { version = "0.21.0", os = ["linux"] }
-github-cli = { version = "2.101.0", os = ["linux"] }
+github-cli = { version = "2.103.3", os = ["linux"] }
 neovim = { version = "0.12.6", os = ["linux"] }
 worktrunk = { version = "0.81.0", os = ["linux"] }
-kubectx = { version = "0.9.5", os = ["macos"] }
-kubens = { version = "0.9.5", os = ["macos"] }
-usage = '6.12.0'
-go = '1.27.1'
-golangci-lint = '2.13.2'
-node = "24.13.1"
+kubectx = { version = "0.11.0", os = ["macos"] }
+kubens = { version = "0.11.0", os = ["macos"] }
+usage = '6.12.1'
+go = '1.27.4'
+golangci-lint = '2.15.0'
+node = "24.22.3"
 "npm:ccstatusline" = '2.2.34'
