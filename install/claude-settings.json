@@ -44,9 +44,7 @@
       "Edit(~/.ssh/**)"
     ],
     "defaultMode": "auto",
-    "additionalDirectories": [
-      "~/vault"
-    ]
+    "additionalDirectories": ["~/vault"]
   },
   "enableAllProjectMcpServers": false,
   "disabledMcpjsonServers": [],
@@ -92,12 +90,11 @@
   "enabledPlugins": {
     "claude-md-management@claude-plugins-official": true,
     "ponytail@ponytail": true,
-    "typesafe@typesafe-ai": true,
     "tote-brand-guidelines@synced": false,
     "tote-engineering-context@synced": false,
     "tote-github-skills@synced": false,
+    "tote-issue-tracker@synced": true,
     "cowork-plugin-management@synced": false,
-    "tote-issue-tracker@claudeai-thetote-skills": true,
     "next-steps@claude-community": true,
     "understand-anything@understand-anything": true,
     "tokeneconomizer@tokeneconomizer": true,
@@ -123,13 +120,6 @@
       "source": {
         "source": "github",
         "repo": "spf13/go-skills"
-      },
-      "autoUpdate": true
-    },
-    "typesafe-ai": {
-      "source": {
-        "source": "github",
-        "repo": "typesafe-ai/skills"
       },
       "autoUpdate": true
     },
@@ -166,7 +156,7 @@
   },
   "feedbackDrafts": "off",
   "alwaysThinkingEnabled": true,
-  "effortLevel": "high",
+  "effortLevel": "medium",
   "modelSettings": {
     "gpt-5.6-terra": {
       "effortLevel": "high"
@@ -189,9 +179,7 @@
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
   "autoMode": {
-    "allow": [
-      "$defaults"
-    ]
+    "allow": ["$defaults"]
   },
   "mcpServers": {}
 }
