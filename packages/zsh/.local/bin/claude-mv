@@ -151,11 +151,12 @@ merge_dir() {
     rmdir "$src" 2>/dev/null || true
 }
 
-# Replace $1 with $2 in the remaining args' files, but not where $1 starts a longer name (repo-2).
+# Replace $1 with $2 in the remaining args' files, but not where $1 starts a longer name (repo-2,
+# repo.bak). A full stop that ends a sentence ("in repo.") still counts as the end of the path.
 rewrite_paths() {
     local old="$1" new="$2"
     shift 2
-    OLD="$old" NEW="$new" perl -pi -e 's/\Q$ENV{OLD}\E(?![\w.-])/$ENV{NEW}/g' "$@"
+    OLD="$old" NEW="$new" perl -pi -e 's/\Q$ENV{OLD}\E(?![\w-]|\.[\w-])/$ENV{NEW}/g' "$@"
 }
 
 echo "Moving Claude context from:"
