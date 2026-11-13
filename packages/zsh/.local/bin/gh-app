@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# gh wrapper that authenticates as a GitHub App installation.
+# Needs GH_APP_CLIENT_ID and GH_APP_PRIVATE_KEY (the PEM contents, not a path).
+# Set GH_APP_INSTALLATION_ID if the app is installed on more than one account or org.
+set -euo pipefail
+
+: "${GH_APP_CLIENT_ID:?set GH_APP_CLIENT_ID}"
+: "${GH_APP_PRIVATE_KEY:?set GH_APP_PRIVATE_KEY}"
+
+b64url() { openssl base64 -A | tr '+/' '-_' | tr -d '='; }
+
+# iat is backdated 60s for clock drift; GitHub rejects exp more than 10 minutes out.
+now=$(date +%s)
+header=$(printf '{"alg":"RS256","typ":"JWT"}' | b64url)
+payload=$(printf '{"iat":%d,"exp":%d,"iss":"%s"}' $((now - 60)) $((now + 540)) "$GH_APP_CLIENT_ID" | b64url)
+sig=$(printf '%s.%s' "$header" "$payload" | openssl dgst -sha256 -binary -sign <(printf '%s\n' "$GH_APP_PRIVATE_KEY") | b64url)
+jwt="$header.$payload.$sig"
+
+api() { curl -fsSL -H "Authorization: Bearer $jwt" -H "Accept: application/vnd.github+json" "$@"; }
+
+id=${GH_APP_INSTALLATION_ID:-$(api https://api.github.com/app/installations |
+  jq -er 'if length == 1 then .[0].id else error("app has \(length) installations; set GH_APP_INSTALLATION_ID") end')}
+
+token=$(api -X POST "https://api.github.com/app/installations/$id/access_tokens" | jq -er .token)
+GH_TOKEN=$token exec gh "$@"
