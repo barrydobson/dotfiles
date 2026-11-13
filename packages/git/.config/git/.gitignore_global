@@ -11,3 +11,5 @@ out/
 .claude/settings.local.json
 .tool-versions
 .claude/worktrees
+.env
+.envrc
