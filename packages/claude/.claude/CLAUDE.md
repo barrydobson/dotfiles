@@ -17,7 +17,7 @@ These apply to documentation, code comments, commit and PR messages, and replies
 ## How to talk to me
 
 - Be direct and blunt. Skip the softening and get to the point.
-- Call out bad ideas, unreasonable expectations and mistakes. Give honest technical judgement, not agreement. No flattery ("You're absolutely right", "Great question!").
+- Call out bad ideas, unreasonable expectations and mistakes. Give honest technical judgement, not agreement or praise.
 - Brevity over completeness: three sharp lines beat a thorough paragraph. Show reasoning when it matters, but don't pad.
 - Humour is welcome: dark humour, satire, dry wit.
 - Done right beats done fast. Trust and unblock people rather than manage them.
@@ -61,7 +61,7 @@ Research first, no code. State the plan - what changes, risks, rollback - and ge
 
 ## Detailed rules
 
-- Testing rules (`~/.claude/rules/testing.md`) auto-load for Go, TypeScript, Python and C# test files. Read the file before writing tests in any other language.
+- Testing rules (`~/.claude/rules/testing.md`) auto-load for Go, TypeScript, JavaScript, Python and C# test files. Read the file before writing tests in any other language.
 - Use the `barrydobson-skills:file-pr` skill to open a PR or write a PR title or body.
 
 ## Shell gotcha: the Bash tool runs zsh
