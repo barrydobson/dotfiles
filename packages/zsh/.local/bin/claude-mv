@@ -2,6 +2,10 @@
 set -e
 
 # Usage: claude-mv <old_directory> <new_directory>
+#
+# Moves a directory and the Claude Code context keyed by its path: the project folders (sessions
+# and memory) for it and for every subfolder or worktree under it, the paths inside those sessions,
+# history.jsonl, and its per-project settings in ~/.claude.json.
 
 if [ $# -ne 2 ]; then
     echo "Usage: claude-mv <old_directory> <new_directory>"
@@ -26,9 +30,10 @@ if [ -e "$NEW_DIR" ]; then
     exit 1
 fi
 
-# Convert paths to Claude's format (any non-alphanumeric char becomes -)
-# Need to do this BEFORE moving the directory to check for existing context
-OLD_ENCODED="${OLD_ABS//[^a-zA-Z0-9]/-}"
+if ! command -v jq >/dev/null 2>&1; then
+    echo "Error: jq is required to update ~/.claude.json"
+    exit 1
+fi
 
 # Figure out what the new absolute path will be
 if [[ "$NEW_DIR" = /* ]]; then
@@ -45,17 +50,47 @@ else
     fi
 fi
 
-NEW_ENCODED="${NEW_ABS_FUTURE//[^a-zA-Z0-9]/-}"
-
 CLAUDE_DIR="$HOME/.claude"
+CLAUDE_JSON="$HOME/.claude.json"
 
-# Check if destination Claude context already exists BEFORE moving directory
-EXISTING_CONTEXT=()
-for subdir in projects file-history todos shell-snapshots debug; do
-    NEW_PATH="$CLAUDE_DIR/$subdir/$NEW_ENCODED"
-    if [ -d "$NEW_PATH" ] || [ -f "$NEW_PATH" ]; then
-        EXISTING_CONTEXT+=("$subdir")
+# Claude's folder name for a path: any non-alphanumeric char becomes -
+encode() { printf '%s' "${1//[^a-zA-Z0-9]/-}"; }
+
+OLD_ENCODED=$(encode "$OLD_ABS")
+NEW_ENCODED=$(encode "$NEW_ABS_FUTURE")
+
+# The working directory a project folder's sessions ran in; empty if none is recorded.
+recorded_cwd() {
+    cat "$1"/*.jsonl 2>/dev/null | grep -m1 -o '"cwd":"[^"]*"' | sed 's/^"cwd":"//; s/"$//'
+}
+
+# Project folders to move, as parallel old/new name lists. The name encoding is lossy (a/b and a-b
+# encode alike), so a folder only counts as ours when its recorded cwd is OLD_ABS or under it.
+OLD_NAMES=()
+NEW_NAMES=()
+for dir in "$CLAUDE_DIR/projects/$OLD_ENCODED" "$CLAUDE_DIR/projects/$OLD_ENCODED"-*; do
+    [ -d "$dir" ] || continue
+    name=$(basename "$dir")
+    cwd=$(recorded_cwd "$dir")
+    if [ "$cwd" = "$OLD_ABS" ] || [[ "$cwd" == "$OLD_ABS"/* ]]; then
+        OLD_NAMES+=("$name")
+        NEW_NAMES+=("$(encode "$NEW_ABS_FUTURE${cwd#"$OLD_ABS"}")")
+    elif [ -z "$cwd" ] && [ "$name" = "$OLD_ENCODED" ]; then
+        OLD_NAMES+=("$name")
+        NEW_NAMES+=("$NEW_ENCODED")
+    elif [ -z "$cwd" ]; then
+        echo "Skipping projects/$name: it records no path, so it may belong to another folder"
     fi
+done
+
+# Check if destination Claude context already exists BEFORE moving anything
+EXISTING_CONTEXT=()
+for i in "${!OLD_NAMES[@]}"; do
+    for subdir in projects file-history todos shell-snapshots debug; do
+        if [ -e "$CLAUDE_DIR/$subdir/${NEW_NAMES[$i]}" ]; then
+            EXISTING_CONTEXT+=("$subdir/${NEW_NAMES[$i]}")
+        fi
+    done
 done
 
 # If destination context exists, prompt user BEFORE moving anything
@@ -63,8 +98,8 @@ if [ ${#EXISTING_CONTEXT[@]} -gt 0 ]; then
     echo "Warning: Claude context already exists for $NEW_ABS_FUTURE:"
     for item in "${EXISTING_CONTEXT[@]}"; do
         COUNT=""
-        if [ "$item" = "projects" ] && [ -d "$CLAUDE_DIR/$item/$NEW_ENCODED" ]; then
-            SESSION_COUNT=$(ls -1 "$CLAUDE_DIR/$item/$NEW_ENCODED"/*.jsonl 2>/dev/null | wc -l | tr -d ' ')
+        if [[ "$item" == projects/* ]]; then
+            SESSION_COUNT=$(ls -1 "$CLAUDE_DIR/$item"/*.jsonl 2>/dev/null | wc -l | tr -d ' ')
             COUNT=" ($SESSION_COUNT sessions)"
         fi
         echo "  - $item$COUNT"
@@ -81,8 +116,7 @@ if [ ${#EXISTING_CONTEXT[@]} -gt 0 ]; then
     if [[ $REPLY =~ ^[Cc]$ ]]; then
         echo "Cleaning out existing context for $NEW_ABS_FUTURE..."
         for item in "${EXISTING_CONTEXT[@]}"; do
-            NEW_PATH="$CLAUDE_DIR/$item/$NEW_ENCODED"
-            rm -rf "$NEW_PATH"
+            rm -rf "${CLAUDE_DIR:?}/$item"
             echo "  ✓ Removed $item"
         done
         echo ""
@@ -94,6 +128,35 @@ if [ ${#EXISTING_CONTEXT[@]} -gt 0 ]; then
     fi
 fi
 
+# Move everything in $1, hidden entries included, into $2. Never overwrites: a file identical to
+# its counterpart is dropped, a different one stays in $1 and is reported. $1 goes once empty.
+MERGE_CONFLICTS=0
+merge_dir() {
+    local src="$1" dst="$2" entry name
+    for entry in "$src"/* "$src"/.[!.]* "$src"/..?*; do
+        [ -e "$entry" ] || [ -L "$entry" ] || continue
+        name=$(basename "$entry")
+        if [ ! -e "$dst/$name" ] && [ ! -L "$dst/$name" ]; then
+            mv "$entry" "$dst/$name"
+        elif [ -d "$entry" ] && [ ! -L "$entry" ] && [ -d "$dst/$name" ]; then
+            merge_dir "$entry" "$dst/$name"
+        elif [ -f "$entry" ] && cmp -s "$entry" "$dst/$name"; then
+            rm "$entry"
+        else
+            echo "  ! Kept $entry: $dst/$name already exists and differs"
+            MERGE_CONFLICTS=$((MERGE_CONFLICTS + 1))
+        fi
+    done
+    rmdir "$src" 2>/dev/null || true
+}
+
+# Replace $1 with $2 in the remaining args' files, but not where $1 starts a longer name (repo-2).
+rewrite_paths() {
+    local old="$1" new="$2"
+    shift 2
+    OLD="$old" NEW="$new" perl -pi -e 's/\Q$ENV{OLD}\E(?![\w.-])/$ENV{NEW}/g' "$@"
+}
+
 echo "Moving Claude context from:"
 echo "  $OLD_ABS"
 echo "  → $NEW_ABS_FUTURE"
@@ -102,27 +165,31 @@ echo ""
 MOVED=0
 
 # Rename/merge in each location if exists (BEFORE moving directory)
-for subdir in projects file-history todos shell-snapshots debug; do
-    OLD_PATH="$CLAUDE_DIR/$subdir/$OLD_ENCODED"
-    NEW_PATH="$CLAUDE_DIR/$subdir/$NEW_ENCODED"
+for i in "${!OLD_NAMES[@]}"; do
+    for subdir in projects file-history todos shell-snapshots debug; do
+        OLD_PATH="$CLAUDE_DIR/$subdir/${OLD_NAMES[$i]}"
+        NEW_PATH="$CLAUDE_DIR/$subdir/${NEW_NAMES[$i]}"
 
-    if [ -d "$OLD_PATH" ]; then
-        if [ -d "$NEW_PATH" ]; then
-            # Merge: move all files from old to new
-            echo "Merging $subdir/$OLD_ENCODED → $subdir/$NEW_ENCODED"
-            mv "$OLD_PATH"/* "$NEW_PATH/" 2>/dev/null || true
-            rmdir "$OLD_PATH" 2>/dev/null || rm -rf "$OLD_PATH"
-        else
-            # Simple rename
-            echo "Moving $subdir/$OLD_ENCODED → $subdir/$NEW_ENCODED"
-            mv "$OLD_PATH" "$NEW_PATH"
+        if [ -d "$OLD_PATH" ]; then
+            if [ -d "$NEW_PATH" ]; then
+                echo "Merging $subdir/${OLD_NAMES[$i]} → $subdir/${NEW_NAMES[$i]}"
+                merge_dir "$OLD_PATH" "$NEW_PATH"
+            else
+                echo "Moving $subdir/${OLD_NAMES[$i]} → $subdir/${NEW_NAMES[$i]}"
+                mv "$OLD_PATH" "$NEW_PATH"
+            fi
+            MOVED=$((MOVED + 1))
+        elif [ -f "$OLD_PATH" ]; then
+            if [ -e "$NEW_PATH" ]; then
+                echo "  ! Kept $OLD_PATH: $NEW_PATH already exists"
+                MERGE_CONFLICTS=$((MERGE_CONFLICTS + 1))
+            else
+                echo "Moving $subdir/${OLD_NAMES[$i]} → $subdir/${NEW_NAMES[$i]}"
+                mv "$OLD_PATH" "$NEW_PATH"
+            fi
+            MOVED=$((MOVED + 1))
         fi
-        MOVED=$((MOVED + 1))
-    elif [ -f "$OLD_PATH" ]; then
-        echo "Moving $subdir/$OLD_ENCODED → $subdir/$NEW_ENCODED"
-        mv "$OLD_PATH" "$NEW_PATH"
-        MOVED=$((MOVED + 1))
-    fi
+    done
 done
 
 if [ $MOVED -eq 0 ]; then
@@ -130,18 +197,25 @@ if [ $MOVED -eq 0 ]; then
 else
     echo "✓ Moved $MOVED context location(s)"
 fi
+if [ $MERGE_CONFLICTS -gt 0 ]; then
+    echo "! $MERGE_CONFLICTS item(s) clashed and were left at their old path; merge them by hand"
+fi
 
 echo ""
 
 # Update session file contents to reference new path
-if [ -d "$CLAUDE_DIR/projects/$NEW_ENCODED" ]; then
-    SESSION_FILES=$(find "$CLAUDE_DIR/projects/$NEW_ENCODED" -name "*.jsonl" 2>/dev/null)
-    if [ -n "$SESSION_FILES" ]; then
-        echo "Updating session file references..."
-        find "$CLAUDE_DIR/projects/$NEW_ENCODED" -name "*.jsonl" -exec sed -i '' "s|$OLD_ABS|$NEW_ABS_FUTURE|g" {} \;
-        echo "✓ Updated session files"
-        echo ""
-    fi
+SESSION_FILES=()
+for name in "${NEW_NAMES[@]}"; do
+    [ -d "$CLAUDE_DIR/projects/$name" ] || continue
+    while IFS= read -r f; do
+        SESSION_FILES+=("$f")
+    done < <(find "$CLAUDE_DIR/projects/$name" -name "*.jsonl")
+done
+if [ ${#SESSION_FILES[@]} -gt 0 ]; then
+    echo "Updating session file references..."
+    rewrite_paths "$OLD_ABS" "$NEW_ABS_FUTURE" "${SESSION_FILES[@]}"
+    echo "✓ Updated ${#SESSION_FILES[@]} session file(s)"
+    echo ""
 fi
 
 # Move the actual directory AFTER Claude context is moved
@@ -161,6 +235,29 @@ if [ -f "$HISTORY_FILE" ]; then
     echo ""
     echo "Updating history.jsonl references..."
     cp "$HISTORY_FILE" "$HISTORY_FILE.backup"
-    sed -i '' "s|$OLD_ABS|$NEW_ABS|g" "$HISTORY_FILE"
+    rewrite_paths "$OLD_ABS" "$NEW_ABS" "$HISTORY_FILE"
     echo "✓ Updated history.jsonl (backup: history.jsonl.backup)"
+fi
+
+# Move the per-project settings (trust, allowed tools, MCP servers) in ~/.claude.json, for the
+# directory and everything under it. Where a moved key meets an existing one, the existing wins.
+if [ -f "$CLAUDE_JSON" ]; then
+    KEY_COUNT=$(jq --arg old "$OLD_ABS" \
+        '[.projects // {} | keys[] | select(. == $old or startswith($old + "/"))] | length' "$CLAUDE_JSON")
+    if [ "$KEY_COUNT" -gt 0 ]; then
+        echo ""
+        echo "Updating ~/.claude.json project settings..."
+        cp "$CLAUDE_JSON" "$CLAUDE_JSON.claude-mv-backup"
+        TMP_JSON=$(mktemp "$CLAUDE_JSON.XXXXXX")
+        jq --arg old "$OLD_ABS" --arg new "$NEW_ABS" '
+            .projects |= (to_entries
+                | map(if .key == $old or (.key | startswith($old + "/"))
+                      then {key: ($new + (.key | ltrimstr($old))), value: .value, moved: true}
+                      else . + {moved: false} end)
+                | group_by(.key)
+                | map({key: .[0].key, value: (sort_by(.moved | not) | map(.value) | add)})
+                | from_entries)' "$CLAUDE_JSON" > "$TMP_JSON"
+        mv "$TMP_JSON" "$CLAUDE_JSON"
+        echo "✓ Moved $KEY_COUNT project entr(ies) (backup: .claude.json.claude-mv-backup)"
+    fi
 fi
