@@ -108,3 +108,5 @@
 	path = ~/.config/git/.gitconfig-local
 [gpg "ssh"]
 	allowedSignersFile = ~/.ssh/allowed_signers
+[worktree]
+	useRelativePaths = true
