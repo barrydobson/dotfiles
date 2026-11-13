@@ -156,7 +156,8 @@ merge_dir() {
 rewrite_paths() {
     local old="$1" new="$2"
     shift 2
-    OLD="$old" NEW="$new" perl -pi -e 's/\Q$ENV{OLD}\E(?![\w-]|\.[\w-])/$ENV{NEW}/g' "$@"
+    # xargs batches the files: a whole tree's sessions overflow one command's argument list.
+    printf '%s\0' "$@" | OLD="$old" NEW="$new" xargs -0 perl -pi -e 's/\Q$ENV{OLD}\E(?![\w-]|\.[\w-])/$ENV{NEW}/g'
 }
 
 echo "Moving Claude context from:"
