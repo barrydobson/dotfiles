@@ -3,7 +3,7 @@
 ## Branch protection
 
 - Ticket/feature work on shared repos: worktree, never on `main`/`master`. Small doc/config edits and solo repos: `main` is fine. Unsure? Ask.
-- Parallel subagents require worktrees - each in its own directory. Never share working directories.
+- Parallel subagents that edit files each get their own worktree. Never let two agents edit the same working directory.
 - Create worktrees in the project's `.claude/worktrees` directory. Worktrunk (`wt`) uses the same path.
 
 ## Commits

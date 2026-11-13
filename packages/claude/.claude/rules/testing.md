@@ -37,7 +37,7 @@ Mock only:
 - Non-deterministic things: time, randomness, UUIDs
 - Anything outside the unit under test's process
 
-Never mock pure functions, internal collaborators, or anything you own. If logic is hard to test without mocking, the design is wrong - extract the dependency, don't mock around it.
+Never mock pure functions or internal collaborators. At a boundary, mock the thinnest interface you own over it (an HTTP client wrapper, a clock), not the logic behind it. If logic is hard to test without mocking, the design is wrong - extract the dependency, don't mock around it.
 
 ## Verify tests catch failures
 
