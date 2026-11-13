@@ -148,7 +148,7 @@
     "tokeneconomizer": {
       "source": {
         "source": "directory",
-        "path": "/Users/barrydobson/_git/oss/TokenEconomizer"
+        "path": "@HOME@/_git/oss/TokenEconomizer"
       }
     },
     "openai-codex": {

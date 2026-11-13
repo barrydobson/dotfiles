@@ -187,11 +187,16 @@ post_install_setup() {
 
 # For config files the app also writes to, so they are not stowed. Merges the repo's
 # copy into the live file: repo keys win (arrays are replaced, not joined), every other
-# key the app wrote is kept. Usage: merge_config <json|toml> <repo file> <live file>
+# key the app wrote is kept. @HOME@ in the repo file becomes this machine's home folder.
+# Usage: merge_config <json|toml> <repo file> <live file>
 merge_config() {
-    local fmt=$1 common=$2 dest=$3
-    local dir yq tmp
+    local fmt=$1 dest=$3
+    local dir yq tmp common content
     dir=$(dirname "${dest}")
+
+    content=$(<"$2")
+    common=$(mktemp)
+    printf '%s\n' "${content//@HOME@/${HOME}}" >"${common}"
 
     # Old stow links, to the file or a folded parent dir, would make the write land in the repo
     if [[ -L "${dir}" && "$(readlink "${dir}")" == *packages/* ]]; then
@@ -210,6 +215,7 @@ merge_config() {
             cp "${common}" "${dest}"
             print_success "Copied ${dest}"
         fi
+        rm "${common}"
         return
     fi
     [[ -e "${dest}" ]] || : >"${dest}"
@@ -218,6 +224,7 @@ merge_config() {
     # $f is a yq variable. Comments are dropped so the repo file's header is not copied in.
     # shellcheck disable=SC2016
     "${yq}" ea -p "${fmt}" -o "${fmt}" '(. as $f ireduce ({}; . * $f)) | ... comments = ""' "${dest}" "${common}" >"${tmp}"
+    rm "${common}"
     if cmp -s "${tmp}" "${dest}"; then
         rm "${tmp}"
         print_status "${dest} already has the repo settings"
