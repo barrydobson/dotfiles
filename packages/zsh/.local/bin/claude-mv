@@ -5,7 +5,8 @@ set -e
 #
 # Moves a directory and the Claude Code context keyed by its path: the project folders (sessions
 # and memory) for it and for every subfolder or worktree under it, the paths inside those sessions,
-# history.jsonl, and its per-project settings in ~/.claude.json.
+# history.jsonl, its per-project settings in ~/.claude.json, and its project and local plugin
+# installs in ~/.claude/plugins/installed_plugins.json.
 
 if [ $# -ne 2 ]; then
     echo "Usage: claude-mv <old_directory> <new_directory>"
@@ -259,5 +260,31 @@ if [ -f "$CLAUDE_JSON" ]; then
                 | from_entries)' "$CLAUDE_JSON" > "$TMP_JSON"
         mv "$TMP_JSON" "$CLAUDE_JSON"
         echo "✓ Moved $KEY_COUNT project entr(ies) (backup: .claude.json.claude-mv-backup)"
+    fi
+fi
+
+# Move project and local plugin installs recorded against the directory or anything under it.
+# Where a moved install meets one already recorded for the same scope and path, the existing wins.
+PLUGINS_JSON="$CLAUDE_DIR/plugins/installed_plugins.json"
+if [ -f "$PLUGINS_JSON" ]; then
+    PLUGIN_COUNT=$(jq --arg old "$OLD_ABS" \
+        '[.plugins // {} | .[][] | .projectPath // empty | select(. == $old or startswith($old + "/"))] | length' "$PLUGINS_JSON")
+    if [ "$PLUGIN_COUNT" -gt 0 ]; then
+        echo ""
+        echo "Updating plugin install paths..."
+        cp "$PLUGINS_JSON" "$PLUGINS_JSON.claude-mv-backup"
+        TMP_JSON=$(mktemp "$PLUGINS_JSON.XXXXXX")
+        jq --arg old "$OLD_ABS" --arg new "$NEW_ABS" '
+            .plugins |= map_values(
+                map(if (.projectPath // "") as $p | ($p == $old or ($p | startswith($old + "/")))
+                    then .projectPath = ($new + (.projectPath | ltrimstr($old))) | .moved = true
+                    else . end)
+                | map(select(.projectPath == null))
+                  + (map(select(.projectPath != null))
+                     | group_by([.scope, .projectPath])
+                     | map((map(select(.moved != true)) + map(select(.moved == true)))[0]))
+                | map(del(.moved)))' "$PLUGINS_JSON" > "$TMP_JSON"
+        mv "$TMP_JSON" "$PLUGINS_JSON"
+        echo "✓ Moved $PLUGIN_COUNT plugin install(s) (backup: installed_plugins.json.claude-mv-backup)"
     fi
 fi
