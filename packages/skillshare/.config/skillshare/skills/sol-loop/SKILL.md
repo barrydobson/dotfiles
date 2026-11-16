@@ -1,27 +1,19 @@
 ---
 name: sol-loop
-description: Use when the user says "sol loop".
+description: Review a working-tree change with GPT Sol in a loop until it approves. Use when the user says "sol loop".
 ---
 
 # sol-loop
 
-This is a workflow for making your code changes more correct before (or
-sometimes after) filing a pull request. tl;dr - use OpenAI's GPT Sol to review
-your code in a loop.
-
-Make the most minimal possible changes to appease the Sol reviewers. Be careful
-of scope creep and don't be scared to push back.
+Hold every fix to the smallest change; push back on findings you can show are
+wrong.
 
 ## Budget
 
-- Default: 3 rounds total. Round 1 is full. Later rounds check only
-  changed code and open findings.
+- Default: 3 rounds total.
 - Extend to 5 only for security, permissions, auth, data loss, or
   state/concurrency, while a blocker or should stays open with evidence. Or when
   the user asks.
-- Stop early if a round returns only nits. Declined nits and comment,
-  doc, or format-only fixes need no new round.
-- One reviewer only. Sol must not start subagents, workers or reviewers.
 - Keep a ledger: id, severity, outcome, usage if returned. Never guess it.
 
 ## 1. Scope
@@ -57,18 +49,19 @@ wait for and end the reviewer, and its reply channel.
 
 In every harness:
 
-- One reviewer: async, read-only, and followed up by its saved ID.
+- One reviewer for the whole loop: async, read-only, and followed up by its
+  saved ID.
 - Pick the latest Sol unless the user named a version. Do not hardcode an
   ID. If the reviewer is not Sol, report the blocker. Do not substitute a
   model. Record provider, model, and effort only if exposed.
-- Do not edit scoped files while review runs. Wait for the reply. Do not
-  poll or start a second reviewer. Timeout, error, exit, or no reply is not
-  approval. On failure, cancel, verify stop, restart with the ledger.
+- Do not edit scoped files while review runs. Wait for the reply; do not
+  poll. Timeout, error, exit, or no reply is not approval. On failure,
+  cancel, verify stop, restart with the ledger.
 
 Round 1 brief (the reviewer gets no history beyond it):
 
 ```
-Review only, per <repo>/.claude/skills/sol-loop/reviewer.md. Reply via: <adapter's reply channel>.
+Review only, per ${CLAUDE_SKILL_DIR}/reviewer.md. Reply via: <adapter's reply channel>.
 Repo: <repo> Base: <sha> Paths: <paths or "all">
 Intent: <intent> Out of scope: <scope> Checks: <results>
 See: git diff <base> [-- <paths>]; git status --short (read untracked).
@@ -90,19 +83,23 @@ review grew the diff, cut first. Do not agree just to end the loop.
 
 ## 4. Next round
 
-Start one only if budget remains and a blocker or should is open, behavior code
-changed, or approval does not cover the current behavior diff. Follow up the
-saved reviewer ID through the adapter. Send the round 1 brief, the ledger
-(`fixed:` / `disagree:` / `declined:` + evidence), the same base diff, and the
-change since last round. Tell Sol: open ids and changed code only. If the
-reviewer is gone, start a new one with the ledger.
+Follow up the saved reviewer ID through the adapter. Send the round 1 brief,
+the ledger (`fixed:` / `disagree:` / `declined:` + evidence), the same base
+diff, and the change since last round. If the reviewer is gone, start a new
+one with the ledger.
 
 ## 5. Stop and ship
 
-Agreed: APPROVE on the current behavior diff, no blocker or should open,
-no concern of your own. Stuck: an item stays disputed after two replies,
-or budget ends. Show both sides in 2-3 lines each. The user decides.
-Budget end is not approval.
+After each round, decide:
+
+- **Next round:** budget remains and a blocker or should is open, behavior
+  code changed, or approval does not cover the current behavior diff.
+- **Stop early:** the round returned only nits. Declined nits and comment,
+  doc, or format-only fixes need no new round.
+- **Agreed:** APPROVE on the current behavior diff, no blocker or should
+  open, no concern of your own.
+- **Stuck:** an item stays disputed after two replies, or budget ends. Show
+  both sides in 2-3 lines each. The user decides. Budget end is not approval.
 
 End the reviewer through the adapter once the loop stops.
 

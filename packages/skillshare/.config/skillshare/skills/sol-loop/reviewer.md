@@ -15,13 +15,14 @@ guards the intent does not need. Other paths, rare cases, small perf, extra
 compat: nits.
 
 blocker = intended case wrong. should = real bug callers will hit, in intent.
-nit = rest. Mark a finding PLAUSIBLE if you could not verify it.
+nit = rest. Ids are stable across rounds (S1, S2, ...). Mark a finding
+PLAUSIBLE if you could not verify it.
 
 Reply once per round through the brief's reply channel:
 
 ```
 VERDICT: APPROVE or CHANGES
-S1 [blocker|should|nit] <file>:<line> <claim>. Fix: <suggestion> (stable ids)
+S1 [blocker|should|nit] <file>:<line> <claim>. Fix: <suggestion>
 Reviewed: base <sha>, HEAD <sha>
 ```
 
@@ -31,5 +32,6 @@ reason instead of a verdict. Then wait for the next round.
 
 Later rounds carry the ledger (`fixed:` / `disagree:` / `declined:` +
 evidence) and the change since last round. Review open ids and changed code
-only. Mark each old id `resolved` or `still open: <reason>`. Number new
+only. Confirm each fix, and weigh each disagreement or decline against its
+evidence. Mark each old id `resolved` or `still open: <reason>`. Number new
 findings after the highest id.

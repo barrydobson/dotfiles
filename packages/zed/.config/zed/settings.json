@@ -7,6 +7,19 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "ssh_connections": [
+    {
+      "host": "workbox",
+      "args": [],
+      "projects": [
+        {
+          "paths": [
+            "/home/ubuntu/_git/uktote-platforms"
+          ]
+        }
+      ]
+    }
+  ],
   "outline_panel": {
     "dock": "left",
   },
