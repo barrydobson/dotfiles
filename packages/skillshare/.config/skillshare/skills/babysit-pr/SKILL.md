@@ -41,7 +41,7 @@ It remembers what it already reported, so nothing that arrived in between is
 lost. If it says another pid already watches the PR, do not start a second one.
 Kill the old one only if its events do not reach you.
 
-With either watcher: when an event needs no action, end your turn without a
+When an event needs no action, end your turn without a
 message. Never post or say "still waiting".
 
 ## GitHub rate limits
@@ -75,8 +75,6 @@ narrows code.
 
 Keep an eye on changes to `main` and rebase when needed. `pr-wait` reports when
 new base commits touch this PR's files, and when the PR becomes BEHIND or DIRTY.
-`watch_pull_request` reports conflicts only, so check for BEHIND yourself
-before you call the PR ready.
 If an overlapping PR makes this one obsolete, stop monitoring, report it to the
 user, and ask before closing the PR unless closure was explicitly authorized.
 

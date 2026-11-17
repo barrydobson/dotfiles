@@ -43,7 +43,7 @@ packages/codex/.codex/AGENTS.md
 packages/skillshare/.config/skillshare/skills/tote-tooling-access
 packages/skillshare/.config/skillshare/skills/vault-query
 packages/skillshare/.config/skillshare/skills/systems-memory-check
-packages/skillshare/.config/skillshare/skills/full-stop-tickets
+packages/skillshare/.config/skillshare/skills/full-stop
 # Skills that live in the fleet repo, linked in locally
 packages/skillshare/.config/skillshare/skills/til
 packages/skillshare/.config/skillshare/skills/claudex-code-review
