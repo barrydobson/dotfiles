@@ -70,6 +70,23 @@ configure_locale() {
     print_success "Locale ${locale} generated"
 }
 
+# Docker comes with the box image, not this script; join its group so agents can run docker without sudo.
+configure_docker_group() {
+    if ! getent group docker >/dev/null; then
+        return
+    fi
+    if id -nG "${USER}" | grep -qw docker; then
+        print_status "${USER} already in docker group"
+        return
+    fi
+    if ! check_sudo_access; then
+        print_warning "Run: sudo usermod -aG docker ${USER}"
+        return
+    fi
+    _sudo usermod -aG docker "${USER}"
+    print_success "Added ${USER} to docker group (log in again to pick it up)"
+}
+
 change_shell() {
     if [[ "${SHELL}" != */zsh ]]; then
         print_status "Changing default shell to zsh..."
@@ -90,6 +107,7 @@ main() {
     check_debian_based
     install_system_packages
     configure_locale
+    configure_docker_group
     install_mise
     post_install_setup
     change_shell
