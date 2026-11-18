@@ -1,41 +1,36 @@
-// The orchestrate layout's worker panel: the selected worker's PR (state, checks, a link), as gh tells it.
-// The worker is the one clicked in the batch sidebar (shared "orch.selected"); its PR number is its orch.pr
-// label, asked in the folder it started in. Asks GitHub on selection, then every 30 s. Read only.
-// Once the head has relayed it (orch.phase=relayed) it adds a Ready to merge section: GitHub's merge
-// verdict, the commits and files, and the head's open items about it.
+// The bob layout's PR panel: the selected run's PR (state, checks, comments, a link), as gh tells it.
+// The run is the one clicked in the bob-runs panel (shared "orch.selected"); its PR is its orch.pr label,
+// asked in the folder it started in. Asks GitHub on selection, then every 30 s.
 // Click an Actions check to expand its output, annotations and (for a failure) the end of its log; fetched on expand.
 // Comments lists conversation comments, reviews and inline review comments.
-// With props { merge: true } (the bob layout) it adds one merge button: squash now, or enable/disable auto-merge,
-// behind the confirm dialog. Without that prop it stays read only: merge on GitHub.
+// One merge button: squash now, or enable/disable auto-merge, behind the confirm dialog.
 // Adapted from Shepherdr mods/task-pr (MIT, Copyright (c) 2026 Elias Stravik).
 import { View, div, svg } from "gpui-kit";
 import { v_flex, h_flex, TextView } from "gpui-base";
-import { exec, theme, shared, terminals, home, readTextFile, props, openOverlay, nextCommand } from "herdr";
-import { PR_FIELDS, READY_FIELDS, prOf, checksLine, mergeLine, itemsFor, repoOf, detailOf, mergeActionOf, previewOf } from "./pr.js";
+import { exec, theme, shared, terminals, openOverlay, nextCommand } from "herdr";
+import { PR_FIELDS, prOf, checksLine, repoOf, detailOf, mergeActionOf, previewOf } from "./pr.js";
 
 const EVERY = 30000;
 
-// The selected worker, if it's still there: { address, name, cwd, parent, pr, relayed }.
+// The selected run, if it's still there: { address, name, cwd, pr }.
 function selected() {
   const address = shared("orch.selected");
   const w = address && terminals().find((t) => t.address === address);
-  return w ? { address, name: w.name ?? address, cwd: w.cwd, parent: w.parent, pr: w.labels?.["orch.pr"] ?? null,
-    relayed: w.labels?.["orch.phase"] === "relayed" } : null;
+  return w ? { address, name: w.name ?? address, cwd: w.cwd, pr: w.labels?.["orch.pr"] ?? null } : null;
 }
-const keyOf = (w) => (w ? `${w.address}:${w.pr}:${w.relayed}` : null);
+const keyOf = (w) => (w ? `${w.address}:${w.pr}` : null);
 
 // { pr } or { why } (nothing to show, and why) or { error }.
 async function ask(w) {
-  if (!w.pr) return { why: "No PR yet. The worker sets its orch.pr label when it opens one." };
-  const r = await exec("gh", ["pr", "view", String(w.pr), "--json", w.relayed ? READY_FIELDS : PR_FIELDS], { cwd: w.cwd });
+  if (!w.pr) return { why: "No PR yet. bob sets its orch.pr label when it opens one." };
+  const r = await exec("gh", ["pr", "view", String(w.pr), "--json", PR_FIELDS], { cwd: w.cwd });
   if (r.code !== 0) return { error: (r.stderr || r.stdout || "").trim().split("\n")[0] || "GitHub didn't answer." };
-  const items = w.relayed && w.parent ? itemsFor(await readTextFile(`${home()}/.local/state/orchestrate/${w.parent}.md`), w.name, w.cwd) : [];
   const d = JSON.parse(r.stdout), ref = repoOf(d.url);
   // Inline review comments are only in the REST API. A failure here leaves them out rather than hiding the PR.
   const ic = ref ? await exec("gh", ["api", `repos/${ref.repo}/pulls/${ref.number}/comments?per_page=100`]) : null;
   let inline = [];
   try { if (ic?.code === 0) inline = JSON.parse(ic.stdout); } catch { inline = []; }
-  return { pr: prOf(d, inline), items };
+  return { pr: prOf(d, inline) };
 }
 
 export default class WorkerPr extends View {
@@ -80,8 +75,8 @@ export default class WorkerPr extends View {
   async merge(cx) {
     const p = this.pending; this.pending = null;
     const pr = this.res?.pr;
-    // Only the PR the dialog named, still shown, in a copy allowed to merge.
-    if (!props()?.merge || !p || !pr || pr.url !== p.url) return;
+    // Only the PR the dialog named, if it's still shown.
+    if (!p || !pr || pr.url !== p.url) return;
     this.mergeMsg = { text: `${p.action.label}…`, bad: false }; cx.notify();
     const r = await exec("gh", p.action.args, { timeout: 60000 });
     this.mergeMsg = r.code === 0 ? { text: `${p.action.label}: done.`, bad: false }
@@ -128,7 +123,7 @@ export default class WorkerPr extends View {
       .child(h_flex().h(36).flex_none().px(12).gap(8).items_center().border_b(1).border_color(t.border)
         .child(div().font_semibold().child("Pull request"))
         .child(div().min_w(0).truncate().text_size(11).text_color(t.dim).child(w ? w.name : "")));
-    if (!w) return root.child(this.note("Click a worker in the sidebar to see its PR.", t));
+    if (!w) return root.child(this.note("Click a bob run to see its PR.", t));
     if (!res) return root.child(this.note("Asking GitHub…", t));
     if (!res.pr) return root.child(this.note(res.why ?? `GitHub didn't answer: ${res.error}`, t, Boolean(res.error)));
     const pr = res.pr;
@@ -157,7 +152,7 @@ export default class WorkerPr extends View {
               cx.timer.after(1500, (cx) => { this.copied = null; cx.notify(); });
               cx.notify();
             })))
-          .when(Boolean(props()?.merge), (e) => e.child(this.mergeRow(pr, t))))
+          .child(this.mergeRow(pr, t)))
         .child(v_flex().gap(4)
           .child(h_flex().gap(8).items_center().justify_between().text_size(12)
             .child(div().font_medium().text_color(t.muted).child("Checks"))
@@ -178,8 +173,7 @@ export default class WorkerPr extends View {
                 .child(svg("mods/worker-pr/external-link.svg").size(12).text_color(t.dim))));
             return open ? v_flex().child(row).child(this.detail(this.details.get(c.url), t)) : row;
           })))
-        .child(this.comments(pr.comments ?? [], t))
-        .when(w.relayed, (e) => e.child(this.ready(pr, res.items ?? [], t))));
+        .child(this.comments(pr.comments ?? [], t)));
   }
 
   // Under an expanded check: its output, annotations and log tail, or why there's nothing.
@@ -227,7 +221,7 @@ export default class WorkerPr extends View {
         .child(all ? "Show less" : `Show all · ${p.more} more ${p.more === 1 ? "line" : "lines"}`)));
   }
 
-  // Only in a copy with props { merge: true }. The button opens the confirm dialog; it never merges by itself.
+  // The button opens the confirm dialog; it never merges by itself.
   mergeRow(pr, t) {
     const action = mergeActionOf(pr);
     return v_flex().gap(4)
@@ -236,30 +230,5 @@ export default class WorkerPr extends View {
       .when(!action && pr.state === "open", (e) => e.child(div().text_size(11.5).text_color(t.dim)
         .child(pr.mergeable === "CONFLICTING" || pr.mergeState === "DIRTY" ? "Conflicts with its base: no merge from here." : "GitHub hasn't worked out whether it can merge yet.")))
       .when(Boolean(this.mergeMsg), (e) => e.child(div().text_size(11.5).text_color(this.mergeMsg.bad ? t.blocked : t.dim).child(this.mergeMsg.text)));
-  }
-
-  // Shown once the head has relayed the PR: what you'd be merging, from GitHub and the head's file.
-  ready(pr, items, t) {
-    const [verdict, how] = mergeLine(pr);
-    const head = (text) => div().pt(4).text_size(12).font_medium().text_color(t.muted).child(text);
-    const line = (id, left, right) => h_flex().id(id).min_h(24).gap(8).items_center().text_size(12).child(left).child(right);
-    return v_flex().gap(4).pt(12).border_t(1).border_color(t.border)
-      .child(div().text_size(13).font_semibold().child("Ready to merge"))
-      .child(div().text_size(12).text_color({ ok: t.ansi2, bad: t.ansi1, wait: t.working }[how]).child(verdict))
-      .child(head(`Commits · ${pr.commits.length}`))
-      .children(pr.commits.map((c, i) => line(`worker-pr-commit-${i}`,
-        div().flex_none().font_family("JetBrains Mono").text_size(11).text_color(t.dim).child(c.sha),
-        div().flex_1().min_w(0).truncate().child(c.headline))))
-      .child(head(`Files · ${pr.fileList.length}`))
-      .children(pr.fileList.map((f, i) => line(`worker-pr-file-${i}`,
-        div().flex_1().min_w(0).truncate().child(f.path),
-        h_flex().flex_none().gap(6).text_size(11)
-          .when(f.add > 0, (e) => e.child(div().text_color(t.ansi2).child(`+${f.add}`)))
-          .when(f.del > 0, (e) => e.child(div().text_color(t.ansi1).child(`−${f.del}`))))))
-      .child(head("Open items about it"))
-      .when(!items.length, (e) => e.child(div().text_size(12).text_color(t.dim).child("None.")))
-      .children(items.map((it) => line(`worker-pr-item-${it.id}`,
-        div().flex_none().w(26).font_semibold().text_color(it.id.startsWith("Q") ? t.accent : t.muted).child(it.id),
-        div().flex_1().min_w(0).child(it.text))));
   }
 }

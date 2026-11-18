@@ -150,10 +150,7 @@
                   "id": "orch-pr",
                   "type": "block",
                   "content": {
-                    "mod": "worker-pr",
-                    "props": {
-                      "merge": true
-                    }
+                    "mod": "worker-pr"
                   },
                   "size": {
                     "weight": 1
