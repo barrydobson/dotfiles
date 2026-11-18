@@ -176,7 +176,7 @@ export default class BobRuns extends View {
           .bg(t.background).text_size(12.5).text_color(t.foreground))
         .child(div().text_size(11.5).text_color(this.addError ? t.blocked : t.dim)
           .child(this.addError ?? "Ticket key: PI-123, owner/repo#12 or an issue URL. Enter starts bob, Esc closes."))))
-      .child(v_flex().id("bob-list").flex_1().min_h(0).overflow_y_scrollbar().px(6).pt(6).pb(8)
+      .child(v_flex().id("bob-list").flex_1().min_h(0).overflow_y_scrollbar().px(6).pt(6).pb(8).gap(4)
         .when(!runs.length, (e) => e.child(div().px(8).py(6).text_color(t.dim).child("No bob runs. Start one with /bob <ticket> in fleet.")))
         .children(runs.map((r) => this.row(r, t))));
   }
