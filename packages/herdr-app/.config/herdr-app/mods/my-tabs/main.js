@@ -97,7 +97,7 @@ export default class Tabs extends View {
       .when(enabled.includes("files"), el => el.child(panelButton("files", "Files", "mods/files/file.svg")))
       .when(enabled.includes("changes"), el => el.child(panelButton("changes", "Changes", "mods/changes/changes.svg")))
       .child(panelButton("ideas", "Ideas", "mods/ideas/lightbulb.svg"))
-      .child(panelButton("bob", "Bob", "icons/agent.svg"))
+      .child(panelButton("bob", "Bob", "mods/bob-runs/bob.svg"))
       .when(window()?.buttons, el => el.child(button("minimize", "−", () => run("window.minimize")))
         .child(button("maximize", "□", () => run("window.maximize")))
         .child(button("close-window", svg("mods/pane/close.svg").size(13), () => run("window.close"))));

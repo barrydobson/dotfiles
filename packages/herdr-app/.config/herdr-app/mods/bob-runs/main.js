@@ -149,6 +149,7 @@ export default class BobRuns extends View {
     return v_flex().id("bob-runs").size_full().min_h(0).overflow_hidden().bg(t.background).text_color(t.foreground).text_size(12.5)
       // Same header bar as worker-pr's "Pull request", the panel below it.
       .child(h_flex().h(36).flex_none().px(12).gap(8).items_center().border_b(1).border_color(t.border).text_size(13)
+        .child(svg("mods/bob-runs/bob.svg").size(15).flex_none().text_color(t.foreground))
         .child(div().font_semibold().child("Bob"))
         .child(div().flex_1())
         .child(div().id("bob-add").size(24).flex().items_center().justify_center().rounded(6).cursor_pointer()
