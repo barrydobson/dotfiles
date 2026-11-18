@@ -72,3 +72,6 @@ packages/herdr-core/.config/herdr-core/templates/ticket-worker.md
 packages/herdr-core/.config/herdr-core/templates/finisher.md
 packages/herdr-core/.config/herdr-core/templates/dispatch-claude.md
 packages/herdr-core/.config/herdr-core/templates/dispatch-codex.md
+packages/herdr-core/.config/herdr-core/templates/ticket-spec.md
+packages/herdr-core/.config/herdr-core/templates/ticket-build.md
+packages/herdr-core/.config/herdr-core/templates/ticket-finish.md
