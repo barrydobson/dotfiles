@@ -70,3 +70,5 @@ docs/specs/
 # Private fleet hc templates, symlinked in from the fleet repo
 packages/herdr-core/.config/herdr-core/templates/ticket-worker.md
 packages/herdr-core/.config/herdr-core/templates/finisher.md
+packages/herdr-core/.config/herdr-core/templates/dispatch-claude.md
+packages/herdr-core/.config/herdr-core/templates/dispatch-codex.md
