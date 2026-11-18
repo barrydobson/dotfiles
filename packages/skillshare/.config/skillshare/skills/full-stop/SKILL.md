@@ -9,6 +9,8 @@ disable-model-invocation: true
 
 Work one ticket or task into a PR autonomously, stop the PR at the merge gate for the human to merge, then close the ticket and clean up once it merges. After step 2 the human is not watching: your updates go unread until long after you stop. From the moment the PR opens until step 5 is done, end a turn only while a `pr-wait` watcher runs for the PR or an `AskUserQuestion` is pending. Without one, the work stops, because nobody will prompt you again.
 
+`pr-wait` is not on `PATH`. Run it as `~/.claude/skills/babysit-pr/scripts/pr-wait` everywhere this skill names it, under the Monitor tool. Never write your own polling loop.
+
 The user grants you permission to:
 
 - Use the test methods that Proof needs, without asking first.
