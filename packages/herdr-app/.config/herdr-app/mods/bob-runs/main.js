@@ -55,8 +55,10 @@ export default class BobRuns extends View {
 
   askFinish(r, f) {
     this.pending = f;
-    openOverlay({ mod: "confirm", kind: "dialog", props: { title: `Finish ${r.ticket}?`,
-      detail: `Types ${f.text} into bob's terminal (${f.terminal}). bob checks the PR has merged, runs the post-merge checks, `
+    openOverlay({ mod: "confirm", kind: "dialog", props: { title: `${f.replaces ? "Run finish again for" : "Finish"} ${r.ticket}?`,
+      detail: `Types ${f.text} into bob's terminal (${f.terminal}). `
+        + (f.replaces ? `It replaces the stopped finish agent (${f.replaces}) with a new one. ` : "")
+        + "bob checks the PR has merged, runs the post-merge checks, "
         + "then moves the ticket to Done and removes the worktree and branch. A failed check stops it before Done.",
       command: { name: "bob-runs.finish" } } });
   }

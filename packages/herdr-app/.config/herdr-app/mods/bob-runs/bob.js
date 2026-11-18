@@ -57,11 +57,14 @@ export function newStops(seen, runs) {
 // "#412" from a PR URL (or a bare number); null without one.
 export const prLabel = (pr) => { const m = /(\d+)\/?$/.exec(pr ?? ""); return m ? `#${m[1]}` : null; };
 
-// What the Finish pill types into bob's terminal, or null when it has nothing to start: only at the
-// finish phase with no finish agent running (a stopped finish can be run again).
+// What the Finish pill types into bob's terminal, or null when it has nothing to start: at the finish phase
+// with no finish agent, or after a finish stopped (its agent stays alive but is done; rerun replaces it).
+// replaces: the stopped finish agent's address, or null. While a finish runs, the pill peeks it instead.
 export function finishOf(run) {
+  if (run.phase !== "finish") return null;
   const f = run.stages.find((s) => s.id === "finish");
-  return run.phase === "finish" && !f.live ? { terminal: run.address, text: `/bob --finish ${run.ticket}` } : null;
+  if (f.live && !run.stopped) return null;
+  return { terminal: run.address, text: `/bob --finish ${run.ticket}`, replaces: f.live ? f.agent : null };
 }
 
 // The ticket key the person typed into the + input: a Jira key (any case, given back in capitals),

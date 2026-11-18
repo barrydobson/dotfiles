@@ -96,7 +96,7 @@ test("finish phase waits on merge; the pill offers /bob --finish until a finish 
   const [waiting] = runsOf([bob("t1", { "bob.ticket": "PI-2792", "bob.phase": "finish" })]);
   assert.equal(states(waiting), "ddddddc");
   assert.equal(waiting.line, "Merge, then finish");
-  assert.deepEqual(finishOf(waiting), { terminal: "t1", text: "/bob --finish PI-2792" });
+  assert.deepEqual(finishOf(waiting), { terminal: "t1", text: "/bob --finish PI-2792", replaces: null });
 
   const [running] = runsOf([bob("t1", { "bob.ticket": "PI-2792", "bob.phase": "finish" }), kid("t2", "finish-pi-2792", "t1")]);
   assert.equal(running.line, "Finishing");
@@ -106,6 +106,11 @@ test("finish phase waits on merge; the pill offers /bob --finish until a finish 
   const [stopped] = runsOf([bob("t1", { "bob.ticket": "PI-2792", "bob.phase": "finish", "bob.stopped": "PR not merged" })]);
   assert.equal(stopped.line, "Stopped: PR not merged");
   assert.ok(finishOf(stopped));                                  // can be run again
+
+  // A stopped finish whose agent is still alive: the pill reruns and says it replaces that agent.
+  const [stoppedLive] = runsOf([bob("t1", { "bob.ticket": "PI-2792", "bob.phase": "finish", "bob.stopped": "AC4 waits on 1h scan" }),
+    kid("t2", "finish-pi-2792", "t1", { status: "idle" })]);
+  assert.deepEqual(finishOf(stoppedLive), { terminal: "t1", text: "/bob --finish PI-2792", replaces: "t2" });
 
   for (const phase of ["ticket", "done"]) assert.equal(finishOf(runsOf([bob("t1", { "bob.ticket": "PI-1", "bob.phase": phase })])[0]), null);
 });
