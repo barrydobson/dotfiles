@@ -1,4 +1,4 @@
-// The bob layout's PR panel: the selected run's PR (state, checks, comments, a link), as gh tells it.
+// The PR panel under the Bob panel in my-main: the selected run's PR (state, checks, comments, a link), as gh tells it.
 // The run is the one clicked in the bob-runs panel (shared "orch.selected"); its PR is its orch.pr label,
 // asked in the folder it started in. Asks GitHub on selection, then every 30 s.
 // Click an Actions check to expand its output, annotations and (for a failure) the end of its log; fetched on expand.

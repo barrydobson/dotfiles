@@ -147,6 +147,34 @@
                       "content": {
                         "mod": "ideas"
                       }
+                    },
+                    {
+                      "id": "bob",
+                      "type": "column",
+                      "children": [
+                        {
+                          "id": "bob-runs",
+                          "type": "block",
+                          "content": {
+                            "mod": "bob-runs"
+                          },
+                          "size": {
+                            "weight": 1
+                          },
+                          "min": 120
+                        },
+                        {
+                          "id": "bob-pr",
+                          "type": "block",
+                          "content": {
+                            "mod": "worker-pr"
+                          },
+                          "size": {
+                            "weight": 2
+                          },
+                          "min": 160
+                        }
+                      ]
                     }
                   ],
                   "active": "files"

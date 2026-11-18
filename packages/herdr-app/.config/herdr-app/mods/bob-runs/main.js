@@ -3,7 +3,7 @@ import { v_flex, h_flex, InputState, Input } from "gpui-base";
 import { theme, terminals, run, shared, setShared, notify, exec, openOverlay, nextCommand, home, spaces } from "herdr";
 import { runsOf, newStops, prLabel, finishOf, parseKey, liveRunFor, spaceFor, closeOf } from "./bob.js";
 
-// The bob layout's sidebar: one row per bob run (a terminal labelled bob.ticket) with its stage strip.
+// The Bob panel (my-main's right-hand panel stack): one row per bob run (a terminal labelled bob.ticket) with its stage strip.
 // A click on the row selects the run for the worker-pr panel (shared "orch.selected"; bob carries orch.pr);
 // a click on a stage peeks the agent running it, or bob itself when that agent is gone or bob is blocked.
 // It toasts when a run's bob.stopped label appears; the toast focuses bob's terminal.
