@@ -238,3 +238,11 @@ test("waiting: only at the finish phase with no finish agent running and no stop
   assert.equal(run({ "bob.phase": "finish", "bob.stopped": "AC4" }).waiting, false);
   assert.equal(run({ "bob.phase": "finish" }, [kid("t2", "finish-pi-4", "t1")]).waiting, false);
 });
+
+test("a done card shows the total from bob.at.spec to bob.at.done, or nothing without both", () => {
+  const t0 = 1_800_000_000;
+  const done = (labels) => runsOf([bob("t1", { "bob.ticket": "PI-6", "bob.phase": "done", ...labels })])[0].line;
+  assert.equal(done({ "bob.at.spec": String(t0), "bob.at.done": String(t0 + 7800) }), "Done · 2h 10m");
+  assert.equal(done({ "bob.at.done": String(t0) }), "Done");
+  assert.equal(done({}), "Done");
+});

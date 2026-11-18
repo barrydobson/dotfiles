@@ -46,7 +46,7 @@ const clock = (ms) => { const d = new Date(ms); return `${String(d.getHours()).p
 // newest terminal last. A stage's state is done, current, blocked or todo; agent is the address to peek,
 // live whether the stage's own agent is running.
 // prs: { <PR URL>: kind } from prKindOf, for the PR badge and the merged line. A stage's tip is how long it took
-// (timesOf), or null; the line ends with the current stage's time so far.
+// (timesOf), or null; the line ends with the current stage's time so far, or a done run's total.
 export function runsOf(terms, prs = {}, now = Date.now()) {
   return terms.filter((t) => t.labels?.["bob.ticket"]).map((bob) => {
     const l = bob.labels, n = slug(l["bob.ticket"]);
@@ -71,9 +71,12 @@ export function runsOf(terms, prs = {}, now = Date.now()) {
       : phase === "finish" ? (finishing ? "Finishing" : prKind === "merged" ? "Merged · ready to finish" : "Merge, then finish")
       : stages[at].label;
     const so = phase !== "done" && times[phase];
+    // A done run shows its whole time, spec start to done.
+    const total = phase === "done" && Number(l["bob.at.spec"]) && Number(l["bob.at.done"])
+      ? (Number(l["bob.at.done"]) - Number(l["bob.at.spec"])) * 1000 : null;
     // waiting: at the finish phase with nothing running and nothing wrong, so the next move is the person's (merge, then Finish).
     const waiting = phase === "finish" && !finishing && !stopped && !blocked;
-    return { address: bob.address, ticket: l["bob.ticket"], phase, round, stopped, blocked, waiting, line: so ? `${line} · ${dur(so.ms)}` : line,
+    return { address: bob.address, ticket: l["bob.ticket"], phase, round, stopped, blocked, waiting, line: so ? `${line} · ${dur(so.ms)}` : total !== null && total >= 0 ? `${line} · ${dur(total)}` : line,
       pr, prKind, tab: l["herdr.tab"] ?? null, stages };
   });
 }
