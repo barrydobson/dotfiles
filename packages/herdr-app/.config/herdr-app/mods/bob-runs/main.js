@@ -1,7 +1,7 @@
 import { View, div, svg } from "gpui-kit";
 import { v_flex, h_flex, InputState, Input } from "gpui-base";
 import { theme, terminals, run, shared, setShared, notify, exec, openOverlay, nextCommand, home, spaces } from "herdr";
-import { runsOf, newStops, prLabel, finishOf, parseKey, liveRunFor, spaceFor } from "./bob.js";
+import { runsOf, newStops, prLabel, finishOf, parseKey, liveRunFor, spaceFor, closeOf } from "./bob.js";
 
 // The bob layout's sidebar: one row per bob run (a terminal labelled bob.ticket) with its stage strip.
 // A click on the row selects the run for the worker-pr panel (shared "orch.selected"; bob carries orch.pr);
@@ -11,6 +11,8 @@ import { runsOf, newStops, prLabel, finishOf, parseKey, liveRunFor, spaceFor } f
 // `/bob --finish <key>` into bob's terminal with hc send.
 // The + in the header opens a ticket input: Enter starts `/bob <key>` in a new, unfocused tab of the fleet space
 // (or focuses the run already on that ticket); Esc closes it.
+// The × on a hovered card ends bob's session, its agents and its tab: at once for a done run started from +,
+// otherwise after the confirm dialog. The worktree, branch, PR and ticket stay.
 export default class BobRuns extends View {
   init(_props, cx) {
     this.seen = null;
@@ -20,9 +22,9 @@ export default class BobRuns extends View {
       for (const r of events) notify({ title: `${r.ticket} stopped`, body: r.stopped, level: "warning", timeout: 20000,
         action: { name: "pane.focus", args: { terminal: r.address } } });
     });
-    this.pending = null; this.input = null; this.addError = null;
+    this.pending = null; this.input = null; this.addError = null; this.hovered = null; this.closing = null;
     // The confirm dialog runs bob-runs.finish.
-    cx.spawn(async (cx) => { for (;;) { const c = await nextCommand(); if (c.endsWith("finish")) await this.finish(); cx.notify(); } });
+    cx.spawn(async (cx) => { for (;;) { const c = await nextCommand(); if (c.endsWith("finish")) await this.finish(); else if (c.endsWith("close")) await this.close(this.closing); cx.notify(); } });
   }
 
   openAdd(cx) {
@@ -51,6 +53,21 @@ export default class BobRuns extends View {
       task: `/bob ${key}`, focus: false });
     notify({ title: `${key} started`, body: "bob is running in a new fleet tab. Its row appears once it labels itself.", level: "success" });
     this.closeAdd();
+  }
+
+  askClose(r) {
+    const c = closeOf(r, spaces());
+    if (!c.confirm) return this.close(c.terminal);
+    this.closing = c.terminal;
+    openOverlay({ mod: "confirm", kind: "dialog", props: { ...c.confirm, command: { name: "bob-runs.close" } } });
+  }
+
+  // bob's live agents first, then bob: hc kill ends each, hc rm clears it. Its tab closes with its terminal.
+  async close(address) {
+    this.closing = null;
+    if (!address) return;
+    const kids = terminals().filter((t) => t.parent === address && (!t.state || t.state === "live")).map((t) => t.address);
+    for (const a of [...kids, address]) { await exec("hc", ["kill", a]); await exec("hc", ["rm", a]); }
   }
 
   askFinish(r, f) {
@@ -87,11 +104,16 @@ export default class BobRuns extends View {
   row(r, t) {
     const selected = shared("orch.selected") === r.address;
     return v_flex().id(`r-${r.address}`).flex_none().px(10).py(7).gap(5).rounded(7).cursor_pointer()
+      .on_hover((h, cx) => { this.hovered = h ? r.address : this.hovered === r.address ? null : this.hovered; cx.notify(); })
       .when(Boolean(selected), (e) => e.bg(t.surface).border_l(2).border_color(t.accent)).hover((s) => s.bg(t.surface))
       .on_mouse_down("left", () => setShared("orch.selected", r.address))
       .child(h_flex().gap(8).items_center()
         .child(div().flex_1().min_w(0).truncate().text_color(t.foreground).child(r.ticket))
-        .when(Boolean(r.pr), (e) => e.child(div().flex_none().text_size(10.5).text_color(t.muted).child(prLabel(r.pr)))))
+        .when(Boolean(r.pr), (e) => e.child(div().flex_none().text_size(10.5).text_color(t.muted).child(prLabel(r.pr))))
+        .when(this.hovered === r.address, (e) => e.child(div().id(`close-${r.address}`).size(18).flex().flex_none().items_center().justify_center()
+          .rounded(5).cursor_pointer().text_color(t.muted).hover((s) => s.bg(t.hover).text_color(t.foreground)).tooltip(`Close ${r.ticket}`)
+          .on_mouse_down("left", (_e, cx) => { cx.stop_propagation(); this.askClose(r); })
+          .child(svg("mods/workspace-chrome/x.svg").size(12)))))
       .child(div().truncate().text_size(11.5).text_color(r.blocked ? t.blocked : t.dim).child(r.line))
       .child(h_flex().flex_wrap().gap(4).children(r.stages.map((s) => this.chip(s, r, t))));
   }

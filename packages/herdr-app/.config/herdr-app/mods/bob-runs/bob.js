@@ -42,7 +42,7 @@ export function runsOf(terms) {
     const line = stopped ? `Stopped: ${stopped}` : blocked ? "Needs you" : phase === "done" ? "Done"
       : phase === "finish" ? (finishing ? "Finishing" : "Merge, then finish") : stages[at].label;
     return { address: bob.address, ticket: l["bob.ticket"], phase, round, stopped, blocked, line,
-      pr: l["orch.pr"] ?? null, stages };
+      pr: l["orch.pr"] ?? null, tab: l["herdr.tab"] ?? null, stages };
   });
 }
 
@@ -91,4 +91,20 @@ export function spaceFor(terms, spaces) {
   const bob = terms.find((t) => t.labels?.["bob.ticket"] && t.labels?.["herdr.space"]);
   if (bob) return bob.labels["herdr.space"];
   return (spaces ?? []).find((s) => s.name === "fleet")?.id ?? null;
+}
+
+// What the card's × does. { terminal, confirm: null } closes at once: a done run in a tab the + started (the +
+// names its tab after the ticket). Anything else asks first, saying what ends, and flags a session the person
+// started themselves, since closing it ends their whole Claude session.
+export function closeOf(run, spaces) {
+  const tab = (spaces ?? []).flatMap((s) => s.tabs ?? []).find((t) => t.id === run.tab);
+  const fromPlus = tab?.name === run.ticket;
+  if (run.phase === "done" && fromPlus) return { terminal: run.address, confirm: null };
+  const current = run.stages.find((s) => s.state === "current" || s.state === "blocked");
+  const where = run.phase === "done" ? "is done" : run.stopped ? `stopped at ${current?.label}` : `is at ${current?.label}`;
+  const detail = [
+    `${run.ticket} ${where}. Closing ends bob's session and its agents. The worktree, branch, PR and ticket stay.`,
+    fromPlus ? null : "This is a session you started yourself, not from +: closing ends that whole Claude session.",
+  ].filter(Boolean).join("\n\n");
+  return { terminal: run.address, confirm: { title: `Close ${run.ticket}?`, detail } };
 }

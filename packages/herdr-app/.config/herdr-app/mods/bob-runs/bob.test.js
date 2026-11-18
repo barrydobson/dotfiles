@@ -1,7 +1,7 @@
 // node --test bob.test.js
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { runsOf, slug, newStops, prLabel, finishOf, parseKey, liveRunFor, spaceFor } from "./bob.js";
+import { runsOf, slug, newStops, prLabel, finishOf, parseKey, liveRunFor, spaceFor, closeOf } from "./bob.js";
 
 // Shaped like herdr's terminals(): address, name, parent, state, status, labels.
 const bob = (address, labels, extra = {}) => ({ address, name: null, state: "live", status: "idle", labels, ...extra });
@@ -140,4 +140,24 @@ test("spaceFor prefers an existing bob's space, else the space named fleet", () 
   assert.equal(spaceFor([bob("t1", { "bob.ticket": "PI-1", "herdr.space": "sp9" })], spaces), "sp9");
   assert.equal(spaceFor([{ address: "t2", labels: { "herdr.space": "sp1" } }], spaces), "sp2");
   assert.equal(spaceFor([], [{ id: "sp1", name: "Personal" }]), null);
+});
+
+test("closeOf closes a done run from + at once; asks for anything else and flags a person's own session", () => {
+  const spaces = [{ id: "sp1", name: "fleet", tabs: [{ id: "tb1", name: "PI-5" }, { id: "tb2", name: "1" }] }];
+  const run = (labels) => runsOf([bob("t1", { "bob.ticket": "PI-5", ...labels })])[0];
+
+  assert.deepEqual(closeOf(run({ "bob.phase": "done", "herdr.tab": "tb1" }), spaces), { terminal: "t1", confirm: null });
+
+  const busy = closeOf(run({ "bob.phase": "review", "bob.round": "2", "herdr.tab": "tb1" }), spaces);
+  assert.equal(busy.confirm.title, "Close PI-5?");
+  assert.match(busy.confirm.detail, /PI-5 is at Review 2\/3\. Closing ends bob's session and its agents/);
+  assert.doesNotMatch(busy.confirm.detail, /started yourself/);
+
+  const stopped = closeOf(run({ "bob.phase": "finish", "bob.stopped": "AC4 waits", "herdr.tab": "tb1" }), spaces);
+  assert.match(stopped.confirm.detail, /^PI-5 stopped at Finish\./);
+
+  const own = closeOf(run({ "bob.phase": "done", "herdr.tab": "tb2" }), spaces);
+  assert.match(own.confirm.detail, /PI-5 is done\./);
+  assert.match(own.confirm.detail, /started yourself, not from \+/);
+  assert.ok(closeOf(run({ "bob.phase": "done" }), spaces).confirm);   // no tab label: treated as the person's own
 });
