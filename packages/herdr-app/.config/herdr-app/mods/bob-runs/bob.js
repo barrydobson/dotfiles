@@ -20,20 +20,46 @@ export const slug = (key) => String(key).toLowerCase().replace(/[^a-z0-9-]/g, "-
 
 const live = (t) => !t.state || t.state === "live";
 
+// How long each stage has taken, from the bob.at.<phase>=<epoch seconds> labels bob sets as each phase starts.
+// { <stage id>: { start, end, ms } } in epoch ms. A stage ends when the next labelled phase starts; the current
+// stage has end null and runs to now. A stage with no label, or none after it, is left out (runs from before the labels).
+export function timesOf(labels, now) {
+  const phase = PHASES.includes(labels?.["bob.phase"]) ? labels["bob.phase"] : "spec", cur = PHASES.indexOf(phase);
+  const at = PHASES.map((p) => Number(labels?.[`bob.at.${p}`]) * 1000 || null);
+  const out = {};
+  for (let i = 0; i <= cur && i < STAGES.length; i++) {
+    const end = i === cur ? null : at.slice(i + 1, cur + 1).find(Boolean) ?? null;
+    if (at[i] && (i === cur || end)) out[STAGES[i].id] = { start: at[i], end, ms: Math.max(0, (end ?? now) - at[i]) };
+  }
+  return out;
+}
+
+// "<1m", "12m", "3h 5m", "2d 4h".
+export function dur(ms) {
+  const m = Math.floor(ms / 60000), h = Math.floor(m / 60), d = Math.floor(h / 24);
+  return d ? `${d}d ${h % 24}h` : h ? `${h}h ${m % 60}m` : m ? `${m}m` : "<1m";
+}
+
+const clock = (ms) => { const d = new Date(ms); return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`; };
+
 // [{ address, ticket, phase, round, stopped, blocked, line, pr, stages: [{ id, label, state, agent }] }],
 // newest terminal last. A stage's state is done, current, blocked or todo; agent is the address to peek,
 // live whether the stage's own agent is running.
-// prs: { <PR URL>: kind } from prKindOf, for the PR badge and the merged line.
-export function runsOf(terms, prs = {}) {
+// prs: { <PR URL>: kind } from prKindOf, for the PR badge and the merged line. A stage's tip is how long it took
+// (timesOf), or null; the line ends with the current stage's time so far.
+export function runsOf(terms, prs = {}, now = Date.now()) {
   return terms.filter((t) => t.labels?.["bob.ticket"]).map((bob) => {
     const l = bob.labels, n = slug(l["bob.ticket"]);
     const phase = PHASES.includes(l["bob.phase"]) ? l["bob.phase"] : "spec";
     const at = PHASES.indexOf(phase), round = Number(l["bob.round"]) || 0, stopped = l["bob.stopped"] || null;
+    const times = timesOf(l, now);
     const child = (name) => name && terms.find((t) => t.parent === bob.address && t.name === name && live(t));
     const stages = STAGES.map((s, i) => {
       const agent = child(s.agent(n));
       const blocked = i === at && (Boolean(stopped) || bob.status === "blocked" || agent?.status === "blocked");
-      return { id: s.id, label: s.id === "review" && round ? `Review ${round}/${MAX_ROUNDS}` : s.label,
+      const label = s.id === "review" && round ? `Review ${round}/${MAX_ROUNDS}` : s.label, t = times[s.id];
+      return { id: s.id, label,
+        tip: !t ? null : t.end ? `${label} · ${dur(t.ms)} (${clock(t.start)} to ${clock(t.end)})` : `${label} · ${dur(t.ms)} so far`,
         // A blocked bob holds the dialog (its AskUserQuestion), so the current stage peeks bob, not its agent.
         state: i < at ? "done" : i > at ? "todo" : blocked ? "blocked" : "current",
         agent: i === at && bob.status === "blocked" ? bob.address : agent?.address ?? bob.address, live: Boolean(agent) };
@@ -44,7 +70,10 @@ export function runsOf(terms, prs = {}) {
     const line = stopped ? `Stopped: ${stopped}` : blocked ? "Needs you" : phase === "done" ? "Done"
       : phase === "finish" ? (finishing ? "Finishing" : prKind === "merged" ? "Merged · ready to finish" : "Merge, then finish")
       : stages[at].label;
-    return { address: bob.address, ticket: l["bob.ticket"], phase, round, stopped, blocked, line,
+    const so = phase !== "done" && times[phase];
+    // waiting: at the finish phase with nothing running and nothing wrong, so the next move is the person's (merge, then Finish).
+    const waiting = phase === "finish" && !finishing && !stopped && !blocked;
+    return { address: bob.address, ticket: l["bob.ticket"], phase, round, stopped, blocked, waiting, line: so ? `${line} · ${dur(so.ms)}` : line,
       pr, prKind, tab: l["herdr.tab"] ?? null, stages };
   });
 }

@@ -1,7 +1,7 @@
 // node --test bob.test.js
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { runsOf, slug, newStops, prLabel, finishOf, parseKey, liveRunFor, spaceFor, closeOf, prKindOf, pollAfter, PR_LOOK } from "./bob.js";
+import { runsOf, slug, newStops, prLabel, finishOf, parseKey, liveRunFor, spaceFor, closeOf, prKindOf, pollAfter, PR_LOOK, timesOf, dur } from "./bob.js";
 
 // Shaped like herdr's terminals(): address, name, parent, state, status, labels.
 const bob = (address, labels, extra = {}) => ({ address, name: null, state: "live", status: "idle", labels, ...extra });
@@ -194,4 +194,47 @@ test("a merged PR at the finish phase reads Merged · ready to finish", () => {
   assert.equal(runsOf(terms)[0].line, "Merge, then finish");     // not asked yet
   const stopped = [bob("t1", { "bob.ticket": "PI-9", "bob.phase": "finish", "orch.pr": url, "bob.stopped": "AC4" })];
   assert.equal(runsOf(stopped, { [url]: "merged" })[0].line, "Stopped: AC4");
+});
+
+test("timesOf: a stage runs from its bob.at label to the next one; the current one to now", () => {
+  const t0 = 1_800_000_000, now = (t0 + 3600) * 1000;
+  const l = { "bob.phase": "review", "bob.at.spec": String(t0), "bob.at.build": String(t0 + 600), "bob.at.review": String(t0 + 1800) };
+  assert.deepEqual(timesOf(l, now), {
+    spec: { start: t0 * 1000, end: (t0 + 600) * 1000, ms: 600000 },
+    build: { start: (t0 + 600) * 1000, end: (t0 + 1800) * 1000, ms: 1200000 },
+    review: { start: (t0 + 1800) * 1000, end: null, ms: 1800000 },
+  });
+  // A run from before the labels has none; a stage with no later label is left out.
+  assert.deepEqual(timesOf({ "bob.phase": "ci" }, now), {});
+  assert.deepEqual(Object.keys(timesOf({ "bob.phase": "ci", "bob.at.spec": String(t0) }, now)), []);
+  // A skipped label (ship) leaves review ending at the next one.
+  assert.equal(timesOf({ "bob.phase": "ci", "bob.at.review": String(t0), "bob.at.ci": String(t0 + 120) }, now).review.ms, 120000);
+});
+
+test("dur rounds down to minutes, then hours, then days", () => {
+  assert.equal(dur(59000), "<1m");
+  assert.equal(dur(12 * 60000), "12m");
+  assert.equal(dur((3 * 60 + 5) * 60000), "3h 5m");
+  assert.equal(dur((52 * 60 + 9) * 60000), "2d 4h");
+});
+
+test("the line shows the current stage's time; each timed chip has a tip, done ones with their clock times", () => {
+  const t0 = 1_800_000_000, now = (t0 + 1500) * 1000;
+  const [run] = runsOf([bob("t1", { "bob.ticket": "PI-3", "bob.phase": "build", "bob.at.spec": String(t0), "bob.at.build": String(t0 + 600) })], {}, now);
+  assert.equal(run.line, "Build · 15m");
+  assert.match(run.stages[0].tip, /^Spec · 10m \(\d\d:\d\d to \d\d:\d\d\)$/);
+  assert.equal(run.stages[1].tip, "Build · 15m so far");
+  assert.equal(run.stages[2].tip, null);
+  const [done] = runsOf([bob("t1", { "bob.ticket": "PI-3", "bob.phase": "done", "bob.at.finish": String(t0), "bob.at.done": String(t0 + 60) })], {}, now);
+  assert.equal(done.line, "Done");
+  assert.match(done.stages[6].tip, /^Finish · 1m /);
+});
+
+test("waiting: only at the finish phase with no finish agent running and no stop", () => {
+  const run = (labels, kids = []) => runsOf([bob("t1", { "bob.ticket": "PI-4", ...labels }), ...kids])[0];
+  assert.equal(run({ "bob.phase": "finish" }).waiting, true);
+  assert.equal(run({ "bob.phase": "ticket" }).waiting, false);
+  assert.equal(run({ "bob.phase": "done" }).waiting, false);
+  assert.equal(run({ "bob.phase": "finish", "bob.stopped": "AC4" }).waiting, false);
+  assert.equal(run({ "bob.phase": "finish" }, [kid("t2", "finish-pi-4", "t1")]).waiting, false);
 });

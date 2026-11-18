@@ -1,4 +1,4 @@
-import { View, div, svg } from "gpui-kit";
+import { View, div, svg, Background, PathBuilder } from "gpui-kit";
 import { v_flex, h_flex, InputState, Input } from "gpui-base";
 import { theme, terminals, run, shared, setShared, notify, exec, openOverlay, nextCommand, home, spaces } from "herdr";
 import { runsOf, newStops, prLabel, finishOf, parseKey, liveRunFor, spaceFor, closeOf, prKindOf, pollAfter, PR_LOOK } from "./bob.js";
@@ -13,6 +13,16 @@ import { runsOf, newStops, prLabel, finishOf, parseKey, liveRunFor, spaceFor, cl
 // (or focuses the run already on that ticket); Esc closes it.
 // The × on a hovered card ends bob's session, its agents and its tab: at once for a done run started from +,
 // otherwise after the confirm dialog. The worktree, branch, PR and ticket stay.
+
+// The card's shape in percentages, so it fills whatever card holds it. Only the left corners are rounded (about 7px
+// on a typical card): the wash has faded out before the right edge. Built after coordinator's tile.js (petekp/coordinator).
+const CARD = PathBuilder.fill().move_to("2%", 0).line_to("100%", 0).line_to("100%", "100%").line_to("2%", "100%")
+  .arc_to("2%", "9%", 0, false, true, 0, "91%").line_to(0, "9%").arc_to("2%", "9%", 0, false, true, "2%", 0).close().build();
+
+// A wash of c from the left edge, fading out by 70% of the way across.
+const wash = (c) => globalThis.window.paint_path(CARD, Background.linear_gradient(90,
+  Background.stop(`${c.slice(0, 7)}38`, 0), Background.stop(`${c.slice(0, 7)}00`, 0.7))).absolute().top(0).left(0).size_full();
+
 export default class BobRuns extends View {
   init(_props, cx) {
     this.seen = null; this.prs = {};
@@ -22,6 +32,7 @@ export default class BobRuns extends View {
       this.seen = seen;
       for (const r of events) notify({ title: `${r.ticket} stopped`, body: r.stopped, level: "warning", timeout: 20000,
         action: { name: "pane.focus", args: { terminal: r.address } } });
+      cx.notify();   // the current stage's time ticks on
     });
     this.pending = null; this.input = null; this.addError = null; this.hovered = null; this.closing = null;
     // The confirm dialog runs bob-runs.finish.
@@ -119,7 +130,7 @@ export default class BobRuns extends View {
     return div().id(`s-${s.agent}-${s.id}`).flex_none().px(6).py(1).rounded(5).text_size(10.5).cursor_pointer()
       .border(1).border_color(color).text_color(s.state === "todo" ? t.dim : t.foreground)
       .when(s.state === "current" || s.state === "blocked", (e) => e.bg(t.surface).font_semibold())
-      .hover((h) => h.bg(t.surface))
+      .hover((h) => h.bg(t.surface)).when(Boolean(s.tip), (e) => e.tooltip(s.tip))
       .on_mouse_down("left", (_e, cx) => { cx.stop_propagation(); f ? this.askFinish(r, f) : run("terminal.peek", { terminal: s.agent }); })
       .child(s.label);
   }
@@ -128,7 +139,9 @@ export default class BobRuns extends View {
     const selected = shared("orch.selected") === r.address;
     return v_flex().id(`r-${r.address}`).flex_none().px(10).py(7).gap(5).rounded(7).cursor_pointer()
       .on_hover((h, cx) => { this.hovered = h ? r.address : this.hovered === r.address ? null : this.hovered; cx.notify(); })
-      .when(Boolean(selected), (e) => e.bg(t.surface).border_l(2).border_color(t.accent)).hover((s) => s.bg(t.surface))
+      .when(Boolean(selected), (e) => e.bg(t.surface).border_l(2).border_color(r.blocked ? t.blocked : t.accent)).hover((s) => s.bg(t.surface))
+      // Waiting on the person, all well (merge, then Finish): the theme's accent. Needs you or stopped: its blocked colour.
+      .when(r.waiting || r.blocked, (e) => e.relative().child(wash(r.blocked ? t.blocked : t.accent)))
       .on_mouse_down("left", () => setShared("orch.selected", r.address))
       .child(h_flex().gap(8).items_center()
         .child(div().flex_1().min_w(0).truncate().text_color(t.foreground).child(r.ticket))
