@@ -1,7 +1,7 @@
 // node --test bob.test.js
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { runsOf, slug, newStops, prLabel, finishOf, parseKey, liveRunFor, spaceFor, closeOf } from "./bob.js";
+import { runsOf, slug, newStops, prLabel, finishOf, parseKey, liveRunFor, spaceFor, closeOf, prKindOf, pollAfter, PR_LOOK } from "./bob.js";
 
 // Shaped like herdr's terminals(): address, name, parent, state, status, labels.
 const bob = (address, labels, extra = {}) => ({ address, name: null, state: "live", status: "idle", labels, ...extra });
@@ -160,4 +160,38 @@ test("closeOf closes a done run from + at once; asks for anything else and flags
   assert.match(own.confirm.detail, /PI-5 is done\./);
   assert.match(own.confirm.detail, /started yourself, not from \+/);
   assert.ok(closeOf(run({ "bob.phase": "done" }), spaces).confirm);   // no tab label: treated as the person's own
+});
+
+test("prKindOf: terminal states first, then draft, failed and running checks", () => {
+  const run = (status, conclusion) => ({ __typename: "CheckRun", status, conclusion });
+  assert.equal(prKindOf({ state: "MERGED", isDraft: true, statusCheckRollup: [run("COMPLETED", "FAILURE")] }), "merged");
+  assert.equal(prKindOf({ state: "CLOSED" }), "closed");
+  assert.equal(prKindOf({ state: "OPEN", isDraft: true }), "draft");
+  assert.equal(prKindOf({ state: "OPEN", statusCheckRollup: [run("COMPLETED", "SUCCESS"), run("COMPLETED", "FAILURE")] }), "failed");
+  assert.equal(prKindOf({ state: "OPEN", statusCheckRollup: [{ __typename: "StatusContext", state: "ERROR" }] }), "failed");
+  assert.equal(prKindOf({ state: "OPEN", statusCheckRollup: [run("COMPLETED", "SUCCESS"), run("IN_PROGRESS", "")] }), "pending");
+  assert.equal(prKindOf({ state: "OPEN", statusCheckRollup: [{ __typename: "StatusContext", state: "PENDING" }] }), "pending");
+  assert.equal(prKindOf({ state: "OPEN", statusCheckRollup: [run("COMPLETED", "SUCCESS"), run("COMPLETED", "SKIPPED")] }), "open");
+  assert.equal(prKindOf(null), "open");
+  for (const k of ["open", "pending", "failed", "merged", "closed", "draft"]) assert.ok(PR_LOOK[k].label, k);
+});
+
+test("pollAfter stops on merged or closed and asks sooner while checks run", () => {
+  assert.equal(pollAfter("merged"), null);
+  assert.equal(pollAfter("closed", true), null);
+  assert.equal(pollAfter("pending"), 120000);
+  assert.equal(pollAfter("pending", true), 30000);
+  assert.equal(pollAfter("open"), 300000);
+  assert.equal(pollAfter("failed", true), 120000);
+});
+
+test("a merged PR at the finish phase reads Merged · ready to finish", () => {
+  const url = "https://github.com/o/r/pull/9";
+  const terms = [bob("t1", { "bob.ticket": "PI-9", "bob.phase": "finish", "orch.pr": url })];
+  assert.equal(runsOf(terms, { [url]: "merged" })[0].line, "Merged · ready to finish");
+  assert.equal(runsOf(terms, { [url]: "merged" })[0].prKind, "merged");
+  assert.equal(runsOf(terms, { [url]: "open" })[0].line, "Merge, then finish");
+  assert.equal(runsOf(terms)[0].line, "Merge, then finish");     // not asked yet
+  const stopped = [bob("t1", { "bob.ticket": "PI-9", "bob.phase": "finish", "orch.pr": url, "bob.stopped": "AC4" })];
+  assert.equal(runsOf(stopped, { [url]: "merged" })[0].line, "Stopped: AC4");
 });

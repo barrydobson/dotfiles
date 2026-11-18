@@ -8,9 +8,10 @@
 import { View, div, svg } from "gpui-kit";
 import { v_flex, h_flex, TextView } from "gpui-base";
 import { exec, theme, shared, terminals, openOverlay, nextCommand } from "herdr";
-import { PR_FIELDS, prOf, checksLine, repoOf, detailOf, mergeActionOf, previewOf } from "./pr.js";
+import { PR_FIELDS, prOf, checksLine, repoOf, detailOf, mergeActionOf, previewOf, kindOf, pollAfter } from "./pr.js";
 
-const EVERY = 30000;
+// How often it checks whether the PR is due another look (pollAfter decides when).
+const TICK = 30000;
 
 // The selected run, if it's still there: { address, name, cwd, pr }.
 function selected() {
@@ -35,9 +36,9 @@ async function ask(w) {
 
 export default class WorkerPr extends View {
   init(_props, cx) {
-    this.res = null; this.key = null; this.at = 0; this.asking = false;
+    this.res = null; this.key = null; this.at = 0; this.wait = 0; this.asking = false;
     this.open = null; this.details = new Map(); this.pending = null; this.mergeMsg = null;
-    cx.timer.every(EVERY, (cx) => this.refresh(cx));
+    cx.timer.every(TICK, (cx) => this.refresh(cx));
     // The confirm dialog runs worker-pr.merge; this copy then makes the merge it offered.
     cx.spawn(async (cx) => { for (;;) { const c = await nextCommand(); if (c.endsWith("merge")) await this.merge(cx); cx.notify(); } });
   }
@@ -84,17 +85,21 @@ export default class WorkerPr extends View {
     this.at = 0; this.refresh(cx);
   }
 
+  // at 0 means never asked, or asked to look again now (a new selection, a merge).
+  due() { return this.at === 0 || (this.wait !== null && Date.now() - this.at >= this.wait - 1000); }
+
   refresh(cx) {
     if (this.asking) return;
     const w = selected(), key = keyOf(w);
     if (key !== this.key) { this.key = key; this.res = null; this.at = 0; this.open = null; this.details.clear(); this.mergeMsg = null; this.pending = null; }
-    if (!w || Date.now() - this.at < EVERY - 1000) return cx.notify();
+    if (!w || !this.due()) return cx.notify();
     this.asking = true;
     cx.spawn(async (cx) => {
       let res;
       try { res = await ask(w); } catch (e) { res = { error: String(e?.message ?? e) }; }
       this.asking = false;
-      if (key === this.key) { this.res = res; this.at = Date.now(); }
+      // A merged or closed PR isn't asked again (wait null) until the selection changes or a merge runs.
+      if (key === this.key) { this.res = res; this.at = Date.now(); this.wait = res.pr ? pollAfter(kindOf(res.pr), true) : 120000; }
       cx.notify();
     });
   }
@@ -117,7 +122,7 @@ export default class WorkerPr extends View {
   render(cx) {
     const t = theme(), w = selected();
     const key = keyOf(w);
-    if (key !== this.key || (w && Date.now() - this.at >= EVERY)) cx.timer.after(0, (cx) => this.refresh(cx));
+    if (key !== this.key || (w && this.due())) cx.timer.after(0, (cx) => this.refresh(cx));
     const res = key === this.key ? this.res : null;
     const root = v_flex().id("worker-pr").size_full().min_h(0).overflow_hidden().bg(t.background).text_color(t.foreground).text_size(13)
       .child(h_flex().h(36).flex_none().px(12).gap(8).items_center().border_b(1).border_color(t.border)

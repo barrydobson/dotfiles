@@ -106,3 +106,20 @@ export function previewOf(body, n = 12) {
   const open = head.filter((l) => /^\s*(```|~~~)/.test(l)).length % 2 === 1;
   return { text: head.join("\n") + (open ? "\n```" : ""), more: lines.length - n };
 }
+
+// The PR's kind for polling: merged, closed, draft, failed, pending or open. Same rule as prKindOf in
+// bob-runs/bob.js (mods can't import each other), read from prOf's result instead of gh's JSON.
+export function kindOf(pr) {
+  if (pr.state === "merged" || pr.state === "closed" || pr.state === "draft") return pr.state;
+  if (pr.checks.some((c) => c.state === "fail")) return "failed";
+  if (pr.checks.some((c) => c.state === "pending")) return "pending";
+  return "open";
+}
+
+// Copy of pollAfter in bob-runs/bob.js; keep the two in step. Adapted from standFor in Better Sidebar's
+// git/pr-status.js (munza/herdr-mods, Apache-2.0, Copyright 2026 Tawsif Aqib).
+export function pollAfter(kind, fast = false) {
+  if (kind === "merged" || kind === "closed") return null;
+  if (kind === "pending") return fast ? 30000 : 120000;
+  return fast ? 120000 : 300000;
+}

@@ -23,7 +23,8 @@ const live = (t) => !t.state || t.state === "live";
 // [{ address, ticket, phase, round, stopped, blocked, line, pr, stages: [{ id, label, state, agent }] }],
 // newest terminal last. A stage's state is done, current, blocked or todo; agent is the address to peek,
 // live whether the stage's own agent is running.
-export function runsOf(terms) {
+// prs: { <PR URL>: kind } from prKindOf, for the PR badge and the merged line.
+export function runsOf(terms, prs = {}) {
   return terms.filter((t) => t.labels?.["bob.ticket"]).map((bob) => {
     const l = bob.labels, n = slug(l["bob.ticket"]);
     const phase = PHASES.includes(l["bob.phase"]) ? l["bob.phase"] : "spec";
@@ -39,10 +40,12 @@ export function runsOf(terms) {
     });
     const blocked = stages.some((s) => s.state === "blocked");
     const finishing = phase === "finish" && stages[at].live;
+    const pr = l["orch.pr"] ?? null, prKind = (pr && prs[pr]) || null;
     const line = stopped ? `Stopped: ${stopped}` : blocked ? "Needs you" : phase === "done" ? "Done"
-      : phase === "finish" ? (finishing ? "Finishing" : "Merge, then finish") : stages[at].label;
+      : phase === "finish" ? (finishing ? "Finishing" : prKind === "merged" ? "Merged · ready to finish" : "Merge, then finish")
+      : stages[at].label;
     return { address: bob.address, ticket: l["bob.ticket"], phase, round, stopped, blocked, line,
-      pr: l["orch.pr"] ?? null, tab: l["herdr.tab"] ?? null, stages };
+      pr, prKind, tab: l["herdr.tab"] ?? null, stages };
   });
 }
 
@@ -107,4 +110,37 @@ export function closeOf(run, spaces) {
     fromPlus ? null : "This is a session you started yourself, not from +: closing ends that whole Claude session.",
   ].filter(Boolean).join("\n\n");
   return { terminal: run.address, confirm: { title: `Close ${run.ticket}?`, detail } };
+}
+
+// A PR's kind from gh pr view's state, isDraft and statusCheckRollup: merged, closed, draft, failed (a check
+// failed), pending (checks still running) or open. Terminal states win over draft or check flags left from
+// when it was open. Adapted from prAppearance in Better Sidebar's git/pr-status.js (munza/herdr-mods,
+// Apache-2.0, Copyright 2026 Tawsif Aqib), as shipped in VladTemp27/herdr-orca.
+// worker-pr/pr.js keeps the same rule as kindOf (mods can't import each other).
+const FAILED = ["FAILURE", "ERROR", "TIMED_OUT", "ACTION_REQUIRED", "STARTUP_FAILURE", "CANCELLED"];
+const PENDING = /PENDING|QUEUED|IN_PROGRESS|EXPECTED|WAITING|REQUESTED/i;
+export function prKindOf(d) {
+  if (d?.state === "MERGED") return "merged";
+  if (d?.state === "CLOSED") return "closed";
+  if (d?.isDraft) return "draft";
+  const cs = d?.statusCheckRollup ?? [];
+  if (cs.some((c) => FAILED.includes(String(c.conclusion || c.state || "").toUpperCase()))) return "failed";
+  if (cs.some((c) => !c.conclusion && PENDING.test(String(c.status || c.state || "")))) return "pending";
+  return "open";
+}
+
+// The theme colour and words for each kind.
+export const PR_LOOK = {
+  open: { color: "ansi2", label: "Open" }, pending: { color: "working", label: "Checks running" },
+  failed: { color: "ansi1", label: "Checks failed" }, merged: { color: "ansi5", label: "Merged" },
+  closed: { color: "ansi1", label: "Closed" }, draft: { color: "dim", label: "Draft" },
+};
+
+// How long until GitHub is asked about a PR again, or null to stop: a merged or closed PR doesn't change.
+// Running checks are asked about often, a settled open PR less. fast is for a PR on screen (worker-pr).
+// Adapted from standFor in the same file (Better Sidebar, munza/herdr-mods, Apache-2.0, Copyright 2026 Tawsif Aqib).
+export function pollAfter(kind, fast = false) {
+  if (kind === "merged" || kind === "closed") return null;
+  if (kind === "pending") return fast ? 30000 : 120000;
+  return fast ? 120000 : 300000;
 }

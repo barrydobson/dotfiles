@@ -1,7 +1,7 @@
 // node --test pr.test.js
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { prOf, checksLine, repoOf, jobOf, logTail, detailOf, commentsOf, mergeActionOf, previewOf } from "./pr.js";
+import { prOf, checksLine, repoOf, jobOf, logTail, detailOf, commentsOf, mergeActionOf, previewOf, kindOf, pollAfter } from "./pr.js";
 
 test("prOf maps state and sorts checks failed first", () => {
   const pr = prOf({
@@ -110,4 +110,18 @@ test("previewOf keeps short bodies whole and cuts long ones, closing an open cod
   assert.deepEqual(previewOf(diff, 3), { text: "### Rendered diff\n```diff\n-a\n```", more: 3 });
   assert.deepEqual(previewOf("x\n```\ny\n```\nz", 4), { text: "x\n```\ny\n```", more: 1 });
   assert.deepEqual(previewOf(null), { text: "", more: 0 });
+});
+
+test("kindOf reads prOf's result; pollAfter asks the shown PR fast and stops once it's merged", () => {
+  const pr = (state, isDraft, checks) => prOf({ state, isDraft, statusCheckRollup: checks });
+  const ok = { __typename: "CheckRun", status: "COMPLETED", conclusion: "SUCCESS" };
+  assert.equal(kindOf(pr("MERGED", false, [])), "merged");
+  assert.equal(kindOf(pr("CLOSED", false, [])), "closed");
+  assert.equal(kindOf(pr("OPEN", true, [])), "draft");
+  assert.equal(kindOf(pr("OPEN", false, [ok, { __typename: "CheckRun", status: "COMPLETED", conclusion: "FAILURE" }])), "failed");
+  assert.equal(kindOf(pr("OPEN", false, [ok, { __typename: "CheckRun", status: "IN_PROGRESS", conclusion: "" }])), "pending");
+  assert.equal(kindOf(pr("OPEN", false, [ok])), "open");
+  assert.equal(pollAfter("merged", true), null);
+  assert.equal(pollAfter("pending", true), 30000);
+  assert.equal(pollAfter("open", true), 120000);
 });

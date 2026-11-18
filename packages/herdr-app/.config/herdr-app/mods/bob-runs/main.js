@@ -1,7 +1,7 @@
 import { View, div, svg } from "gpui-kit";
 import { v_flex, h_flex, InputState, Input } from "gpui-base";
 import { theme, terminals, run, shared, setShared, notify, exec, openOverlay, nextCommand, home, spaces } from "herdr";
-import { runsOf, newStops, prLabel, finishOf, parseKey, liveRunFor, spaceFor, closeOf } from "./bob.js";
+import { runsOf, newStops, prLabel, finishOf, parseKey, liveRunFor, spaceFor, closeOf, prKindOf, pollAfter, PR_LOOK } from "./bob.js";
 
 // The Bob panel (my-main's right-hand panel stack): one row per bob run (a terminal labelled bob.ticket) with its stage strip.
 // A click on the row selects the run for the worker-pr panel (shared "orch.selected"; bob carries orch.pr);
@@ -15,8 +15,9 @@ import { runsOf, newStops, prLabel, finishOf, parseKey, liveRunFor, spaceFor, cl
 // otherwise after the confirm dialog. The worktree, branch, PR and ticket stay.
 export default class BobRuns extends View {
   init(_props, cx) {
-    this.seen = null;
-    cx.timer.every(1000, () => {
+    this.seen = null; this.prs = {};
+    cx.timer.every(1000, (cx) => {
+      this.pollPrs(cx);
       const { events, seen } = newStops(this.seen, runsOf(terminals()));
       this.seen = seen;
       for (const r of events) notify({ title: `${r.ticket} stopped`, body: r.stopped, level: "warning", timeout: 20000,
@@ -26,6 +27,28 @@ export default class BobRuns extends View {
     // The confirm dialog runs bob-runs.finish.
     cx.spawn(async (cx) => { for (;;) { const c = await nextCommand(); if (c.endsWith("finish")) await this.finish(); else if (c.endsWith("close")) await this.close(this.closing); cx.notify(); } });
   }
+
+  // Each run's PR state, asked of GitHub when due (pollAfter): every 2 min while checks run, every 5 min
+  // while open, never again once merged or closed. A failed ask tries again in 2 min.
+  pollPrs(cx) {
+    const now = Date.now();
+    for (const r of runsOf(terminals())) {
+      const p = r.pr && (this.prs[r.pr] ??= { kind: null, next: 0, asking: false });
+      if (!p || p.asking || p.next === null || now < p.next) continue;
+      p.asking = true;
+      cx.spawn(async (cx) => {
+        const res = await exec("gh", ["pr", "view", r.pr, "--json", "state,isDraft,statusCheckRollup"]);
+        let ok = false;
+        try { if (res.code === 0) { p.kind = prKindOf(JSON.parse(res.stdout)); ok = true; } } catch { ok = false; }
+        const wait = ok ? pollAfter(p.kind) : 120000;
+        p.next = wait === null ? null : Date.now() + wait;
+        p.asking = false;
+        cx.notify();
+      });
+    }
+  }
+
+  kinds() { return Object.fromEntries(Object.entries(this.prs).filter(([, p]) => p.kind).map(([url, p]) => [url, p.kind])); }
 
   openAdd(cx) {
     this.addError = null;
@@ -83,7 +106,7 @@ export default class BobRuns extends View {
   async finish() {
     const f = this.pending; this.pending = null;
     // Still waiting to finish? The run may have moved on while the dialog was open.
-    const r = f && runsOf(terminals()).find((x) => x.address === f.terminal);
+    const r = f && runsOf(terminals(), this.kinds()).find((x) => x.address === f.terminal);
     if (!r || !finishOf(r)) return;
     // Without HC_TERMINAL_ID, hc send types the text as is, so bob reads it as the /bob command, not a tagged message.
     const res = await exec("env", ["-u", "HC_TERMINAL_ID", "hc", "send", f.terminal, f.text], { timeout: 70000 });
@@ -109,7 +132,9 @@ export default class BobRuns extends View {
       .on_mouse_down("left", () => setShared("orch.selected", r.address))
       .child(h_flex().gap(8).items_center()
         .child(div().flex_1().min_w(0).truncate().text_color(t.foreground).child(r.ticket))
-        .when(Boolean(r.pr), (e) => e.child(div().flex_none().text_size(10.5).text_color(t.muted).child(prLabel(r.pr))))
+        .when(Boolean(r.pr), (e) => e.child(div().id(`pr-${r.address}`).flex_none().text_size(10.5).font_medium()
+          .text_color(r.prKind ? t[PR_LOOK[r.prKind].color] ?? t.muted : t.muted)
+          .tooltip(r.prKind ? PR_LOOK[r.prKind].label : "Asking GitHub…").child(prLabel(r.pr))))
         .when(this.hovered === r.address, (e) => e.child(div().id(`close-${r.address}`).size(18).flex().flex_none().items_center().justify_center()
           .rounded(5).cursor_pointer().text_color(t.muted).hover((s) => s.bg(t.hover).text_color(t.foreground)).tooltip(`Close ${r.ticket}`)
           .on_mouse_down("left", (_e, cx) => { cx.stop_propagation(); this.askClose(r); })
@@ -120,7 +145,7 @@ export default class BobRuns extends View {
 
   render() {
     const t = theme();
-    const runs = runsOf(terminals());
+    const runs = runsOf(terminals(), this.kinds());
     return v_flex().id("bob-runs").size_full().min_h(0).overflow_hidden().bg(t.background).text_color(t.foreground).text_size(12.5)
       // Same header bar as worker-pr's "Pull request", the panel below it.
       .child(h_flex().h(36).flex_none().px(12).gap(8).items_center().border_b(1).border_color(t.border).text_size(13)
