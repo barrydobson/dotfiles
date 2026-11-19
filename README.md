@@ -150,7 +150,7 @@ shellcheck -x --source-path=SCRIPTDIR install.sh install/*.sh   # Lint shell scr
 
 ### Linux
 
-- Same agent setup as macOS: Claude Code, Codex, herdr-core and skillshare, with the same skills, plugins and config
+- Same agent setup as macOS: Claude Code, Codex and herdr-core, with the same skills, plugins and config
 - apt installs the minimum (curl, fzf, git, gnupg, stow, zsh, bubblewrap, locales); everything else comes from mise or vendor installers into `~/.local/bin`
 - Git signs with a key generated on the machine; `install.sh` ends with a checklist: git identity, `gh auth login`, register the signing key, Claude and Codex logins
 - No fonts are installed - install JetBrainsMono Nerd Font yourself if the terminal needs it

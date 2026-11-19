@@ -137,8 +137,7 @@ install_tavily_cli() {
     print_success "Tavily CLI installed"
 }
 
-# Agent CLIs from their vendor installers, all into ~/.local/bin. macOS gets
-# skillshare from Homebrew; the others install the same way on both.
+# Agent CLIs from their vendor installers, all into ~/.local/bin, the same way on both.
 install_claude_code() {
     if command -v claude >/dev/null 2>&1; then
         print_status "Claude Code is already installed"
@@ -168,16 +167,6 @@ install_herdr_core() {
     print_status "Installing herdr-core..."
     curl -fsSL https://releases.herdr.dev/core/install.sh | sh
     print_success "herdr-core installed"
-}
-
-install_skillshare() {
-    if command -v skillshare >/dev/null 2>&1; then
-        print_status "skillshare is already installed"
-        return
-    fi
-    print_status "Installing skillshare..."
-    curl -fsSL https://raw.githubusercontent.com/runkids/skillshare/main/install.sh | sh
-    print_success "skillshare installed"
 }
 
 # ~/.local/bin is on PATH before anything is installed into it

@@ -51,8 +51,8 @@ Three packages are stowed into `$HOME`:
 
 - **`zsh`** — `~/.zshenv`, `~/.config/zsh/` (zshrc, conf.d, aliases, functions)
 - **`starship`** — `~/.config/starship/starship.toml`
-- **`claude`** — `~/.claude/` config, rules and agents. No skills: they come
-  from skillshare, which devcontainers do not install
+- **`claude`** — `~/.claude/` config, rules and stowed skills. No plugins or
+  MCP servers: `install.sh` adds those, and devcontainers do not run it
 
 Two settings files are copied rather than stowed, because the apps write to
 them: `~/.claude/settings.json` from `install/claude-settings.json`, and

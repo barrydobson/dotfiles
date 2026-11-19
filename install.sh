@@ -23,7 +23,6 @@ COMMON_PACKAGES=(
   git
   mise
   nvim
-  skillshare
   starship
   tmux
   worktrunk
@@ -117,6 +116,51 @@ sync_app_configs() {
   seed_config "${DOTFILES_DIR}/install/ccstatusline-settings.json" "${HOME}/.config/ccstatusline/settings.json"
 }
 
+# Claude keeps user MCP servers in ~/.claude.json, not settings.json. Codex has none.
+add_claude_mcp_server() {
+  if ! claude mcp get "$1" >/dev/null 2>&1; then
+    claude mcp add-json -s user "$1" "$2"
+  fi
+}
+
+add_claude_mcp_servers() {
+  add_claude_mcp_server granola '{"type":"http","url":"https://mcp.granola.ai/mcp"}'
+  add_claude_mcp_server groundcover '{"type":"http","url":"https://mcp.groundcover.com/api/mcp"}'
+  add_claude_mcp_server notion '{"type":"http","url":"https://mcp.notion.com/mcp"}'
+  add_claude_mcp_server vault "{\"command\":\"npx\",\"args\":[\"-y\",\"@modelcontextprotocol/server-filesystem\",\"${HOME}/vault/\"]}"
+  print_success "Claude MCP servers in place"
+}
+
+# Claude gets its plugins from enabledPlugins in settings.json. Both commands are no-ops
+# when already done.
+add_codex_plugins() {
+  codex plugin marketplace add barrydobson/skills
+  codex plugin marketplace add DietrichGebert/ponytail
+  codex plugin add barrydobson-skills@barrydobson
+  codex plugin add ponytail@ponytail
+}
+
+# Codex reads hooks only from hooks.json, which other tools may also write, so append ours
+# rather than stow it. Same hooks as SessionStart in the Claude settings.json.
+add_codex_session_hook() {
+  local file="${HOME}/.codex/hooks.json" yq
+  if grep -qs 'hc-context.sh' "${file}"; then
+    return
+  fi
+  yq=$(command -v yq || mise which yq) || {
+    print_warning "yq is not installed, skipping the Codex SessionStart hook"
+    return
+  }
+  [[ -s "${file}" ]] || echo '{}' >"${file}"
+  # $HOME is expanded by Codex when the hook runs
+  # shellcheck disable=SC2016
+  HOOK='{"hooks":[
+    {"type":"command","command":"bash \"$HOME/.claude/hooks/systems-note-context.sh\"","timeout":5},
+    {"type":"command","command":"bash \"$HOME/.claude/hooks/hc-context.sh\"","timeout":5}]}' \
+    "${yq}" -i -p json -o json -I 2 '.hooks.SessionStart += [env(HOOK)]' "${file}"
+  print_success "Added the Codex SessionStart hook"
+}
+
 # Stow links each skill into these, so they must be real dirs, not folded into one link
 unfold_skill_targets() {
   local dir
@@ -126,19 +170,6 @@ unfold_skill_targets() {
     fi
     mkdir -p "${dir}"
   done
-}
-
-# Skills come from stow and the barrydobson-skills plugin; skillshare only syncs MCP,
-# hooks and plugins.
-sync_skillshare() {
-  if ! command -v skillshare >/dev/null 2>&1; then
-    print_warning "skillshare is not installed, skipping MCP, hook and plugin sync"
-    return
-  fi
-  skillshare sync mcp --no-tui
-  skillshare sync hooks
-  skillshare sync plugins --no-tui
-  print_success "skillshare synced"
 }
 
 # The vault skills name Tote internals, so they stay in the vault and are linked from it.
@@ -161,6 +192,10 @@ prepare_agent_dirs() {
   mkdir -p "${HOME}/.claude" "${HOME}/.codex/rules" "${HOME}/.config/herdr-core"
   generate_codex_agents_md
   unfold_skill_targets
+  # skillshare was removed; drop its stale stow link
+  if [[ -L "${HOME}/.config/skillshare" && ! -e "${HOME}/.config/skillshare" ]]; then
+    rm "${HOME}/.config/skillshare"
+  fi
 }
 
 # A fixed path to the clone, wherever it was cloned, for pulling updates.
@@ -179,8 +214,6 @@ link_dotfiles_dir() {
 install_linux_extras() {
   install_starship
   install_1password_cli
-  # macOS gets skillshare from the Brewfile
-  install_skillshare
 }
 
 # A key made on this machine, so nothing secret has to reach it. Commits sign once the
@@ -223,8 +256,7 @@ print_linux_checklist() {
   echo "  gh ssh-key add ~/.ssh/id_ed25519_signing.pub --type signing --title \"$(hostname)\""
   echo "  claude                      # log in"
   echo "  codex login --device-auth"
-  echo "  codex, then /hooks          # approve the skillshare SessionStart hook"
-  echo "  codex mcp login <server>    # for each HTTP MCP server in: codex mcp list"
+  echo "  codex, then /hooks          # approve the SessionStart hook"
 }
 
 main() {
@@ -265,11 +297,13 @@ main() {
     exit 1
   fi
   MISE_AQUA_GITHUB_ATTESTATIONS=false mise install
-  # After the agent CLIs: plugin sync installs into Codex
-  sync_skillshare
+  # After the agent CLIs, and after mise install, which provides yq on Linux
+  add_claude_mcp_servers
+  add_codex_plugins
+  add_codex_session_hook
   link_vault_skills
-  # Last: skillshare writes to Codex config.toml too, and a merge before it would rewrite
-  # the file again on the next run. After mise install, which provides yq on Linux.
+  # Last: codex plugin writes to config.toml too, and a merge before it would rewrite
+  # the file again on the next run.
   sync_app_configs
 
   if [[ "${os}" == "debian" ]]; then

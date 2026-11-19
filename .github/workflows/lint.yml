@@ -56,7 +56,7 @@ jobs:
           export PATH="${HOME}/.local/bin:${HOME}/.local/share/mise/shims:${PATH}"
           failed=0
           check() { if eval "$2" >/dev/null 2>&1; then echo "ok    $1"; else echo "::error::$1"; failed=1; fi; }
-          for bin in zsh nvim mise starship gh yq claude codex skillshare herdr-core wt; do
+          for bin in zsh nvim mise starship gh yq claude codex herdr-core wt; do
             check "${bin} on PATH" "command -v ${bin}"
           done
           check "Claude skills stowed" "[ -f ~/.claude/skills/herdr-core/SKILL.md ] && [ -f ~/.claude/skills/til/SKILL.md ]"

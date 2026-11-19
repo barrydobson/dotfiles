@@ -1,5 +1,5 @@
 # Common Codex settings. install.sh merges them into ~/.codex/config.toml on every run:
-# these keys win, everything else Codex or skillshare wrote there is kept.
+# these keys win, everything else Codex wrote there is kept.
 # Comments in the live file do not survive the merge.
 
 approval_policy = "on-request"
