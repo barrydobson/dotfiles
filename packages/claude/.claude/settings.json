@@ -44,9 +44,7 @@
       "Edit(~/.ssh/**)"
     ],
     "defaultMode": "auto",
-    "additionalDirectories": [
-      "~/vault"
-    ]
+    "additionalDirectories": ["~/vault"]
   },
   "enableAllProjectMcpServers": false,
   "disabledMcpjsonServers": [],
@@ -122,7 +120,6 @@
     "next-steps@claude-community": true,
     "understand-anything@understand-anything": true,
     "tokeneconomizer@tokeneconomizer": true,
-    "codex@openai-codex": true,
     "barrydobson-skills@barrydobson": true
   },
   "extraKnownMarketplaces": {
@@ -137,13 +134,6 @@
       "source": {
         "source": "github",
         "repo": "DietrichGebert/ponytail"
-      },
-      "autoUpdate": true
-    },
-    "go-skills": {
-      "source": {
-        "source": "github",
-        "repo": "spf13/go-skills"
       },
       "autoUpdate": true
     },
@@ -165,12 +155,6 @@
         "repo": "microsoft/TokenEconomizer"
       }
     },
-    "openai-codex": {
-      "source": {
-        "source": "github",
-        "repo": "openai/codex-plugin-cc"
-      }
-    },
     "barrydobson": {
       "source": {
         "source": "github",
@@ -181,11 +165,6 @@
   "feedbackDrafts": "off",
   "alwaysThinkingEnabled": true,
   "effortLevel": "medium",
-  "modelSettings": {
-    "gpt-5.6-terra": {
-      "effortLevel": "high"
-    }
-  },
   "autoUpdatesChannel": "latest",
   "plansDirectory": ".claude/plans",
   "tui": "fullscreen",
@@ -203,8 +182,6 @@
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
   "autoMode": {
-    "allow": [
-      "$defaults"
-    ]
+    "allow": ["$defaults"]
   }
 }
