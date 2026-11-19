@@ -20,7 +20,14 @@ Names are shared with every session on the machine, so use `<repo>-<id>-impl` an
    - `--model` is always set; the child does not inherit yours. `sonnet` unless the ticket asks otherwise.
    - `--permission-mode` is this session's mode. An hc child starts in `default` and stops at its first edit without it. Never pass a mode more permissive than your own.
 
-**Reviewer**, the `codex-reviewer` template, once the implementer reports DONE: after `/work` step 4, before step 5. The template carries the review contract, so the task names only the target and the intent:
+**Reviewer**, once the implementer reports DONE: after `/work` step 4, before step 5. Run `git diff --stat <base SHA>...HEAD` and pick one:
+
+- **Review it yourself** when the change is documentation only, or small: a few files, roughly 50 changed lines or fewer, and no change to auth, data handling, migrations or public interfaces. Read the full diff against the ticket's criteria and write your open findings as the reviewer would.
+- **Start `codex-reviewer`** for anything larger, or when you are unsure.
+
+Name the choice and its reason in the PR body.
+
+The `codex-reviewer` template carries the review contract, so the task names only the target and the intent:
 
 ```sh
 hc run --bg --name <repo>-<id>-review --cwd <worktree path> codex-reviewer \
