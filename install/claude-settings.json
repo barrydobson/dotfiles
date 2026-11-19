@@ -56,7 +56,6 @@
     "anthropic-skills:import-memory": "off",
     "anthropic-skills:morning": "off",
     "anthropic-skills:pptx": "off",
-    "archify": "off",
     "gh-stack": "off"
   },
   "hooks": {

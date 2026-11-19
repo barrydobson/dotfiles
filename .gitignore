@@ -43,21 +43,16 @@ packages/codex/.codex/AGENTS.md
 packages/skillshare/.config/skillshare/skills/tote-tooling-access
 packages/skillshare/.config/skillshare/skills/vault-query
 packages/skillshare/.config/skillshare/skills/systems-memory-check
-packages/skillshare/.config/skillshare/skills/full-stop
 # Skills that live in the fleet repo, linked in locally
 packages/skillshare/.config/skillshare/skills/til
 packages/skillshare/.config/skillshare/skills/claudex-code-review
 # Installed by `skillshare install` from the pins in .metadata.json
-packages/skillshare/.config/skillshare/skills/archify
 packages/skillshare/.config/skillshare/skills/find-docs
 packages/skillshare/.config/skillshare/skills/officecli-pptx
 packages/skillshare/.config/skillshare/skills/herdr-core
-packages/skillshare/.config/skillshare/skills/lavish
 packages/skillshare/.config/skillshare/skills/tavily-research
 packages/skillshare/.config/skillshare/skills/tavily-search
 # Old locations: keep until every machine has moved its private skills into the source
-packages/claude/.claude/skills/archify
-packages/agents/.agents/skills/archify/
 packages/claude/.claude/skills/tote-tooling-access
 
 # Written by the Herdr app into every mod folder
@@ -68,10 +63,3 @@ packages/herdr-app/.config/herdr-app/mods/*/jsconfig.json
 docs/specs/
 
 # Private fleet hc templates, symlinked in from the fleet repo
-packages/herdr-core/.config/herdr-core/templates/ticket-worker.md
-packages/herdr-core/.config/herdr-core/templates/finisher.md
-packages/herdr-core/.config/herdr-core/templates/dispatch-claude.md
-packages/herdr-core/.config/herdr-core/templates/dispatch-codex.md
-packages/herdr-core/.config/herdr-core/templates/ticket-spec.md
-packages/herdr-core/.config/herdr-core/templates/ticket-build.md
-packages/herdr-core/.config/herdr-core/templates/ticket-finish.md

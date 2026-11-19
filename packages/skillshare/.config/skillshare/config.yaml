@@ -15,7 +15,7 @@ targets:
   codex:
     skills:
       path: ~/.agents/skills
-      include: [archify, herdr-core, lavish, tavily-research, tavily-search]
+      include: [herdr-core, tavily-research, tavily-search]
 ignore:
   - .DS_Store
   - .git/
