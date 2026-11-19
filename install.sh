@@ -184,6 +184,16 @@ link_vault_skills() {
   done
 }
 
+# Herdr mods and layouts live in their own repo; Herdr only loads them from ~/.config/herdr-app.
+link_herdr_mods() {
+  local link="${HOME}/_git/barrydobson/herdr-mods/link.sh"
+  if [[ -x "${link}" ]]; then
+    "${link}"
+  else
+    print_warning "no herdr-mods clone at ${link%/link.sh}, skipping"
+  fi
+}
+
 # Real dirs stop stow folding them into one symlink, which would pull runtime state and
 # auth.json into the repo. ~/.codex/rules too: Codex writes default.rules there next to
 # the stowed dotfiles.rules.
@@ -309,6 +319,7 @@ main() {
   add_codex_plugins
   add_codex_session_hook
   link_vault_skills
+  link_herdr_mods
   # Last: codex plugin writes to config.toml too, and a merge before it would rewrite
   # the file again on the next run.
   sync_app_configs
