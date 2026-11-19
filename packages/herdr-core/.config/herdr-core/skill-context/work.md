@@ -4,7 +4,7 @@ The `/work` skill still owns the steps: read, decide, implement, review, PR. Ins
 
 ## Starting a child
 
-Names are shared with every session on the machine, so use `<repo>-<id>-impl` and `<repo>-<id>-review`.
+Names are shared with every session on the machine, so use `<repo>-<id>-impl` and `<repo>-<id>-review`. hc accepts 1-32 characters of `a-z 0-9 - _ .`: lowercase the ticket key (`pi-2751`) and shorten the repo name if the whole name runs over.
 
 **Implementer**, a Claude terminal:
 
