@@ -1,21 +1,10 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/runkids/skillshare/main/schemas/config.schema.json
 
-sources:
-  skills: ~/.config/skillshare/skills
-  agents: ~/.config/skillshare/agents
-mode: merge
-# The vault skills are symlinks in the source
-follow_source_links: true
+# Skills come from stow and the barrydobson-skills plugin, not skillshare. It only syncs
+# MCP servers, hooks and plugins to these targets.
 targets:
-  claude:
-    skills:
-      path: ~/.claude/skills
-    agents:
-      path: ~/.claude/agents
-  codex:
-    skills:
-      path: ~/.agents/skills
-      include: [herdr-core, tavily-research, tavily-search]
+  claude: {}
+  codex: {}
 ignore:
   - .DS_Store
   - .git/

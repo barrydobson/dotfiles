@@ -39,20 +39,7 @@ wt
 packages/claude/.claude/me.md
 packages/claude/.claude/work.md
 packages/codex/.codex/AGENTS.md
-# Private skills in the skillshare source
-packages/skillshare/.config/skillshare/skills/tote-tooling-access
-packages/skillshare/.config/skillshare/skills/vault-query
-packages/skillshare/.config/skillshare/skills/systems-memory-check
-# Skills that live in the fleet repo, linked in locally
-packages/skillshare/.config/skillshare/skills/til
-packages/skillshare/.config/skillshare/skills/claudex-code-review
-# Installed by `skillshare install` from the pins in .metadata.json
-packages/skillshare/.config/skillshare/skills/find-docs
-packages/skillshare/.config/skillshare/skills/officecli-pptx
-packages/skillshare/.config/skillshare/skills/herdr-core
-packages/skillshare/.config/skillshare/skills/tavily-research
-packages/skillshare/.config/skillshare/skills/tavily-search
-# Old locations: keep until every machine has moved its private skills into the source
+# Private skills: never commit them to this public repo
 packages/claude/.claude/skills/tote-tooling-access
 
 # Written by the Herdr app into every mod folder

@@ -13,6 +13,7 @@ source "${DOTFILES_DIR}/install/common.sh"
 
 # Packages stowed on every platform
 COMMON_PACKAGES=(
+  agents
   atuin
   claude
   codex
@@ -116,7 +117,7 @@ sync_app_configs() {
   seed_config "${DOTFILES_DIR}/install/ccstatusline-settings.json" "${HOME}/.config/ccstatusline/settings.json"
 }
 
-# skillshare links each skill into these, so they must be real dirs, not old stow folds
+# Stow links each skill into these, so they must be real dirs, not folded into one link
 unfold_skill_targets() {
   local dir
   for dir in "${HOME}/.claude/skills" "${HOME}/.agents/skills"; do
@@ -127,17 +128,30 @@ unfold_skill_targets() {
   done
 }
 
+# Skills come from stow and the barrydobson-skills plugin; skillshare only syncs MCP,
+# hooks and plugins.
 sync_skillshare() {
   if ! command -v skillshare >/dev/null 2>&1; then
-    print_warning "skillshare is not installed, skipping skill, MCP and hook sync"
+    print_warning "skillshare is not installed, skipping MCP, hook and plugin sync"
     return
   fi
-  # Restores third-party skills from the pins in skills/.metadata.json; skips any present
-  skillshare install </dev/null
-  skillshare sync --all --no-tui
-  # --all leaves out plugins
+  skillshare sync mcp --no-tui
+  skillshare sync hooks
   skillshare sync plugins --no-tui
   print_success "skillshare synced"
+}
+
+# The vault skills name Tote internals, so they stay in the vault and are linked from it.
+link_vault_skills() {
+  local skill src
+  for skill in vault-query systems-memory-check; do
+    src="${HOME}/vault/.claude/skills/${skill}"
+    if [[ -d "${src}" ]]; then
+      ln -sfn "${src}" "${HOME}/.claude/skills/${skill}"
+    else
+      print_warning "no vault skill at ${src}, skipping"
+    fi
+  done
 }
 
 # Real dirs stop stow folding them into one symlink, which would pull runtime state and
@@ -253,6 +267,7 @@ main() {
   MISE_AQUA_GITHUB_ATTESTATIONS=false mise install
   # After the agent CLIs: plugin sync installs into Codex
   sync_skillshare
+  link_vault_skills
   # Last: skillshare writes to Codex config.toml too, and a merge before it would rewrite
   # the file again on the next run. After mise install, which provides yq on Linux.
   sync_app_configs

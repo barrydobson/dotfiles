@@ -59,9 +59,8 @@ jobs:
           for bin in zsh nvim mise starship gh yq claude codex skillshare herdr-core wt; do
             check "${bin} on PATH" "command -v ${bin}"
           done
-          check "Claude skills linked" "[ -n \"\$(ls ~/.claude/skills)\" ]"
-          check "Codex skills linked" "[ -n \"\$(ls ~/.agents/skills)\" ]"
-          check "Pinned skills restored" "[ -f \"\${HOME}/.config/skillshare/skills/tavily-search/SKILL.md\" ]"
+          check "Claude skills stowed" "[ -f ~/.claude/skills/herdr-core/SKILL.md ] && [ -f ~/.claude/skills/til/SKILL.md ]"
+          check "Codex skills stowed" "[ -f ~/.agents/skills/herdr-core/SKILL.md ]"
           check "Codex has barrydobson-skills" "codex plugin list | grep -q '^barrydobson-skills@'"
           check "Codex common config merged" "grep -q '^approval_policy' ~/.codex/config.toml"
           check "Git signing key configured" "git config --file ~/.config/git/.gitconfig-local --get user.signingkey"
