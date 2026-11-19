@@ -112,7 +112,6 @@ generate_codex_agents_md() {
 # Apps that write to their own config are not stowed. See merge_config and seed_config.
 sync_app_configs() {
   merge_config toml "${DOTFILES_DIR}/install/codex-config.toml" "${HOME}/.codex/config.toml"
-  merge_config json "${DOTFILES_DIR}/install/claude-settings.json" "${HOME}/.claude/settings.json"
   seed_config "${DOTFILES_DIR}/install/ccstatusline-settings.json" "${HOME}/.config/ccstatusline/settings.json"
 }
 
@@ -192,6 +191,11 @@ prepare_agent_dirs() {
   mkdir -p "${HOME}/.claude" "${HOME}/.codex/rules" "${HOME}/.config/herdr-core"
   generate_codex_agents_md
   unfold_skill_targets
+  # settings.json used to be merged, not stowed; a real file would make stow abort
+  if [[ -f "${HOME}/.claude/settings.json" && ! -L "${HOME}/.claude/settings.json" ]]; then
+    mv "${HOME}/.claude/settings.json" "${HOME}/.claude/settings.json.bak"
+    print_warning "Moved the old ~/.claude/settings.json to settings.json.bak"
+  fi
   # skillshare was removed; drop its stale stow link
   if [[ -L "${HOME}/.config/skillshare" && ! -e "${HOME}/.config/skillshare" ]]; then
     rm "${HOME}/.config/skillshare"

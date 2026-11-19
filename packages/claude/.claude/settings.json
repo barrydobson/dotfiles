@@ -44,7 +44,9 @@
       "Edit(~/.ssh/**)"
     ],
     "defaultMode": "auto",
-    "additionalDirectories": ["~/vault"]
+    "additionalDirectories": [
+      "~/vault"
+    ]
   },
   "enableAllProjectMcpServers": false,
   "disabledMcpjsonServers": [],
@@ -136,8 +138,8 @@
     },
     "tokeneconomizer": {
       "source": {
-        "source": "directory",
-        "path": "@HOME@/_git/oss/TokenEconomizer"
+        "source": "github",
+        "repo": "microsoft/TokenEconomizer"
       }
     },
     "openai-codex": {
@@ -178,7 +180,8 @@
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
   "autoMode": {
-    "allow": ["$defaults"]
-  },
-  "mcpServers": {}
+    "allow": [
+      "$defaults"
+    ]
+  }
 }
