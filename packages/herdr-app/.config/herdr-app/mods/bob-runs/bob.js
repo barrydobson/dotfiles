@@ -1,7 +1,7 @@
 // A bob run is a terminal labelled bob.ticket. bob labels itself bob.phase (one of PHASES), bob.round
 // (review round), bob.stopped=<reason> when it stops for the person, and orch.pr=<PR URL> once it opens one.
 // The PR sits on bob, not the builder, because bob removes the builder when it finishes. Its agents are its hc children,
-// named as fleet's .claude/skills/bob/SKILL.md names them: spec-<n>, <n> (builder), sol-<n>, ci-<n>, finish-<n>.
+// named as skills/orc/SKILL.md in barrydobson/skills names them: spec-<n>, <n> (builder), sol-<n>, ci-<n>, finish-<n>.
 
 export const STAGES = [
   { id: "spec", label: "Spec", agent: (n) => `spec-${n}` },
@@ -99,7 +99,7 @@ export function finishOf(run) {
   if (run.phase !== "finish") return null;
   const f = run.stages.find((s) => s.id === "finish");
   if (f.live && !run.stopped) return null;
-  return { terminal: run.address, text: `/bob --finish ${run.ticket}`, replaces: f.live ? f.agent : null };
+  return { terminal: run.address, text: `/barrydobson-skills:orc --finish ${run.ticket}`, replaces: f.live ? f.agent : null };
 }
 
 // The ticket key the person typed into the + input: a Jira key (any case, given back in capitals),

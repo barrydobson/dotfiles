@@ -8,8 +8,8 @@ import { runsOf, newStops, prLabel, finishOf, parseKey, liveRunFor, spaceFor, cl
 // a click on a stage peeks the agent running it, or bob itself when that agent is gone or bob is blocked.
 // It toasts when a run's bob.stopped label appears; the toast focuses bob's terminal.
 // The Finish pill, while a run waits at the finish phase, asks first (the confirm dialog), then types
-// `/bob --finish <key>` into bob's terminal with hc send.
-// The + in the header opens a ticket input: Enter starts `/bob <key>` in a new, unfocused tab of the fleet space
+// `/barrydobson-skills:orc --finish <key>` into bob's terminal with hc send.
+// The + in the header opens a ticket input: Enter starts `/barrydobson-skills:orc <key>` in a new, unfocused tab of the fleet space
 // (or focuses the run already on that ticket); Esc closes it.
 // The × on a hovered card ends bob's session, its agents and its tab: at once for a done run started from +,
 // otherwise after the confirm dialog. The worktree, branch, PR and ticket stay.
@@ -82,9 +82,9 @@ export default class BobRuns extends View {
     }
     const space = spaceFor(terminals(), spaces());
     if (!space) { this.addError = "No fleet space to start it in. Open one named fleet first."; return; }
-    // bob only exists in fleet, so the folder is fixed whatever folder the space shows.
+    // orc runs from fleet for its Tote routing, so the folder is fixed whatever folder the space shows.
     run("tab.new", { space, name: key, folder: `${home()}/_git/barrydobson/fleet`, argv: ["claude", "--permission-mode", "auto"],
-      task: `/bob ${key}`, focus: false });
+      task: `/barrydobson-skills:orc ${key}`, focus: false });
     notify({ title: `${key} started`, body: "bob is running in a new fleet tab. Its row appears once it labels itself.", level: "success" });
     this.closeAdd();
   }
@@ -119,7 +119,7 @@ export default class BobRuns extends View {
     // Still waiting to finish? The run may have moved on while the dialog was open.
     const r = f && runsOf(terminals(), this.kinds()).find((x) => x.address === f.terminal);
     if (!r || !finishOf(r)) return;
-    // Without HC_TERMINAL_ID, hc send types the text as is, so bob reads it as the /bob command, not a tagged message.
+    // Without HC_TERMINAL_ID, hc send types the text as is, so bob reads it as the orc command, not a tagged message.
     const res = await exec("env", ["-u", "HC_TERMINAL_ID", "hc", "send", f.terminal, f.text], { timeout: 70000 });
     if (res.code !== 0) notify({ title: `${r.ticket}: finish not sent`, body: (res.stderr || res.stdout || "hc send failed").trim().split("\n")[0], level: "error" });
   }
@@ -177,7 +177,7 @@ export default class BobRuns extends View {
         .child(div().text_size(11.5).text_color(this.addError ? t.blocked : t.dim)
           .child(this.addError ?? "Ticket key: PI-123, owner/repo#12 or an issue URL. Enter starts bob, Esc closes."))))
       .child(v_flex().id("bob-list").flex_1().min_h(0).overflow_y_scrollbar().px(6).pt(6).pb(8).gap(4)
-        .when(!runs.length, (e) => e.child(div().px(8).py(6).text_color(t.dim).child("No bob runs. Start one with /bob <ticket> in fleet.")))
+        .when(!runs.length, (e) => e.child(div().px(8).py(6).text_color(t.dim).child("No bob runs. Start one with /barrydobson-skills:orc <ticket> in fleet.")))
         .children(runs.map((r) => this.row(r, t))));
   }
 }
