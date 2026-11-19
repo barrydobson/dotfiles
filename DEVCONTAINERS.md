@@ -47,16 +47,13 @@ listing what's absent.
 ## What gets installed
 
 `DEVCONTAINER_PACKAGES` in `install/devcontainer.sh` is the source of truth.
-Three packages are stowed into `$HOME`:
+Four packages are stowed into `$HOME`:
 
 - **`zsh`** — `~/.zshenv`, `~/.config/zsh/` (zshrc, conf.d, aliases, functions)
 - **`starship`** — `~/.config/starship/starship.toml`
 - **`claude`** — `~/.claude/` config, settings, rules and stowed skills. No
   plugins or MCP servers: `install.sh` adds those, and devcontainers do not run it
-
-`~/.config/ccstatusline/settings.json` is copied from
-`install/ccstatusline-settings.json` rather than stowed, because ccstatusline
-writes to it. It is only copied when missing.
+- **`ccstatusline`** — `~/.config/ccstatusline/settings.json`
 
 The zsh config is defensively gated with `command -v` checks, so missing
 optional tools (atuin, zoxide, fzf, mise, etc.) are silently skipped — the

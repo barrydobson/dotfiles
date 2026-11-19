@@ -106,7 +106,7 @@ Gitignored, so absent on a fresh clone: `.zprofile`, `.zsh_history`, `99_private
 **`~/.claude` is a real directory holding stow symlinks.** Claude Code's runtime state stays in your home directory and never enters the working tree.
 
 - `CLAUDE.md`, `settings.json`, `me.md` and `work.md` are individual file symlinks into `packages/claude/.claude/`.
-- `settings.json` is stowed like `CLAUDE.md`, so settings changed in the app land in the repo. Review them in `git diff` before committing. `install/codex-config.toml` is merged into the live Codex file by `merge_config` (in `install/common.sh`), repo keys winning, arrays replaced. `install/ccstatusline-settings.json` is different: `seed_config` copies it only when the live file is missing, so edits made in the ccstatusline TUI survive. To save a TUI change for new machines, copy the live file back into the repo.
+- `settings.json` is stowed like `CLAUDE.md`, so settings changed in the app land in the repo. Review them in `git diff` before committing. `install/codex-config.toml` is merged into the live Codex file by `merge_config` (in `install/common.sh`), repo keys winning, arrays replaced. The ccstatusline config is stowed from `packages/ccstatusline`, so edits made in its TUI land in the repo too.
 - `hooks/`, `rules/`, `themes/` and `scheduled-tasks/` are folded directory symlinks, so files you author in them are live immediately with no stow step.
 - Everything else in `~/.claude` (`projects/`, `history.jsonl`, `plugins/`, `shell-snapshots/`, `statsig/`, ...) is a real path outside this repo.
 - Only after adding a **new top-level entry** to the package does stow need re-running: `cd packages && stow -R -t "${HOME}" claude`.

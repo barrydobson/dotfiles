@@ -17,6 +17,7 @@ DEVCONTAINER_PACKAGES=(
     starship
     zsh
     claude
+    ccstatusline
 )
 
 check_prerequisites() {
@@ -45,7 +46,6 @@ main() {
     # A real dir stops stow folding ~/.claude into the repo, where Claude writes runtime state
     mkdir -p "${HOME}/.claude"
     stow_packages "${DEVCONTAINER_PACKAGES[@]}"
-    seed_config "${DOTFILES_DIR}/install/ccstatusline-settings.json" "${HOME}/.config/ccstatusline/settings.json"
     print_success "Done. Open a new zsh shell to load the configuration."
 }
 

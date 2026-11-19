@@ -15,6 +15,7 @@ source "${DOTFILES_DIR}/install/common.sh"
 COMMON_PACKAGES=(
   agents
   atuin
+  ccstatusline
   claude
   codex
   editorconfig
@@ -109,10 +110,9 @@ generate_codex_agents_md() {
   print_success "Generated Codex AGENTS.md"
 }
 
-# Apps that write to their own config are not stowed. See merge_config and seed_config.
+# Codex writes trust and state into config.toml, so it is merged, not stowed. See merge_config.
 sync_app_configs() {
   merge_config toml "${DOTFILES_DIR}/install/codex-config.toml" "${HOME}/.codex/config.toml"
-  seed_config "${DOTFILES_DIR}/install/ccstatusline-settings.json" "${HOME}/.config/ccstatusline/settings.json"
 }
 
 # Claude keeps user MCP servers in ~/.claude.json, not settings.json. Codex has none.
@@ -191,11 +191,14 @@ prepare_agent_dirs() {
   mkdir -p "${HOME}/.claude" "${HOME}/.codex/rules" "${HOME}/.config/herdr-core"
   generate_codex_agents_md
   unfold_skill_targets
-  # settings.json used to be merged, not stowed; a real file would make stow abort
-  if [[ -f "${HOME}/.claude/settings.json" && ! -L "${HOME}/.claude/settings.json" ]]; then
-    mv "${HOME}/.claude/settings.json" "${HOME}/.claude/settings.json.bak"
-    print_warning "Moved the old ~/.claude/settings.json to settings.json.bak"
-  fi
+  # These used to be copied, not stowed; a real file would make stow abort
+  local f
+  for f in "${HOME}/.claude/settings.json" "${HOME}/.config/ccstatusline/settings.json"; do
+    if [[ -f "${f}" && ! -L "${f}" ]]; then
+      mv "${f}" "${f}.bak"
+      print_warning "Moved the old ${f} to ${f}.bak"
+    fi
+  done
   # skillshare was removed; drop its stale stow link
   if [[ -L "${HOME}/.config/skillshare" && ! -e "${HOME}/.config/skillshare" ]]; then
     rm "${HOME}/.config/skillshare"
