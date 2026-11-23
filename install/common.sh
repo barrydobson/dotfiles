@@ -170,7 +170,6 @@ install_herdr_core() {
 }
 
 # Orca's headless server bundle; its CLI is orca-ide. There is no install script.
-# shortcut: installs the latest release once and never upgrades; delete ~/.local/opt/orca-server to upgrade.
 install_orca_server() {
     if command -v orca-ide >/dev/null 2>&1; then
         # The orca-cli skill calls it orca
@@ -178,6 +177,13 @@ install_orca_server() {
         print_status "Orca server is already installed"
         return
     fi
+    print_status "Installing Orca server..."
+    fetch_orca_server && print_success "Orca server installed (orca-ide)"
+}
+
+# Downloads the latest release and swaps it in whole, so no files from the old version
+# remain. Returns non-zero on any failure: update.sh runs it without set -e.
+fetch_orca_server() {
     local arch
     case "$(uname -m)" in
     x86_64) arch=x64 ;;
@@ -187,18 +193,29 @@ install_orca_server() {
         return
         ;;
     esac
-    print_status "Installing Orca server..."
     local tmp url=https://github.com/stablyai/orca/releases/latest/download
-    tmp=$(mktemp -d)
-    curl -fsSL -o "${tmp}/orca-server-linux-${arch}.tar.gz" "${url}/orca-server-linux-${arch}.tar.gz"
-    curl -fsSL -o "${tmp}/orca-server-sha256sums.txt" "${url}/orca-server-sha256sums.txt"
-    (cd "${tmp}" && sha256sum -c --ignore-missing orca-server-sha256sums.txt)
-    mkdir -p "${HOME}/.local/opt/orca-server" "${HOME}/.local/bin"
-    tar xzf "${tmp}/orca-server-linux-${arch}.tar.gz" -C "${HOME}/.local/opt/orca-server" --strip-components=1
-    ln -sfn "${HOME}/.local/opt/orca-server/bin/orca-ide" "${HOME}/.local/bin/orca-ide"
-    ln -sfn "${HOME}/.local/opt/orca-server/bin/orca-ide" "${HOME}/.local/bin/orca"
+    local dest="${HOME}/.local/opt/orca-server"
+    mkdir -p "${HOME}/.local/opt" "${HOME}/.local/bin" || return 1
+    # Next to dest, so the swap is a rename on one filesystem
+    tmp=$(mktemp -d "${dest}.XXXXXX") || return 1
+    if ! {
+        curl -fsSL -o "${tmp}/orca-server-linux-${arch}.tar.gz" "${url}/orca-server-linux-${arch}.tar.gz" &&
+            curl -fsSL -o "${tmp}/orca-server-sha256sums.txt" "${url}/orca-server-sha256sums.txt" &&
+            (cd "${tmp}" && sha256sum -c --ignore-missing orca-server-sha256sums.txt) &&
+            mkdir "${tmp}/new" &&
+            tar xzf "${tmp}/orca-server-linux-${arch}.tar.gz" -C "${tmp}/new" --strip-components=1
+    }; then
+        rm -r "${tmp}"
+        return 1
+    fi
+    # Moved into tmp, so the old version is deleted with it
+    if [[ -d "${dest}" ]]; then
+        mv "${dest}" "${tmp}/old"
+    fi
+    mv "${tmp}/new" "${dest}"
+    ln -sfn "${dest}/bin/orca-ide" "${HOME}/.local/bin/orca-ide"
+    ln -sfn "${dest}/bin/orca-ide" "${HOME}/.local/bin/orca"
     rm -r "${tmp}"
-    print_success "Orca server installed (orca-ide)"
 }
 
 # ~/.local/bin is on PATH before anything is installed into it

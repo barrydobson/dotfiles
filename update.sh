@@ -41,6 +41,14 @@ update_system_packages() {
   fi
 }
 
+# try-restart only restarts the service if it is running
+update_orca_server() {
+  fetch_orca_server || return 1
+  if systemctl --user show-environment >/dev/null 2>&1; then
+    systemctl --user try-restart orca-serve
+  fi
+}
+
 main() {
   export PATH="${HOME}/.local/bin:${PATH}"
 
@@ -51,6 +59,7 @@ main() {
     step mise "mise itself" mise self-update --yes
     # shellcheck disable=SC2016 # $HOME expands in the inner shell
     step starship Starship sh -c 'curl -fsSL https://starship.rs/install.sh | sh -s -- --yes -b "${HOME}/.local/bin"'
+    step orca-ide "Orca server" update_orca_server
   fi
   # --bump rewrites the pins in packages/mise/.config/mise/config.toml; review the diff
   step mise "mise tools" env MISE_AQUA_GITHUB_ATTESTATIONS=false mise upgrade --bump
