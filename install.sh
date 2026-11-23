@@ -209,10 +209,6 @@ prepare_agent_dirs() {
       print_warning "Moved the old ${f} to ${f}.bak"
     fi
   done
-  # skillshare was removed; drop its stale stow link
-  if [[ -L "${HOME}/.config/skillshare" && ! -e "${HOME}/.config/skillshare" ]]; then
-    rm "${HOME}/.config/skillshare"
-  fi
 }
 
 # A fixed path to the clone, wherever it was cloned, for pulling updates.
