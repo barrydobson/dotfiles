@@ -169,6 +169,38 @@ install_herdr_core() {
     print_success "herdr-core installed"
 }
 
+# Orca's headless server bundle; its CLI is orca-ide. There is no install script.
+# shortcut: installs the latest release once and never upgrades; delete ~/.local/opt/orca-server to upgrade.
+install_orca_server() {
+    if command -v orca-ide >/dev/null 2>&1; then
+        # The orca-cli skill calls it orca
+        ln -sfn "$(command -v orca-ide)" "${HOME}/.local/bin/orca"
+        print_status "Orca server is already installed"
+        return
+    fi
+    local arch
+    case "$(uname -m)" in
+    x86_64) arch=x64 ;;
+    aarch64 | arm64) arch=arm64 ;;
+    *)
+        print_warning "No Orca server bundle for $(uname -m)"
+        return
+        ;;
+    esac
+    print_status "Installing Orca server..."
+    local tmp url=https://github.com/stablyai/orca/releases/latest/download
+    tmp=$(mktemp -d)
+    curl -fsSL -o "${tmp}/orca-server-linux-${arch}.tar.gz" "${url}/orca-server-linux-${arch}.tar.gz"
+    curl -fsSL -o "${tmp}/orca-server-sha256sums.txt" "${url}/orca-server-sha256sums.txt"
+    (cd "${tmp}" && sha256sum -c --ignore-missing orca-server-sha256sums.txt)
+    mkdir -p "${HOME}/.local/opt/orca-server" "${HOME}/.local/bin"
+    tar xzf "${tmp}/orca-server-linux-${arch}.tar.gz" -C "${HOME}/.local/opt/orca-server" --strip-components=1
+    ln -sfn "${HOME}/.local/opt/orca-server/bin/orca-ide" "${HOME}/.local/bin/orca-ide"
+    ln -sfn "${HOME}/.local/opt/orca-server/bin/orca-ide" "${HOME}/.local/bin/orca"
+    rm -r "${tmp}"
+    print_success "Orca server installed (orca-ide)"
+}
+
 # ~/.local/bin is on PATH before anything is installed into it
 post_install_setup() {
     mkdir -p "${HOME}/.local/bin"

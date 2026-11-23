@@ -227,6 +227,7 @@ link_dotfiles_dir() {
 install_linux_extras() {
   install_starship
   install_1password_cli
+  install_orca_server
 }
 
 # A key made on this machine, so nothing secret has to reach it. Commits sign once the
@@ -255,6 +256,36 @@ setup_linux_git_credentials() {
   git config --file "${local_config}" 'credential.https://gist.github.com.helper' '!gh auth git-credential'
 }
 
+# After the agent CLIs and mise: the unit freezes PATH when it is installed.
+setup_orca_service() {
+  if ! command -v orca-ide >/dev/null 2>&1; then
+    return
+  fi
+  # No user systemd (CI runners, containers)
+  if ! systemctl --user show-environment >/dev/null 2>&1; then
+    print_warning "No user systemd; not installing the Orca service"
+    return
+  fi
+  if systemctl --user is-enabled orca-serve >/dev/null 2>&1; then
+    print_status "Orca service already installed"
+    return
+  fi
+  local ip
+  ip=$(ip -4 route get 1.1.1.1 | awk '{for (i = 1; i < NF; i++) if ($i == "src") print $(i + 1)}')
+  if [[ -z "${ip}" ]]; then
+    print_warning "Could not find this machine's IP; not installing the Orca service"
+    return
+  fi
+  # Without lingering the user service stops at logout
+  if check_sudo_access; then
+    _sudo loginctl enable-linger "${USER}"
+  else
+    print_warning "Run: sudo loginctl enable-linger ${USER}"
+  fi
+  orca-ide serve service install --port 6768 --bind "${ip}" --pairing-address "${ip}" --refuse-public
+  print_success "Orca service listening on ${ip}:6768"
+}
+
 print_linux_checklist() {
   # Shown to the user, not expanded
   # shellcheck disable=SC2088
@@ -270,6 +301,10 @@ print_linux_checklist() {
   echo "  claude                      # log in"
   echo "  codex login --device-auth"
   echo "  codex, then /hooks          # approve the SessionStart hook"
+  if systemctl --user is-enabled orca-serve >/dev/null 2>&1; then
+    echo "  Pair Orca: systemctl --user stop orca-serve, then orca-ide serve with the service's"
+    echo "    --port/--bind/--pairing-address/--refuse-public flags, pair, Ctrl-C, systemctl --user start orca-serve"
+  fi
 }
 
 main() {
@@ -323,6 +358,7 @@ main() {
   if [[ "${os}" == "debian" ]]; then
     setup_linux_git_signing
     setup_linux_git_credentials
+    setup_orca_service
     print_linux_checklist
   fi
   print_success "Done! Restart your terminal or run: exec zsh"
