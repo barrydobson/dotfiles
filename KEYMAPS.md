@@ -28,7 +28,7 @@ search every keymap.
 | `<leader>hp` | Normal | Preview git change             |
 | `<leader>hd` | Normal | Diff file against index        |
 
-Files changed on disk (for example by lazygit) reload when Neovim regains focus or you switch buffer.
+Files changed on disk by other tools reload when Neovim regains focus or you switch buffer.
 
 ## Plugins
 

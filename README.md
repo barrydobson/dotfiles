@@ -146,7 +146,7 @@ shellcheck -x --source-path=SCRIPTDIR install.sh update.sh install/*.sh   # Lint
 
 - Homebrew manages CLI tools, casks and fonts via `~/.Brewfile`
 - The 1Password SSH agent socket is linked into `~/.1password/agent.sock`
-- Extra packages stowed only here: `1Password`, `ghostty`, `k9s`, `lazygit`, `ssh`, `vscode`, `zed` and the other GUI configs (see `MAC_PACKAGES` in `install.sh`)
+- Extra packages stowed only here: `1Password`, `ghostty`, `k9s`, `ssh`, `vscode`, `zed` and the other GUI configs (see `MAC_PACKAGES` in `install.sh`)
 
 ### Linux
 

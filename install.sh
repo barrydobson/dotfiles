@@ -39,7 +39,6 @@ MAC_PACKAGES=(
   ghostty
   herdr-app
   k9s
-  lazygit
   ssh
   vscode
   zed

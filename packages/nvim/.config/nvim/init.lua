@@ -70,7 +70,7 @@ end, { desc = "Previous git change" })
 vim.keymap.set("n", "<leader>hp", gitsigns.preview_hunk, { desc = "Preview git change" })
 vim.keymap.set("n", "<leader>hd", gitsigns.diffthis, { desc = "Diff file against index" })
 
--- Pick up changes lazygit (or anything else) makes on disk
+-- Pick up changes other tools make on disk
 vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter" }, { command = "checktime" })
 
 local telescope = require("telescope.builtin")

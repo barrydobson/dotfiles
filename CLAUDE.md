@@ -28,7 +28,7 @@ packages/
 - **Editor**: Neovim (single-file minimal config, no AI); also `zed`, `vscode`
 - **Terminal**: Ghostty (`voltaic-dark`/`voltaic-light`)
 - **Git**: Modular config - `config` includes `.gitalias` (short single-letter aliases) and a gitignored `.gitconfig-local`
-- **Tools**: `atuin`, `eza`, `mise`, `k9s`, `lazygit`, `homebrew` (Brewfile), `yamllint`, `editorconfig`, `worktrunk`
+- **Tools**: `atuin`, `eza`, `mise`, `k9s`, `homebrew` (Brewfile), `yamllint`, `editorconfig`, `worktrunk`
 - **Claude**: Config, hooks and rules at `packages/claude/.claude/` - see gotcha below
 - **Skills**: portable skills live in the `barrydobson-skills` plugin (`barrydobson/skills`). Skills tied to this machine are stowed: `packages/claude/.claude/skills/<name>` for Claude and `packages/agents/.agents/skills/<name>` for Codex. `herdr-core` is a stub that loads `hc --skill`. The vault skills (`vault-query`, `systems-memory-check`) name Tote internals, so they stay in `~/vault/.claude/skills`, and `install.sh` links them into `~/.claude/skills`. `~/.claude/skills` and `~/.agents/skills` must be real dirs so stow links each skill rather than the folder. `~/.claude/skills/synced` is written by the Claude app.
 - **Plugins and MCP servers**: Claude plugins and marketplaces are `enabledPlugins` and `extraKnownMarketplaces` in the stowed `settings.json`. Claude keeps user MCP servers in `~/.claude.json`, so `install.sh` adds them with `claude mcp add-json -s user`. Codex has no MCP servers. `install.sh` adds the Codex plugins with `codex plugin` and appends the `SessionStart` hook to `~/.codex/hooks.json`, which other tools may also write.
@@ -82,7 +82,7 @@ Git config is **modular**:
 - `.gitalias` - Short single-letter aliases plus `git cleanup`
 - `.gitconfig-local` - Machine-specific overrides (gitignored, included by `config`)
 
-Commits are signed with `gpg.format = ssh` and verified against `~/.ssh/allowed_signers`. Delta is installed (Brewfile) for lazygit, which picks the `[delta "voltaic-dark"]` or `[delta "voltaic-light"]` feature in git config; `core.pager = delta` itself stays commented out.
+Commits are signed with `gpg.format = ssh` and verified against `~/.ssh/allowed_signers`.
 
 ### Neovim Configuration
 
