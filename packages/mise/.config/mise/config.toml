@@ -1,11 +1,11 @@
 [settings]
 activate_aggressive = true # mise shims win over other PATH entries
+# Orca types the agent command into a new shell; a trust prompt there eats its first characters.
+trusted_config_paths = ["~/_git", "~/orca/workspaces"]
 
 [settings.github]
 credential_command = 'gh auth token'
 
-# Orca types the agent command into a new shell; a trust prompt there eats its first characters.
-trusted_config_paths = ["~/_git", "~/orca/workspaces"]
 
 [tools]
 atuin = { version = "18.22.0", os = ["linux"] }
