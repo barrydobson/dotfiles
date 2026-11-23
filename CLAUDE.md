@@ -43,6 +43,7 @@ packages/
 
 ```bash
 ./install.sh           # Bootstrap: detect OS, stow configs, install tools
+./update.sh            # Upgrade every installed tool (alias: update)
 ```
 
 For manually stowing specific packages:
@@ -56,7 +57,7 @@ stow -v -R -t "${HOME}" git                   # Restow (unstow + stow)
 ### Linting
 
 ```bash
-shellcheck -x --source-path=SCRIPTDIR install.sh install/*.sh   # Same command CI runs; must exit 0
+shellcheck -x --source-path=SCRIPTDIR install.sh update.sh install/*.sh   # Same command CI runs; must exit 0
 ```
 
 `.markdownlint.json` exists (MD013 off, MD007 indent 2) but no markdownlint CLI is installed; it is only honoured by editor extensions. Match those rules when writing markdown here, don't try to run it.

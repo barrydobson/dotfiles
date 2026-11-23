@@ -3,11 +3,7 @@
 #=============================================================================
 
 # System
-if command -v apt >/dev/null 2>&1; then
-    alias update="sudo apt update && sudo apt upgrade -y"
-elif command -v brew >/dev/null 2>&1; then
-    alias update="brew update && brew upgrade"
-fi
+alias update="${HOME}/.dotfiles/update.sh"  # install.sh links ~/.dotfiles to the clone
 alias myip="curl -s https://ipinfo.io/ip"
 
 # Utility

@@ -117,7 +117,7 @@ stow -v -D -t "${HOME}" git     # Remove a package
 stow -v -R -t "${HOME}" git     # Redeploy a package
 
 # Development
-shellcheck -x --source-path=SCRIPTDIR install.sh install/*.sh   # Lint shell scripts (same as CI)
+shellcheck -x --source-path=SCRIPTDIR install.sh update.sh install/*.sh   # Lint shell scripts (same as CI)
 ```
 
 ### Git Integration
