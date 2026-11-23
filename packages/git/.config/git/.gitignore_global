@@ -13,3 +13,5 @@ out/
 .claude/worktrees
 .env
 .envrc
+
+**/.claude/settings.local.json
