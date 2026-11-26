@@ -1,60 +1,39 @@
 # /work inside herdr-core
 
-The `/work` skill still owns the steps: read, decide, implement, review, PR. Inside herdr-core, this changes who does steps 3 and 4, and adds a review and fix round after step 4 and before step 5 opens the PR. You stay the coordinator: you hold the decisions, open the PRs and move the tickets. Run `hc --skill` once before the first start if you have not read it this session.
+How to start, reach and wait on any agent `/work` starts here. Who does which step is not set here: the `/work` skill and the instructions of the folder you run in decide that. Run `hc --skill` once before the first start if you have not read it this session.
 
 ## Starting a child
 
-Names are shared with every session on the machine, so use `<repo>-<id>-impl` and `<repo>-<id>-review`. hc accepts 1-32 characters of `a-z 0-9 - _ .`: lowercase the ticket key (`pi-2751`) and shorten the repo name if the whole name runs over.
+Names are shared with every session on the machine, so use `<repo>-<id>-<role>`, for example `tfmod-pi-2751-impl`. hc accepts 1-32 characters of `a-z 0-9 - _ .`: lowercase the ticket key and shorten the repo name if the whole name runs over.
 
-**Implementer**, a Claude terminal:
-
-1. Write the prompt to `${TMPDIR:-/tmp}/work/<repo>/<id>-impl-prompt.md` with the Write tool: the ticket key, the worktree path and branch, the human's answers from step 2, and "Implement this ticket following steps 3 and 4 of the `tote-issue-tracker:work` skill. Commit on the branch; pushing, the PR and the tracker are mine. Reply with status (DONE / BLOCKED), each criterion met or not met with its evidence, and rulings. Write your reply to `${TMPDIR:-/tmp}/work/<repo>/<id>-impl-report.md`, then `hc send <your $HC_TERMINAL_ID> \"<that path>\"`. Do the same after every later turn. Start no agents."
-2. Start it in the worktree:
-
-   ```sh
-   hc run --bg --name <repo>-<id>-impl --cwd <worktree path> claude \
-     --model <model> --permission-mode <mode> \
-     "Read <prompt file> and follow it."
-   ```
-
-   - `--model` is always set; the child does not inherit yours. `sonnet` unless the ticket asks otherwise.
-   - `--permission-mode` is this session's mode. An hc child starts in `default` and stops at its first edit without it. Never pass a mode more permissive than your own.
-
-**Reviewer**, once the implementer reports DONE: after `/work` step 4, before step 5. Run `git diff --stat <base SHA>...HEAD` and pick one:
-
-- **Review it yourself** when the change is documentation only, or small: a few files, roughly 50 changed lines or fewer, and no change to auth, data handling, migrations or public interfaces. Read the full diff against the ticket's criteria and write your open findings as the reviewer would.
-- **Start `codex-reviewer`** for anything larger, or when you are unsure.
-
-Name the choice and its reason in the PR body.
-
-The `codex-reviewer` template carries the review contract, so the task names only the target and the intent:
+A Claude child:
 
 ```sh
-hc run --bg --name <repo>-<id>-review --cwd <worktree path> codex-reviewer \
-  "Review branch: git diff <base SHA>...HEAD. Intent: <ticket key and summary>."
+hc run --bg --name <name> --cwd <path> claude \
+  --model <model> --permission-mode <mode> \
+  "<task>"
 ```
 
-Change nothing in the worktree while the reviewer runs: no edits, commits, resets or checkouts. Do side work in another worktree.
+- `--model` is always set; the child does not inherit yours.
+- `--permission-mode` is this session's mode. An hc child starts in `default` and stops at its first edit without it. Never pass a mode more permissive than your own.
+- The task arrives as typed, with no sender address. Put the reply address in it: "report with `hc send <your $HC_TERMINAL_ID>` when done or stuck".
+- A long task goes in a file under `${TMPDIR:-/tmp}/work/<repo>/`, written with the Write tool; the task is then "Read <file> and follow it." Ask for a long reply the same way: written to a file there, its path sent with `hc send`, after every turn.
 
-If `hc templates` lacks `codex-reviewer`, report BLOCKED: the herdr-core package is not stowed.
+A template child, such as `codex-reviewer`, carries its own contract, so the task names only the target and the intent. If `hc templates` lacks the template, report BLOCKED: the herdr-core package is not stowed.
 
-After either start, check `first_message.sent` in the JSON. If it is false, `hc read <name>` before anything else; never resend blindly. A start-up prompt on the screen (folder trust, an update) counts as `blocked`.
+After any start, check `first_message.sent` in the JSON. If it is false, `hc read <name>` before anything else; never resend blindly. A start-up prompt on the screen (folder trust, an update) counts as `blocked`.
 
 ## Waiting
 
-Wait with `hc wait --children any`, never sleep or poll. A report arrives tagged `<hc from="<t> <name>">`. The implementer's names a file: read it before acting. The reviewer's carries its findings inline. A `timeout` is a check-in: wait again.
+Wait with `hc wait --children any`, never sleep or poll. A report arrives tagged `<hc from="<t> <name>">`. If it names a file, read the file before acting. A `timeout` is a check-in: wait again.
 
-- **`blocked`**: the child waits on a person, usually a permission prompt. Send "blocked in <name>: <what the screen asks>" to `reach` at once, if the request came over hc; nobody may be watching Herdr. Leave the child for the human and carry on with other tickets.
+- **`blocked`**: the child waits on a person, usually a permission prompt. If your own task gave a reply address, send "blocked in <name>: <what the screen asks>" there at once; nobody may be watching Herdr. Leave the child for the human and carry on with other tickets.
 - **`error`** or **exited**: `hc read --lines 100 <name>`, and treat it as BLOCKED with what the screen shows.
 
-## Fix round
+## A /work request from another agent
 
-Write the reviewer's open findings verbatim to `${TMPDIR:-/tmp}/work/<repo>/<id>-findings.md` and `hc send <repo>-<id>-impl "<that path>"`. One round; whatever stays open goes in the PR body.
-
-## A /work request over hc
-
-A request that arrives over hc carries the sender's address in `reach`: `<hc from="t3 lead" reach="hc send t3 when done or stuck">`. Send your step 2 questions and the final report there.
+If your task names a reply address, send your step 2 questions and the final report there, not to `AskUserQuestion`.
 
 ## Cleanup
 
-Kill and remove a reviewer once its report is in hand, and an implementer once its PR is open. Leave a blocked or failed child alive and name it in the report. Remove only terminals you started.
+Kill and remove a child once you no longer need it. Leave a blocked or failed child alive and name it in the report. Remove only terminals you started.
