@@ -25,7 +25,7 @@ After any start, check `first_message.sent` in the JSON. If it is false, `hc rea
 
 ## Waiting
 
-Wait with `hc wait --children any`, never sleep or poll. A report arrives tagged `<hc from="<t> <name>">`. If it names a file, read the file before acting. A `timeout` is a check-in: wait again.
+Run `hc wait --children any` as a background command, then end your turn. Never wait in the foreground, sleep or poll: reports are typed into this session and queue behind a running command. A report arrives as a new message tagged `<hc from="<t> <name>">`. If it names a file, read the file before acting. When the background wait exits, act on what it returned; a `timeout` is a check-in: start it again.
 
 - **`blocked`**: the child waits on a person, usually a permission prompt. If your own task gave a reply address, send "blocked in <name>: <what the screen asks>" there at once; nobody may be watching Herdr. Leave the child for the human and carry on with other tickets.
 - **`error`** or **exited**: `hc read --lines 100 <name>`, and treat it as BLOCKED with what the screen shows.
